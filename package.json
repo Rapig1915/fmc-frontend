@@ -22,9 +22,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
-    "lint-style": "stylelint src/**/*.{css,scss}",
-    "format": "prettier --write src"
+    "lint": "yarn lint:ts && yarn lint:style && yarn lint:prettier",
+    "lint:ts": "tsc --noEmit && eslint src/**/*.ts{,x}",
+    "lint:style": "stylelint src/**/*.{css,scss}",
+    "lint:prettier": "prettier --write src"
   },
   "eslintConfig": {
     "extends": [
