@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@date-io/moment": "1.x",
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/pickers": "^3.3.10",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -10,11 +14,13 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-redux": "^7.1.16",
     "@types/redux-logger": "^3.0.8",
-    "antd": "^4.14.1",
     "axios": "^0.21.1",
     "loglevel": "^1.7.1",
+    "moment": "^2.29.1",
     "node-sass": "^5.0.0",
+    "notistack": "^1.0.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
@@ -31,9 +37,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "yarn lint:ts && yarn lint:style && yarn lint:prettier",
-    "lint:ts": "tsc --noEmit && eslint src/**/*.ts{,x}",
-    "lint:style": "stylelint src/**/*.{css,scss}",
+    "lint": "yarn lint:script && yarn lint:prettier",
+    "lint:script": "tsc --noEmit && eslint src/**/*.ts{,x}",
     "lint:prettier": "prettier --write src"
   },
   "eslintConfig": {
@@ -63,13 +68,6 @@
     "eslint-plugin-jest": "^24.3.2",
     "eslint-plugin-prettier": "^3.3.1",
     "prettier": "^2.2.1",
-    "redux-mock-store": "^1.5.4",
-    "stylelint": "^13.12.0",
-    "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-sass-guidelines": "^8.0.0",
-    "stylelint-config-standard": "^21.0.0",
-    "stylelint-order": "^4.1.0",
-    "stylelint-prettier": "^1.2.0",
-    "stylelint-scss": "^3.19.0"
+    "redux-mock-store": "^1.5.4"
   }
 }

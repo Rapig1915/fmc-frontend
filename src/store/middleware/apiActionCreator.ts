@@ -1,4 +1,4 @@
-import { Dispatch, MiddlewareAPI } from 'redux';
+import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import {
   API_CALL_FAILURE,
   API_CALL_START,
@@ -6,7 +6,7 @@ import {
   IReduxAction,
 } from '../types';
 
-const apiActionCreator = (api: MiddlewareAPI) => {
+const apiActionCreator: Middleware = (api: MiddlewareAPI) => {
   const { dispatch } = api;
 
   return (next: Dispatch) => async (action: IReduxAction) => {
