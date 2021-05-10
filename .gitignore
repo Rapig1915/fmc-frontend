@@ -2,6 +2,7 @@
 
 # ide
 /.idea
+/settings.json
 
 # dependencies
 /node_modules

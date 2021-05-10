@@ -25,5 +25,11 @@
     "ecmaVersion": 2018,
     "sourceType": "module",
     "project": "./tsconfig.json"
-  }
+  },
+  "rules": {
+    "prettier/prettier": 0,
+    "import/no-extraneous-dependencies": ["error",  {"devDependencies": true}],
+    "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/no-explicit-any": "off"
+  }  
 }
