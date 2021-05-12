@@ -13,9 +13,11 @@ import {
   Partners,
   Pricings,
   Intro,
+  Advantage,
   Features,
   FollowUp,
   WorkSteps,
+  Feedbacks,
 } from './components';
 import { integrations } from './data';
 
@@ -52,6 +54,11 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   imgWorkStepLogo: {
     width: '100%',
     height: '100%',
+    cursor: 'pointer',
+  },
+  buttonGetQuote: {
+    marginTop: '-50px',
+    width: '250px',
   },
 }));
 
@@ -73,6 +80,9 @@ const Home = () => {
             comment="We go extra mile, to help you go more miles"
           />
         </Section>
+        <Section className={classes.sectionNoPaddingTop}>
+          <Advantage />
+        </Section>
         <Section className={classes.pagePaddingTop}>
           <FollowUp title="How it works" comment="It's simpler than 1,2,3" />
         </Section>
@@ -91,7 +101,11 @@ const Home = () => {
         <Section
           className={clsx(classes.sectionNoPaddingTop, classes.alignCenter)}
         >
-          <ButtonGetQuote rounded size="large" />
+          <ButtonGetQuote
+            rounded
+            size="large"
+            className={classes.buttonGetQuote}
+          />
         </Section>
         <Section className={classes.pagePaddingTop}>
           <FollowUp
@@ -100,8 +114,8 @@ const Home = () => {
                 People
                 <Image
                   className={classes.imgLove}
-                  src="/assets/love.svg"
-                  alt="certified"
+                  src="/assets/badges/love.svg"
+                  alt="love"
                   lazy={false}
                 />
                 Us
@@ -110,6 +124,9 @@ const Home = () => {
             comment="We are not just saying it, they're saying it to..."
           />
         </Section>
+        <Section className={classes.sectionNoPaddingTop}>
+          <Feedbacks />
+        </Section>
         <Section className={classes.pagePaddingTop}>
           <FollowUp
             title="Find your mechanic"
@@ -117,14 +134,14 @@ const Home = () => {
             toGetQuote
           />
         </Section>
-        {/* <Section className={classes.pagePaddingTop}>
-          <Hero />
-        </Section>
-        <Section className={classes.sectionNoPaddingTop}>
-          <Hub />
-        </Section> */}
       </div>
-      {/* <Section>
+      {/* <Section className={classes.pagePaddingTop}>
+        <Hero />
+      </Section>
+      <Section className={classes.sectionNoPaddingTop}>
+        <Hub />
+      </Section>
+      <Section>
         <Partners data={integrations} />
       </Section>
       <SectionAlternate>
