@@ -129,7 +129,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
           <div className={classes.contactInfoContainer}>
             <Image
               className={classes.contactImage1}
-              src="/assets/security.svg"
+              src="/assets/badges/security.svg"
               alt="thefront"
               lazy={false}
             />
@@ -139,14 +139,14 @@ const Topbar = (props: ToolbarProps): ReactElement => {
             <div className={classes.flexGrow} />
             <Image
               className={classes.contactImage2}
-              src="/assets/phone.svg"
+              src="/assets/badges/phone.svg"
               alt="thefront"
               lazy={false}
             />
             <div>(214) 620-0702</div>
             <Image
               className={classes.contactImage2}
-              src="/assets/user.svg"
+              src="/assets/badges/user.svg"
               alt="thefront"
               lazy={false}
             />
