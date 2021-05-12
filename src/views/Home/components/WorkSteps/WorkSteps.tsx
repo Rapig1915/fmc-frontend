@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid } from '@material-ui/core';
-import { BadgeFeature } from 'src/components/molecules';
+import { ImageNode } from 'src/components/molecules';
 
 interface WorkStepsProps {
   className?: undefined;
@@ -53,7 +53,7 @@ const WorkSteps = (props: WorkStepsProps): ReactElement => {
           md={4}
           data-aos="fade-up"
         >
-          <BadgeFeature
+          <ImageNode
             title="Get instant quote"
             imgUrl="/assets/work-step-1.png"
             className={classes.item}
@@ -69,7 +69,7 @@ const WorkSteps = (props: WorkStepsProps): ReactElement => {
           md={4}
           data-aos="fade-up"
         >
-          <BadgeFeature
+          <ImageNode
             title="Book appointment"
             imgUrl="/assets/work-step-2.png"
             className={classes.item}
@@ -85,7 +85,7 @@ const WorkSteps = (props: WorkStepsProps): ReactElement => {
           md={4}
           data-aos="fade-up"
         >
-          <BadgeFeature
+          <ImageNode
             title="Pay after service"
             imgUrl="/assets/work-step-3.png"
             className={classes.item}

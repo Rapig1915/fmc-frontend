@@ -5,8 +5,8 @@ import { Typography } from '@material-ui/core';
 import { Image } from 'src/components/atoms';
 import { XOther } from 'src/common';
 
-interface BadgeFeatureProps {
-  title: string;
+interface ImageNodeProps {
+  title: React.ReactNode;
   imgUrl: string;
 
   className?: string;
@@ -30,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
 /**
  * Component to display the Feature Badge
  *
- * @param {BadgeFeatureProps} props
+ * @param {ImageNodeProps} props
  */
-const BadgeFeature = (props: BadgeFeatureProps): ReactElement => {
+const ImageNode = (props: ImageNodeProps): ReactElement => {
   const {
     title,
     titleVariant,
@@ -61,7 +61,7 @@ const BadgeFeature = (props: BadgeFeatureProps): ReactElement => {
   );
 };
 
-BadgeFeature.defaultProps = {
+ImageNode.defaultProps = {
   className: undefined,
   align: 'left',
   titleVariant: 'h4',
@@ -69,4 +69,4 @@ BadgeFeature.defaultProps = {
   imgProps: {},
 };
 
-export default BadgeFeature;
+export default ImageNode;

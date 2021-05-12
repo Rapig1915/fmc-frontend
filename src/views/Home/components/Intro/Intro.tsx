@@ -76,7 +76,7 @@ const Intro = (props: IntroProps): ReactElement => {
               <>
                 <Image
                   className={classes.certifiedImage}
-                  src="/assets/certified.svg"
+                  src="/assets/badges/certified.svg"
                   alt="certified"
                   lazy={false}
                 />

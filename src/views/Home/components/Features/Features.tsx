@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid } from '@material-ui/core';
-import { BadgeFeature } from 'src/components/molecules';
+import { ImageNode } from 'src/components/molecules';
 
 interface FeaturesProps {
   className?: undefined;
@@ -54,9 +54,9 @@ const Features = (props: FeaturesProps): ReactElement => {
           md={4}
           data-aos="fade-up"
         >
-          <BadgeFeature
+          <ImageNode
             title="Affordable"
-            imgUrl="/assets/hand-money.svg"
+            imgUrl="/assets/badges/hand-money.svg"
             titleProps={{ className: classes.title }}
             imgProps={{ className: classes.img }}
           />
@@ -69,9 +69,9 @@ const Features = (props: FeaturesProps): ReactElement => {
           md={4}
           data-aos="fade-up"
         >
-          <BadgeFeature
+          <ImageNode
             title="Same day service"
-            imgUrl="/assets/hand-mobile.svg"
+            imgUrl="/assets/badges/hand-mobile.svg"
             titleProps={{ className: classes.title }}
             imgProps={{ className: classes.img }}
           />
@@ -84,9 +84,9 @@ const Features = (props: FeaturesProps): ReactElement => {
           md={4}
           data-aos="fade-up"
         >
-          <BadgeFeature
+          <ImageNode
             title="Certified technicians"
-            imgUrl="/assets/hand-car.svg"
+            imgUrl="/assets/badges/hand-car.svg"
             titleProps={{ className: classes.title }}
             imgProps={{ className: classes.img }}
           />
