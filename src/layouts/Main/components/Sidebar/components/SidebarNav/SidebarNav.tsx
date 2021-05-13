@@ -3,13 +3,7 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  List,
-  ListItem,
-  Typography,
-  ListItemIcon,
-  Button,
-} from '@material-ui/core';
+import { List, ListItem, Typography, ListItemIcon } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { CustomTheme } from 'src/themes';

@@ -3,13 +3,9 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid, Typography } from '@material-ui/core';
 import { Image, ButtonGetQuote } from 'src/components/atoms';
-import {
-  SectionHeader,
-  ZipcodeQuote,
-  ImageNode,
-} from 'src/components/molecules';
-import { url } from 'inspector';
+import { ImageNode } from 'src/components/molecules';
 import { CustomTheme } from 'src/themes';
+import { itemsAdvantage, itemsShop } from '../../data';
 
 interface AdvantageProps {
   className?: undefined;
@@ -138,45 +134,6 @@ const Advantage = (props: AdvantageProps): ReactElement => {
   const isMd = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true,
   });
-
-  const itemsAdvantage = [
-    {
-      img: 'badges/advantage-money.svg',
-      title: 'Affordable & honest',
-      subtitle:
-        "Fixed & upfront pricing. No hidden fees and you'll get the lowest prices guaranteed.",
-    },
-    {
-      img: 'badges/advantage-ring.svg',
-      title: "We'll come to you",
-      subtitle:
-        'Friendly, car mechanics will come to your home, office or parking lot.',
-    },
-    {
-      img: 'badges/advantage-time.svg',
-      title: 'Flexible hours',
-      subtitle:
-        'Open every-day from 9am - 9pm. Book our epxerienced certified technicians today.',
-    },
-  ];
-
-  const itemsShop = [
-    {
-      img: 'badges/advantage-shop-money.svg',
-      title: 'Expensive & devius',
-      subtitle: '30% more expensive and come with additional fees & upsells.',
-    },
-    {
-      img: 'badges/advantage-shop-location.svg',
-      title: 'Inconvinient service locations',
-      subtitle: 'Repairs must be done at a physical auto repair shop.',
-    },
-    {
-      img: 'badges/advantage-shop-rigid.svg',
-      title: 'Rigid hours',
-      subtitle: 'Open limited hours and at times closed on weekends.',
-    },
-  ];
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>

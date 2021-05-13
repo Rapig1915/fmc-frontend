@@ -2,13 +2,10 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid, Button } from '@material-ui/core';
-import { DriveEta, Star } from '@material-ui/icons';
-import { Image, ButtonGetQuote } from 'src/components/atoms';
-import {
-  ImageNode,
-  SectionHeader,
-  ZipcodeQuote,
-} from 'src/components/molecules';
+import { DriveEta } from '@material-ui/icons';
+import { Image, ButtonGetQuote, StarRating } from 'src/components/atoms';
+import { ImageNode } from 'src/components/molecules';
+import { itemsCustomer } from '../../data';
 
 interface FeedbacksProps {
   className?: undefined;
@@ -88,9 +85,6 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '5px',
     },
   },
-  starFeedback: {
-    color: '#FFB800',
-  },
   buttonFeedbackCar: {
     height: '43px',
     width: '188px',
@@ -129,25 +123,6 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
   const isMd = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true,
   });
-
-  const itemsCustomer = [
-    {
-      img: 'customers/mariah.png',
-      name: 'Mariah Heighl',
-    },
-    {
-      img: 'customers/johnny.png',
-      name: 'Johnny Riece',
-    },
-    {
-      img: 'customers/marian.png',
-      name: 'Marian Huves',
-    },
-    {
-      img: 'customers/alice.png',
-      name: 'Alice Bleu',
-    },
-  ];
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
@@ -195,11 +170,7 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
           <div className={classes.containerFeedbackHeader}>
             <div className={classes.containerFlexColumn}>
               <h1>Loved the experience</h1>
-              <div className={classes.containerFlexRow}>
-                {[0, 1, 2, 3, 4].map((x) => (
-                  <Star key={x} className={classes.starFeedback} />
-                ))}
-              </div>
+              <StarRating className={classes.containerFlexRow} />
             </div>
             <Button
               color="inherit"
