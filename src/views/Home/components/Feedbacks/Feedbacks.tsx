@@ -165,7 +165,7 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
           xs={12}
           md={8}
           lg={9}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <div className={classes.containerFeedbackHeader}>
             <div className={classes.containerFlexColumn}>

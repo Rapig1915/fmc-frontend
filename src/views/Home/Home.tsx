@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { colors, Divider } from '@material-ui/core';
@@ -18,6 +18,8 @@ import {
   FollowUp,
   WorkSteps,
   Feedbacks,
+  Candidates,
+  Location,
 } from './components';
 import { integrations } from './data';
 
@@ -25,6 +27,10 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   root: {
     height: '100%',
     width: '100%',
+  },
+  positionRelative: {
+    position: 'relative',
+    zIndex: 10,
   },
   alignCenter: {
     textAlign: 'center',
@@ -62,7 +68,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   },
 }));
 
-const Home = () => {
+const Home = (): ReactElement => {
   const classes = useStyles();
 
   return (
@@ -128,11 +134,19 @@ const Home = () => {
           <Feedbacks />
         </Section>
         <Section className={classes.pagePaddingTop}>
+          <Candidates />
+        </Section>
+        <Section
+          className={clsx(classes.pagePaddingTop, classes.positionRelative)}
+        >
           <FollowUp
             title="Find your mechanic"
             comment="In 120+ cities and growing"
             toGetQuote
           />
+        </Section>
+        <Section className={classes.sectionNoPaddingTop}>
+          <Location />
         </Section>
       </div>
       {/* <Section className={classes.pagePaddingTop}>

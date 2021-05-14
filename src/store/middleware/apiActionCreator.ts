@@ -1,4 +1,4 @@
-import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from 'redux';
+import { /* AnyAction, */ Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import {
   API_CALL_FAILURE,
   API_CALL_START,

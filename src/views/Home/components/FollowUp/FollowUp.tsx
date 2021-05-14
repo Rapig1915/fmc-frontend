@@ -57,7 +57,7 @@ const Intro = (props: IntroProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={12}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <SectionHeader
             title={<span>{title}</span>}

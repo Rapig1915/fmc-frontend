@@ -51,7 +51,7 @@ const WorkSteps = (props: WorkStepsProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={4}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <ImageNode
             title="Get instant quote"
@@ -67,7 +67,7 @@ const WorkSteps = (props: WorkStepsProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={4}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <ImageNode
             title="Book appointment"
@@ -83,7 +83,7 @@ const WorkSteps = (props: WorkStepsProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={4}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <ImageNode
             title="Pay after service"

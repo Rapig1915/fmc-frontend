@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { IconButton, List, ListItem } from '@material-ui/core';
+import { Grid, IconButton, List, ListItem } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -9,6 +9,8 @@ import PinterestIcon from '@material-ui/icons/Pinterest';
 
 import { CustomTheme } from 'src/themes';
 import { Image } from 'src/components/atoms';
+
+import { itemFooter } from 'src/views/Home/data';
 
 interface FooterProps {
   className?: string;
@@ -20,9 +22,8 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     [theme.breakpoints.up('md')]: {
       padding: theme.spacing(6, 0),
     },
-    opacity: 0.9,
-    height: '300px',
     position: 'relative',
+    overflow: 'visible',
   },
   copyrightBar: {
     background: theme.palette.background.footer,
@@ -45,13 +46,13 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   },
   logoContainerItem: {
     paddingTop: 0,
-    width: theme.layout.contentWidth,
+    maxWidth: theme.layout.contentWidth,
   },
   logoContainer: {
     height: 32,
     display: 'flex',
     width: '100%',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
   logoImage: {
@@ -75,10 +76,11 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   },
   imgBack: {
     position: 'absolute',
+    opacity: 0.8,
     bottom: 0,
     width: '100%',
+    height: 'auto',
     objectFit: 'cover',
-    zIndex: -2,
   },
   mask: {
     position: 'absolute',
@@ -88,7 +90,48 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     opacity: 0.9,
     width: '100%',
     height: '100%',
-    zIndex: -1,
+  },
+  menuContainer: {
+    width: '100%',
+    '& h2': {
+      fontFamily: 'Lato',
+      fontWeight: 600,
+      fontStyle: 'normal',
+      fontSize: '20px',
+      lineHeight: '40px',
+      color: '#FFFFFF',
+      marginBottom: 0,
+    },
+    '& h6': {
+      fontFamily: 'Lato',
+      fontWeight: 400,
+      fontStyle: 'normal',
+      fontSize: '17px',
+      lineHeight: '29px',
+      color: '#7E7A92',
+      padding: 0,
+      margin: 0,
+      minWidth: '120px',
+      cursor: 'pointer',
+      '&:hover': {
+        color: '#7E7AB2',
+        textDecoration: 'underline',
+      },
+    },
+    '& hr': {
+      width: '100%',
+      backgroundColor: '#585266',
+      color: '#585266',
+      height: '1px',
+      border: 'none',
+    },
+  },
+  carMakers: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'baseline',
+    alignItems: 'center',
   },
 }));
 
@@ -104,7 +147,7 @@ const Footer = (props: FooterProps): ReactElement => {
           className={classes.imgBack}
           src="/assets/footer-back.png"
           alt="thefront"
-          lazy
+          lazy={false}
         />
         <div key="mask" className={classes.mask} />
         <div className={classes.footerContainer}>
@@ -130,18 +173,40 @@ const Footer = (props: FooterProps): ReactElement => {
               </div>
             </ListItem>
             <ListItem disableGutters>
-              <IconButton className={classes.socialIcon}>
-                <FacebookIcon className={classes.icon} />
-              </IconButton>
-              <IconButton className={classes.socialIcon}>
-                <InstagramIcon className={classes.icon} />
-              </IconButton>
-              <IconButton className={classes.socialIcon}>
-                <TwitterIcon className={classes.icon} />
-              </IconButton>
-              <IconButton className={classes.socialIcon}>
-                <PinterestIcon className={classes.icon} />
-              </IconButton>
+              <Grid container spacing={3} className={classes.menuContainer}>
+                <Grid item md={3} sm={4} xs={12}>
+                  <h2>Contact Us</h2>
+                  <hr />
+                  <h6>team@fixmycar.io</h6>
+                  <h6>(214) 620-0702</h6>
+                  <div>
+                    <IconButton className={classes.socialIcon}>
+                      <FacebookIcon className={classes.icon} />
+                    </IconButton>
+                    <IconButton className={classes.socialIcon}>
+                      <InstagramIcon className={classes.icon} />
+                    </IconButton>
+                    <IconButton className={classes.socialIcon}>
+                      <TwitterIcon className={classes.icon} />
+                    </IconButton>
+                    <IconButton className={classes.socialIcon}>
+                      <PinterestIcon className={classes.icon} />
+                    </IconButton>
+                  </div>
+                  <h2>Menu</h2>
+                  <hr />
+                  {itemFooter &&
+                    itemFooter.menu &&
+                    itemFooter.menu.map((m) => <h6>{m}</h6>)}
+                </Grid>
+                <Grid item md={9} sm={8} xs={12} className={classes.carMakers}>
+                  <h2>Car Makes</h2>
+                  <hr />
+                  {itemFooter &&
+                    itemFooter.carMakers &&
+                    itemFooter.carMakers.map((c) => <h6>{c}</h6>)}
+                </Grid>
+              </Grid>
             </ListItem>
           </List>
         </div>

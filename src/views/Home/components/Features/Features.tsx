@@ -52,7 +52,7 @@ const Features = (props: FeaturesProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={4}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <ImageNode
             title="Affordable"
@@ -67,7 +67,7 @@ const Features = (props: FeaturesProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={4}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <ImageNode
             title="Same day service"
@@ -82,7 +82,7 @@ const Features = (props: FeaturesProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={4}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <ImageNode
             title="Certified technicians"

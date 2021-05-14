@@ -69,7 +69,7 @@ const Intro = (props: IntroProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={6}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <SectionHeader
             title={
@@ -109,7 +109,7 @@ const Intro = (props: IntroProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={6}
-          data-aos="fade-up"
+          // data-aos="fade-up"
         >
           <Image
             src="/assets/intro-background.png"
