@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, IconButton, List, ListItem } from '@material-ui/core';
+import { Grid, Hidden, IconButton, List, ListItem } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -53,7 +53,10 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     display: 'flex',
     width: '100%',
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    [theme.breakpoints.up('sm')]: {
+      justifyContent: 'space-between',
+    },
   },
   logoImage: {
     width: '100%',
@@ -162,14 +165,16 @@ const Footer = (props: FooterProps): ReactElement => {
                     lazy={false}
                   />
                 </a>
-                <a href="/" title="thefront">
-                  <Image
-                    className={classes.logoImage}
-                    src="/assets/trust-pilot.svg"
-                    alt="thefront"
-                    lazy={false}
-                  />
-                </a>
+                <Hidden xsDown>
+                  <a href="/" title="thefront">
+                    <Image
+                      className={classes.logoImage}
+                      src="/assets/trust-pilot.svg"
+                      alt="thefront"
+                      lazy={false}
+                    />
+                  </a>
+                </Hidden>
               </div>
             </ListItem>
             <ListItem disableGutters>
@@ -199,13 +204,21 @@ const Footer = (props: FooterProps): ReactElement => {
                     itemFooter.menu &&
                     itemFooter.menu.map((m) => <h6>{m}</h6>)}
                 </Grid>
-                <Grid item md={9} sm={8} xs={12} className={classes.carMakers}>
-                  <h2>Car Makes</h2>
-                  <hr />
-                  {itemFooter &&
-                    itemFooter.carMakers &&
-                    itemFooter.carMakers.map((c) => <h6>{c}</h6>)}
-                </Grid>
+                <Hidden xsDown>
+                  <Grid
+                    item
+                    md={9}
+                    sm={8}
+                    xs={12}
+                    className={classes.carMakers}
+                  >
+                    <h2>Car Makes</h2>
+                    <hr />
+                    {itemFooter &&
+                      itemFooter.carMakers &&
+                      itemFooter.carMakers.map((c) => <h6>{c}</h6>)}
+                  </Grid>
+                </Hidden>
               </Grid>
             </ListItem>
           </List>

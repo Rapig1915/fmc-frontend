@@ -90,7 +90,7 @@ const Intro = (props: IntroProps): ReactElement => {
               </span>
             }
             ctaGroup={[<ZipcodeQuote className={classes.zipQuote} />]}
-            align="left"
+            align={isMd ? 'left' : 'center'}
             disableGutter
             titleVariant="h6"
             titleProps={{
@@ -105,7 +105,7 @@ const Intro = (props: IntroProps): ReactElement => {
         <Grid
           item
           container
-          justify="flex-start"
+          justify="center"
           alignItems="center"
           xs={12}
           md={6}

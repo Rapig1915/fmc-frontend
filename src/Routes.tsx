@@ -13,7 +13,6 @@ import {
 const Routes = (): ReactElement => {
   return (
     <Switch>
-      <Redirect exact from="/" to="/home" />
       <RouteWithLayout
         component={HomeView}
         exact

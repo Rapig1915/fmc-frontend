@@ -11,7 +11,8 @@ interface ZipcodeQuoteProps {
 const useStyles = makeStyles((theme: CustomTheme) => ({
   root: {
     borderRadius: '31px',
-    width: '400px',
+    maxWidth: '400px',
+    minWidth: '250px',
     height: '45px',
     display: 'flex',
     flexDirection: 'row',
@@ -20,7 +21,8 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   },
   inputZip: {
     flexGrow: 1,
-    width: '200px',
+    maxWidth: '150px',
+    minWidth: '100px',
     height: '100%',
     color: '#A2A1A8',
     fontFamily: 'Artegra Sans',

@@ -21,11 +21,17 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '25px',
     color: '#FFFFFF',
     marginLeft: '10px',
+    [theme.breakpoints.down('sm')]: {
+      minWidth: '200px',
+    },
   },
   img: {
     width: '40px',
     height: '40px',
     color: '#57FFC4',
+  },
+  fullBackground: {
+    background: '#2A2D3C',
   },
 }));
 
@@ -37,6 +43,9 @@ const Features = (props: FeaturesProps): ReactElement => {
   const isMd = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true,
   });
+  const isXs = useMediaQuery(theme.breakpoints.up('md'), {
+    defaultMatches: true,
+  });
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
@@ -44,7 +53,7 @@ const Features = (props: FeaturesProps): ReactElement => {
         container
         justify="space-between"
         spacing={4}
-        direction={isMd ? 'row' : 'column-reverse'}
+        direction={isMd ? 'row' : 'column'}
       >
         <Grid
           item
@@ -52,6 +61,7 @@ const Features = (props: FeaturesProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={4}
+          className={!isXs ? classes.fullBackground : ''}
           // data-aos="fade-up"
         >
           <ImageNode
@@ -67,6 +77,7 @@ const Features = (props: FeaturesProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={4}
+          className={!isXs ? classes.fullBackground : ''}
           // data-aos="fade-up"
         >
           <ImageNode
@@ -82,6 +93,7 @@ const Features = (props: FeaturesProps): ReactElement => {
           alignItems="center"
           xs={12}
           md={4}
+          className={!isXs ? classes.fullBackground : ''}
           // data-aos="fade-up"
         >
           <ImageNode

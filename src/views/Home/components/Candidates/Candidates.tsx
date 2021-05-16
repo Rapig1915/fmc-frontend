@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useMediaQuery, Grid } from '@material-ui/core';
+import { useMediaQuery, Grid, Hidden } from '@material-ui/core';
 import { Check, KeyboardArrowRight } from '@material-ui/icons';
 import { Image, ButtonGetQuote, StarRating } from 'src/components/atoms';
 import { SectionHeader, ImageNode } from 'src/components/molecules';
@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
   buttonGetQuote: {
     marginTop: '20px',
     width: '200px',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: 0,
+    },
   },
   introSubtitle: {
     fontFamily: 'Artegra Sans',
@@ -41,19 +44,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     position: 'relative',
     flexDirection: 'row',
-    overflow: 'visible',
+    overflow: 'hidden',
     zIndex: 1,
   },
   cardCandidate: {
+    minWidth: '300px',
     maxWidth: '50%',
     marginTop: '50px',
     position: 'relative',
     overflow: 'visible',
     zIndex: 1,
     cursor: 'pointer',
-    '@media (max-width:700px)': {
-      maxWidth: '80%',
-    },
     paddingTop: '20px',
     margin: '10px',
   },
@@ -145,7 +146,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     cursor: 'pointer',
     color: '#7157FF',
-    backgroundColor: 'transparent',
+    backgroundColor: theme.palette.common.white,
     border: '1px solid #7157FF',
     zIndex: 2,
   },
@@ -185,11 +186,13 @@ const Candidates = (props: CandidatesProps): ReactElement => {
               <span>Honest, certified, good mechanics ready when you are</span>
             }
             ctaGroup={[
-              <ButtonGetQuote
-                rounded
-                size="large"
-                className={classes.buttonGetQuote}
-              />,
+              <Hidden smDown>
+                <ButtonGetQuote
+                  rounded
+                  size="large"
+                  className={classes.buttonGetQuote}
+                />
+              </Hidden>,
             ]}
             align="left"
             disableGutter
@@ -253,6 +256,15 @@ const Candidates = (props: CandidatesProps): ReactElement => {
             <KeyboardArrowRight />
           </div>
         </Grid>
+        <Hidden smUp>
+          <Grid item xs={12} sm={12}>
+            <ButtonGetQuote
+              rounded
+              size="large"
+              className={classes.buttonGetQuote}
+            />
+          </Grid>
+        </Hidden>
       </Grid>
     </div>
   );

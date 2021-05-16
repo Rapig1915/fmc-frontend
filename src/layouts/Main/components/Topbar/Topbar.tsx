@@ -8,11 +8,14 @@ import {
   Typography,
   IconButton,
   Button,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import { Image, ButtonGetQuote } from 'src/components/atoms';
 import { CustomTheme } from 'src/themes';
+import clsx from 'clsx';
 
 interface ToolbarProps {
   onSidebarOpen?: any;
@@ -83,22 +86,29 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     whiteSpace: 'nowrap',
   },
   iconButton: {
-    padding: 0,
+    width: '40px',
+    height: '40px',
+    padding: '5px',
     '&:hover': {
       background: 'transparent',
     },
   },
   logoContainer: {
-    width: 100,
+    width: '100%',
     height: 28,
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       width: 120,
+      minWidth: 120,
       height: 32,
     },
   },
   logoImage: {
     width: '100%',
     height: '100%',
+  },
+  imageCenterAlign: {
+    flexGrow: 1,
+    textAlign: 'center',
   },
   contactImage1: {
     width: '20px',
@@ -121,6 +131,11 @@ const Topbar = (props: ToolbarProps): ReactElement => {
   const { onSidebarOpen, ...rest } = props;
 
   const classes = useStyles();
+
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.up('xs'), {
+    defaultMatches: true,
+  });
 
   return (
     <>
@@ -155,10 +170,22 @@ const Topbar = (props: ToolbarProps): ReactElement => {
         </div>
       </Hidden>
       <Toolbar disableGutters className={classes.toolbar} {...rest}>
+        <Hidden smUp>
+          <IconButton
+            className={classes.iconButton}
+            onClick={onSidebarOpen}
+            aria-label="Menu"
+          >
+            <Image src="/assets/menu/menu.svg" />
+          </IconButton>
+        </Hidden>
         <div className={classes.logoContainer}>
           <a href="/" title="thefront">
             <Image
-              className={classes.logoImage}
+              className={clsx(
+                classes.logoImage,
+                isXs ? classes.imageCenterAlign : ''
+              )}
               src="/assets/logo.svg"
               alt="thefront"
               lazy={false}
@@ -234,7 +261,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
             onClick={onSidebarOpen}
             aria-label="Menu"
           >
-            <MenuIcon />
+            <Image src="/assets/menu/call.svg" />
           </IconButton>
         </Hidden>
       </Toolbar>

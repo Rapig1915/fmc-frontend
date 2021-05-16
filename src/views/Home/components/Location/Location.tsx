@@ -1,9 +1,10 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useMediaQuery, Grid, Chip } from '@material-ui/core';
+import { useMediaQuery, Grid, Chip, Hidden } from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { CustomTheme } from 'src/themes';
+import { TabSelector } from 'src/components/molecules';
 import { itemsLocation } from '../../data';
 
 interface LocationProps {
@@ -11,23 +12,50 @@ interface LocationProps {
 }
 
 const useStyles = makeStyles((theme: CustomTheme) => ({
-  root: {},
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   flexGrow: {
     flexGrow: 1,
   },
 
   containerLocation: {
-    background: `url(/assets/advantage-back.png)`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'contain',
-    width: '568px',
-    height: '745px',
-    padding: '50px',
+    margin: '20px',
+    padding: '30px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 100,
+    position: 'relative',
+
+    [theme.breakpoints.down('xs')]: {
+      margin: 0,
+      padding: '20px',
+    },
+  },
+  containerAdvantageMask1: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    background: '#4A37B1',
+    borderRadius: '23px',
+    zIndex: -1,
+  },
+  containerAdvantageMask2: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    background: '#57FFC4',
+    borderRadius: '23px',
+    transform: 'rotate(-3deg)',
+    zIndex: -2,
   },
 
   titleState: {
@@ -62,6 +90,8 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    maxHeight: '400px',
+    overflow: 'hidden',
   },
   buttonCity: {
     fontFamily: 'Lato',
@@ -72,6 +102,8 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     color: theme.palette.common.white,
     padding: '20px',
     borderRadius: '40px',
+    marginBottom: '5px',
+    marginTop: '5px',
   },
 
   buttonExpand: {
@@ -102,6 +134,12 @@ const Location = (props: LocationProps): ReactElement => {
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
+      <Hidden mdUp>
+        <TabSelector
+          items={itemsLocation.map((x) => x.state)}
+          selectedIndex={0}
+        />
+      </Hidden>
       <Grid
         container
         justify="center"
@@ -109,35 +147,49 @@ const Location = (props: LocationProps): ReactElement => {
         direction={isMd ? 'row' : 'column'}
       >
         {itemsLocation &&
-          itemsLocation.map((x) => (
-            <Grid
-              key={x.state}
-              item
-              container
-              alignItems="center"
-              xs={12}
-              md={6}
-              // data-aos="fade-up"
-              className={classes.containerLocation}
-            >
-              <h1 className={classes.titleState}>{x.state}</h1>
-              <h4 className={classes.descriptionState}>{x.description}</h4>
-              <div className={classes.cityContainer}>
-                {x.city &&
-                  x.city.map((c) => (
-                    <Chip
-                      className={classes.buttonCity}
-                      color="primary"
-                      label={c || ''}
-                      key={c}
+          itemsLocation.map(
+            (x, index) =>
+              (isMd || !index) && (
+                <Grid
+                  key={x.state}
+                  item
+                  container
+                  alignItems="center"
+                  xs={12}
+                  md={6}
+                  // data-aos="fade-up"
+                >
+                  <div className={classes.containerLocation}>
+                    <div
+                      className={classes.containerAdvantageMask1}
+                      key="mask1"
                     />
-                  ))}
-              </div>
-              <div className={classes.buttonExpand}>
-                <KeyboardArrowDownIcon />
-              </div>
-            </Grid>
-          ))}
+                    <div
+                      className={classes.containerAdvantageMask2}
+                      key="mask2"
+                    />
+                    <h1 className={classes.titleState}>{x.state}</h1>
+                    <h4 className={classes.descriptionState}>
+                      {x.description}
+                    </h4>
+                    <div className={classes.cityContainer}>
+                      {x.city &&
+                        x.city.map((c) => (
+                          <Chip
+                            className={classes.buttonCity}
+                            color="primary"
+                            label={c || ''}
+                            key={c}
+                          />
+                        ))}
+                    </div>
+                    <div className={classes.buttonExpand}>
+                      <KeyboardArrowDownIcon />
+                    </div>
+                  </div>
+                </Grid>
+              )
+          )}
       </Grid>
     </div>
   );

@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useMediaQuery, Grid, Typography } from '@material-ui/core';
+import { useMediaQuery, Grid, Typography, Hidden } from '@material-ui/core';
 import { Image, ButtonGetQuote } from 'src/components/atoms';
-import { ImageNode } from 'src/components/molecules';
+import { ImageNode, TabSelector } from 'src/components/molecules';
 import { CustomTheme } from 'src/themes';
 import { itemsAdvantage, itemsShop } from '../../data';
 
@@ -21,31 +21,64 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   },
 
   containerAdvantage: {
-    background: `url(/assets/advantage-back.png)`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'contain',
-    width: '568px',
-    height: '745px',
     padding: '50px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 100,
+    position: 'relative',
+
+    [theme.breakpoints.down('xs')]: {
+      padding: '20px',
+    },
   },
+  containerAdvantageMask1: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    background: '#4A37B1',
+    borderRadius: '23px',
+    zIndex: -1,
+  },
+  containerAdvantageMask2: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    background: '#57FFC4',
+    borderRadius: '23px',
+    transform: 'rotate(-3deg)',
+    zIndex: -2,
+  },
+
   containerShop: {
-    background: `url(/assets/advantage-shop-back.png)`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'contain',
-    width: '500px',
-    height: '600px',
     padding: '50px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: '50px',
+    marginBottom: '50px',
     zIndex: 99,
+    position: 'relative',
+
+    [theme.breakpoints.down('xs')]: {
+      padding: '20px',
+    },
+  },
+  containerShopMask: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    background: '#F3ECFF',
+    borderRadius: '23px',
+    zIndex: -2,
   },
 
   logoImage: {
@@ -58,6 +91,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
 
   badgeAdvantage: {
     alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
   titleAdvantage: {
     fontFamily: 'Lato',
@@ -82,6 +116,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
 
   badgeShop: {
     alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
   titleShop: {
     fontFamily: 'Lato',
@@ -137,6 +172,9 @@ const Advantage = (props: AdvantageProps): ReactElement => {
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
+      <Hidden mdUp>
+        <TabSelector items={['Fixmycar', 'Repair Shops']} selectedIndex={0} />
+      </Hidden>
       <Grid
         container
         justify="center"
@@ -152,6 +190,14 @@ const Advantage = (props: AdvantageProps): ReactElement => {
           // data-aos="fade-up"
           className={classes.containerAdvantage}
         >
+          <div
+            className={classes.containerAdvantageMask1}
+            key="advantage-mask1"
+          />
+          <div
+            className={classes.containerAdvantageMask2}
+            key="advantage-mask2"
+          />
           <Image
             className={classes.logoImage}
             src="/assets/logo-white.svg"
@@ -179,36 +225,39 @@ const Advantage = (props: AdvantageProps): ReactElement => {
             className={classes.buttonQuote}
           />
         </Grid>
-        <Grid
-          item
-          container
-          justify="flex-start"
-          alignItems="center"
-          xs={12}
-          md={6}
-          // data-aos="fade-up"
-          className={clsx(
-            classes.containerShop,
-            isMd ? classes.offsetLeft : ''
-          )}
-        >
-          <Typography className={classes.labelShop}>Repair Shop</Typography>
-          {itemsShop &&
-            itemsShop.map((x) => (
-              <ImageNode
-                title={
-                  <>
-                    <span>{x.title}</span>
-                    <p>{x.subtitle}</p>
-                  </>
-                }
-                imgUrl={`/assets/${x.img}`}
-                titleProps={{ className: classes.titleShop }}
-                imgProps={{ className: classes.imgShop }}
-                className={classes.badgeShop}
-              />
-            ))}
-        </Grid>
+        <Hidden smDown>
+          <Grid
+            item
+            container
+            justify="flex-start"
+            alignItems="center"
+            xs={12}
+            md={6}
+            // data-aos="fade-up"
+            className={clsx(
+              classes.containerShop,
+              isMd ? classes.offsetLeft : ''
+            )}
+          >
+            <div className={classes.containerShopMask} key="shop-mask" />
+            <Typography className={classes.labelShop}>Repair Shop</Typography>
+            {itemsShop &&
+              itemsShop.map((x) => (
+                <ImageNode
+                  title={
+                    <>
+                      <span>{x.title}</span>
+                      <p>{x.subtitle}</p>
+                    </>
+                  }
+                  imgUrl={`/assets/${x.img}`}
+                  titleProps={{ className: classes.titleShop }}
+                  imgProps={{ className: classes.imgShop }}
+                  className={classes.badgeShop}
+                />
+              ))}
+          </Grid>
+        </Hidden>
       </Grid>
     </div>
   );

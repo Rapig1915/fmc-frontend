@@ -7,7 +7,7 @@ import { SectionHeader, ZipcodeQuote } from 'src/components/molecules';
 interface IntroProps {
   className?: undefined;
   title: React.ReactNode;
-  comment: string;
+  comment: React.ReactNode;
   toGetQuote?: boolean;
 }
 

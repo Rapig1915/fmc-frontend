@@ -21,18 +21,26 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: 'none',
   },
   liftUp: {
-    transition:
-      'box-shadow .25s ease,transform .25s ease,-webkit-transform .25s ease',
-    '&:hover': {
+    [theme.breakpoints.up('md')]: {
+      transition:
+        'box-shadow .25s ease,transform .25s ease,-webkit-transform .25s ease',
+      '&:hover': {
+        boxShadow:
+          '0 1.5rem 2.5rem rgba(22,28,45,.1),0 .3rem 0.5rem -.50rem rgba(22,28,45,.05) !important',
+        transform: 'translate3d(0,-5px,0)',
+      },
+    },
+  },
+  liftedUp: {
+    [theme.breakpoints.up('md')]: {
       boxShadow:
         '0 1.5rem 2.5rem rgba(22,28,45,.1),0 .3rem 0.5rem -.50rem rgba(22,28,45,.05) !important',
       transform: 'translate3d(0,-5px,0)',
     },
-  },
-  liftedUp: {
-    boxShadow:
-      '0 1.5rem 2.5rem rgba(22,28,45,.1),0 .3rem 0.5rem -.50rem rgba(22,28,45,.05) !important',
-    transform: 'translate3d(0,-5px,0)',
+
+    [theme.breakpoints.down('sm')]: {
+      opacity: '1 !important',
+    },
   },
 
   containerFlexColumn: {
@@ -44,6 +52,15 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
   },
 
+  containerCustomer: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    flexWrap: 'nowrap',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'row',
+    },
+  },
   badgeCustomer: {
     cursor: 'pointer',
     padding: '20px',
@@ -51,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItem: 'center',
     justifyContent: 'flex-start',
+
+    [theme.breakpoints.down('sm')]: {
+      opacity: 0.5,
+    },
   },
   nameCustomer: {
     fontFamily: 'Artegra Sans',
@@ -140,7 +161,7 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
           md={4}
           lg={3}
           // data-aos="fade-up"
-          className={classes.containerFlexColumn}
+          className={classes.containerCustomer}
         >
           {itemsCustomer &&
             itemsCustomer.map((x, index) => (

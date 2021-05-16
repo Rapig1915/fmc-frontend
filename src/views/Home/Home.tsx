@@ -1,17 +1,13 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { colors, Divider } from '@material-ui/core';
-import { Section, SectionAlternate } from 'src/components/organisms';
+import { colors, Hidden, useMediaQuery, useTheme } from '@material-ui/core';
+import { Section } from 'src/components/organisms';
 
 import { CustomTheme } from 'src/themes';
 import { Image, ButtonGetQuote } from 'src/components/atoms';
+import { ImageNode } from 'src/components/molecules';
 import {
-  Customization,
-  Hero,
-  Hub,
-  Partners,
-  Pricings,
   Intro,
   Advantage,
   Features,
@@ -21,7 +17,6 @@ import {
   Candidates,
   Location,
 } from './components';
-import { integrations } from './data';
 
 const useStyles = makeStyles((theme: CustomTheme) => ({
   root: {
@@ -65,11 +60,40 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   buttonGetQuote: {
     marginTop: '-50px',
     width: '250px',
+    height: '50px',
+  },
+
+  containerWarranty: {
+    background: '#4A37B1',
+    borderRadius: '7px',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  imgWarranty: {
+    width: '30px',
+    height: '30px',
+    margin: '5px',
+    objectFit: 'contain',
+    color: '#57FFC4',
+    marginRight: '10px',
+  },
+  titleWarranty: {
+    color: theme.palette.common.white,
+    fontFamily: 'Artegra Sans',
+    fontWeight: 400,
+    fontStyle: 'normal',
+    fontSize: '23px',
+    lineHeight: '32px',
   },
 }));
 
 const Home = (): ReactElement => {
   const classes = useStyles();
+
+  const theme = useTheme();
+  const isSm = useMediaQuery(theme.breakpoints.up('sm'), {
+    defaultMatches: true,
+  });
 
   return (
     <div className={classes.root}>
@@ -77,6 +101,25 @@ const Home = (): ReactElement => {
         <Section className={classes.pagePaddingTop}>
           <Intro />
         </Section>
+        <Hidden mdUp>
+          <Section
+            className={clsx(classes.sectionNoPaddingTop, classes.alignCenter)}
+          >
+            <ImageNode
+              title={
+                <>
+                  <b>Service waranty:</b>
+                  <br />
+                  24 months / 24,000 mi waranty on each job.
+                </>
+              }
+              imgUrl="/assets/badges/security.svg"
+              titleProps={{ className: classes.titleWarranty }}
+              imgProps={{ className: classes.imgWarranty }}
+              className={classes.containerWarranty}
+            />
+          </Section>
+        </Hidden>
         <Section className={classes.sectionNoPaddingTop}>
           <Features />
         </Section>
@@ -127,7 +170,12 @@ const Home = (): ReactElement => {
                 Us
               </>
             }
-            comment="We are not just saying it, they're saying it to..."
+            comment={
+              <>
+                We are not just saying it, {!isSm && <br />} they&apos;re saying
+                it to...
+              </>
+            }
           />
         </Section>
         <Section className={classes.sectionNoPaddingTop}>
