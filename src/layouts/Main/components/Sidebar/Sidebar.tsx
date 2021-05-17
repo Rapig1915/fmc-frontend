@@ -11,7 +11,7 @@ interface SidebarProps {
   variant: 'permanent' | 'persistent' | 'temporary' | undefined;
 
   className?: string;
-  onClose?: any;
+  onClose?: () => void;
 }
 
 const useStyles = makeStyles((theme: CustomTheme) => ({

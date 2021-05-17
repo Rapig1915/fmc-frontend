@@ -2,13 +2,12 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { ButtonGetQuote } from 'src/components/atoms';
 import { makeStyles } from '@material-ui/core';
-import { CustomTheme } from 'src/themes';
 
 interface ZipcodeQuoteProps {
   className?: string;
 }
 
-const useStyles = makeStyles((theme: CustomTheme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     borderRadius: '31px',
     maxWidth: '400px',

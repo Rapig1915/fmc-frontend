@@ -197,22 +197,6 @@ const Home = (): ReactElement => {
           <Location />
         </Section>
       </div>
-      {/* <Section className={classes.pagePaddingTop}>
-        <Hero />
-      </Section>
-      <Section className={classes.sectionNoPaddingTop}>
-        <Hub />
-      </Section>
-      <Section>
-        <Partners data={integrations} />
-      </Section>
-      <SectionAlternate>
-        <Customization />
-      </SectionAlternate>
-      <Divider />
-      <SectionAlternate innerNarrowed>
-        <Pricings />
-      </SectionAlternate> */}
     </div>
   );
 };

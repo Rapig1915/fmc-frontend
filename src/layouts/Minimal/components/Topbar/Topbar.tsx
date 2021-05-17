@@ -7,7 +7,7 @@ import { Image } from 'src/components/atoms';
 import { CustomTheme } from 'src/themes';
 
 interface TopbarProps {
-  onSidebarOpen?: any;
+  onSidebarOpen?: () => void;
   className?: string;
 }
 

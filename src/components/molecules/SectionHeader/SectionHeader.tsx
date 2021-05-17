@@ -4,13 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Grid, GridJustification, Typography } from '@material-ui/core';
 
 interface SectionHeaderProps {
-  title: any;
+  title: React.ReactNode;
 
   className?: string;
-  subtitle?: any;
+  subtitle?: React.ReactNode;
   label?: string;
-  overline?: any;
-  ctaGroup?: any[];
+  overline?: React.ReactNode;
+  ctaGroup?: React.ReactNode[];
   fadeUp?: boolean;
   align?: 'right' | 'left' | 'center';
   disableGutter?: boolean;
@@ -28,9 +28,9 @@ interface SectionHeaderProps {
     | 'body1'
     | 'body2';
   subtitleColor?: 'textPrimary' | 'textSecondary' | 'primary' | 'secondary';
-  labelProps?: any;
-  titleProps?: any;
-  subtitleProps?: any;
+  labelProps?: { className: string };
+  titleProps?: { className: string; variant?: string };
+  subtitleProps?: { className: string };
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -102,70 +102,56 @@ const SectionHeader = (props: SectionHeaderProps): ReactElement => {
       {...rest}
     >
       {overline && (
-        <Grid
-          item
-          container
-          justify={justifyGrid}
-          xs={12}
-          className="section-header__overline-wrapper"
-        >
+        <Grid item container justify={justifyGrid} xs={12}>
           {overline}
         </Grid>
       )}
       {label && (
-        <Grid item xs={12} className="section-header__label-wrapper">
+        <Grid item xs={12}>
           <Typography
-            variant="overline"
+            {...labelProps}
+            variant="h3"
             color="primary"
             component="p"
             align={align || 'center'}
-            {...labelProps}
           >
             {label}
           </Typography>
         </Grid>
       )}
-      <Grid item xs={12} className="section-header__title-wrapper">
+      <Grid item xs={12}>
         <Typography
+          {...titleProps}
           variant={titleVariant}
           align={align || 'center'}
           className={clsx('section-header__title', classes.title, titleClasses)}
           color="textPrimary"
-          {...titleProps}
         >
           {title}
         </Typography>
       </Grid>
       {subtitle && (
-        <Grid item xs={12} className="section-header__subtitle-wrapper">
+        <Grid item xs={12}>
           <Typography
+            {...subtitleProps}
             variant={subtitleVariant || 'h6'}
             align={align || 'center'}
             color={subtitleColor || 'textSecondary'}
-            className="section-header__subtitle"
-            {...subtitleProps}
           >
             {subtitle}
           </Typography>
         </Grid>
       )}
       {ctaGroup && !!ctaGroup.length && (
-        <Grid item xs={12} className="section-header__cta-wrapper">
+        <Grid item xs={12}>
           <Grid
             container
             justify={justifyGrid}
             alignItems="center"
             wrap="nowrap"
-            className="section-header__cta-container"
           >
             {ctaGroup.map((item) => (
-              <div
-                key={`cta-${item.a}`}
-                className={clsx(
-                  'section-header__cta-item-wrapper',
-                  classes.cta
-                )}
-              >
+              <div key={`cta-${item}`} className={clsx(classes.cta)}>
                 {item}
               </div>
             ))}
@@ -189,9 +175,9 @@ SectionHeader.defaultProps = {
   titleVariant: 'h4',
   subtitleVariant: 'h6',
   subtitleColor: 'textPrimary',
-  labelProps: {},
-  titleProps: {},
-  subtitleProps: {},
+  labelProps: undefined,
+  titleProps: undefined,
+  subtitleProps: undefined,
 };
 
 export default SectionHeader;

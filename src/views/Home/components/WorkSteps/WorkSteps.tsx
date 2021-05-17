@@ -8,7 +8,7 @@ interface WorkStepsProps {
   className?: undefined;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {},
   item: {
     flexDirection: 'column',

@@ -8,14 +8,15 @@ import { ArrowForward } from '@material-ui/icons';
 interface ButtonGetQuoteProps {
   rounded?: boolean;
   color?: PropTypes.Color | undefined;
-  size?: any;
+  size?: 'medium' | 'large' | 'small';
   className?: string;
 }
 
 const useStyles = makeStyles({
   root: {
     border: 0,
-    borderRadius: (props: any) => (props.rounded ? '31px' : undefined),
+    borderRadius: (props: ButtonGetQuoteProps) =>
+      props.rounded ? '31px' : undefined,
     textTransform: 'none',
     fontFamily: 'Artegra Sans',
     fontStyle: 'normal',

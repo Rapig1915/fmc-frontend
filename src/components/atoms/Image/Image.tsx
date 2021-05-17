@@ -8,7 +8,9 @@ interface ImageProps {
   srcSet?: string;
   alt?: string;
   lazy?: boolean;
-  lazyProps?: any;
+  lazyProps?: {
+    className: string;
+  };
   className?: string;
 }
 

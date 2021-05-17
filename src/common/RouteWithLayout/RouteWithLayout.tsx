@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, RouteComponentProps, RouteProps } from 'react-router-dom';
 
-interface RoleWithLayoutProps {
-  component: any;
-  layout: any;
-  path?: string;
-  exact?: boolean;
+interface RoleWithLayoutProps extends RouteProps {
+  layout: React.ComponentType;
+  component: React.ComponentType<
+    RouteComponentProps<{ [key: string]: string }>
+  >;
 }
 
 const RouteWithLayout = (props: RoleWithLayoutProps): ReactElement => {
@@ -15,7 +15,7 @@ const RouteWithLayout = (props: RoleWithLayoutProps): ReactElement => {
     <Route
       {...rest}
       exact
-      render={(matchProps: any) => (
+      render={(matchProps: RouteComponentProps) => (
         <Layout>
           <Component {...matchProps} />
         </Layout>
@@ -24,9 +24,6 @@ const RouteWithLayout = (props: RoleWithLayoutProps): ReactElement => {
   );
 };
 
-RouteWithLayout.defaultProps = {
-  path: '',
-  exact: false,
-};
+RouteWithLayout.defaultProps = {};
 
 export default RouteWithLayout;

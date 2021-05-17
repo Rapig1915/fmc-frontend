@@ -2,13 +2,9 @@ import React, { ReactElement } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 
 import { RouteWithLayout } from './common';
-import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
+import { Main as MainLayout } from './layouts';
 
-import {
-  Home as HomeView,
-  SignupSimple as SignupSimpleView,
-  NotFound as NotFoundView,
-} from './views';
+import HomeView from './views';
 
 const Routes = (): ReactElement => {
   return (
@@ -18,18 +14,6 @@ const Routes = (): ReactElement => {
         exact
         layout={MainLayout}
         path="/home"
-      />
-      <RouteWithLayout
-        component={SignupSimpleView}
-        exact
-        layout={MainLayout}
-        path="/signup-simple"
-      />
-      <RouteWithLayout
-        component={NotFoundView}
-        exact
-        layout={MinimalLayout}
-        path="/not-found"
       />
       <Redirect to="/home" />
     </Switch>

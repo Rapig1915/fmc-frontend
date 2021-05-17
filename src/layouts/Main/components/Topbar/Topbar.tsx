@@ -7,18 +7,16 @@ import {
   ListItem,
   Typography,
   IconButton,
-  Button,
   useMediaQuery,
   useTheme,
 } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
 
 import { Image, ButtonGetQuote } from 'src/components/atoms';
 import { CustomTheme } from 'src/themes';
 import clsx from 'clsx';
 
 interface ToolbarProps {
-  onSidebarOpen?: any;
+  onSidebarOpen?: () => void;
 }
 
 const useStyles = makeStyles((theme: CustomTheme) => ({

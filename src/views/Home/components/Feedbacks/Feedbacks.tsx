@@ -166,6 +166,7 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
           {itemsCustomer &&
             itemsCustomer.map((x, index) => (
               <ImageNode
+                key={x.name}
                 title={<span>{x.name}</span>}
                 imgUrl={`/assets/${x.img}`}
                 titleProps={{ className: classes.nameCustomer }}

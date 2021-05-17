@@ -6,15 +6,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, Typography, ListItemIcon } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { CustomTheme } from 'src/themes';
 import { ButtonGetQuote } from 'src/components/atoms';
 
 interface SidebarNavProps {
   className?: string;
-  onClose?: any;
+  onClose?: () => void;
 }
 
-const useStyles = makeStyles((theme: CustomTheme) => ({
+const useStyles = makeStyles(() => ({
   root: {},
   listItem: {
     flexDirection: 'column',

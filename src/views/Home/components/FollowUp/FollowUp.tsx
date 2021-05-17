@@ -11,7 +11,7 @@ interface IntroProps {
   toGetQuote?: boolean;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {},
   introTitle: {
     fontFamily: 'Lato',

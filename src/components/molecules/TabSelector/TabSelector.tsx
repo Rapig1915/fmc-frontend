@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, GridJustification, Typography } from '@material-ui/core';
 
 interface TabSelectorProps {
   className?: string;

@@ -96,6 +96,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   },
   menuContainer: {
     width: '100%',
+    alignItems: 'flex-start',
     '& h2': {
       fontFamily: 'Lato',
       fontWeight: 600,
@@ -202,7 +203,7 @@ const Footer = (props: FooterProps): ReactElement => {
                   <hr />
                   {itemFooter &&
                     itemFooter.menu &&
-                    itemFooter.menu.map((m) => <h6>{m}</h6>)}
+                    itemFooter.menu.map((m) => <h6 key={m}>{m}</h6>)}
                 </Grid>
                 <Hidden xsDown>
                   <Grid
@@ -216,7 +217,7 @@ const Footer = (props: FooterProps): ReactElement => {
                     <hr />
                     {itemFooter &&
                       itemFooter.carMakers &&
-                      itemFooter.carMakers.map((c) => <h6>{c}</h6>)}
+                      itemFooter.carMakers.map((c) => <h6 key={c}>{c}</h6>)}
                   </Grid>
                 </Hidden>
               </Grid>

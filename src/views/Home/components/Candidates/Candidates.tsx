@@ -216,7 +216,12 @@ const Candidates = (props: CandidatesProps): ReactElement => {
         >
           {itemsCandidates &&
             itemsCandidates.map((x) => (
-              <CardBase withShadow liftUp className={classes.cardCandidate}>
+              <CardBase
+                key={x.name}
+                withShadow
+                liftUp
+                className={classes.cardCandidate}
+              >
                 <Image
                   className={classes.imgCandidate}
                   src={`/assets/candidates/${x.photo}`}
@@ -239,6 +244,7 @@ const Candidates = (props: CandidatesProps): ReactElement => {
                   {x.badge &&
                     x.badge.map((b) => (
                       <ImageNode
+                        key={b}
                         title={b}
                         imgUrl={`/assets/badges/${b
                           .toLowerCase()

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent } from '@material-ui/core';
 
 interface CardBaseProps {
-  children: any;
+  children: React.ReactNode;
 
   className?: string;
   withShadow?: boolean;
@@ -13,7 +13,6 @@ interface CardBaseProps {
   noBg?: boolean;
   liftUp?: boolean;
   align?: 'left' | 'right' | 'center';
-  cardContentProps?: any;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +83,6 @@ const CardBase = (props: CardBaseProps): ReactElement => {
     children,
     align,
     className,
-    cardContentProps,
     ...rest
   } = props;
 
@@ -110,7 +108,6 @@ const CardBase = (props: CardBaseProps): ReactElement => {
           classes.content,
           classes[align || 'center']
         )}
-        {...cardContentProps}
       >
         {children}
       </CardContent>
@@ -126,7 +123,6 @@ CardBase.defaultProps = {
   noBg: false,
   liftUp: true,
   align: 'center',
-  cardContentProps: {},
 };
 
 export default CardBase;

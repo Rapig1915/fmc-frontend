@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useMediaQuery, Divider } from '@material-ui/core';
+import { useMediaQuery } from '@material-ui/core';
 import { CustomTheme } from 'src/themes';
 import { Topbar, Footer, Sidebar } from './components';
 

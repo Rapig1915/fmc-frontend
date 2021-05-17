@@ -207,6 +207,7 @@ const Advantage = (props: AdvantageProps): ReactElement => {
           {itemsAdvantage &&
             itemsAdvantage.map((x) => (
               <ImageNode
+                key={x.title}
                 title={
                   <>
                     <span>{x.title}</span>
@@ -244,6 +245,7 @@ const Advantage = (props: AdvantageProps): ReactElement => {
             {itemsShop &&
               itemsShop.map((x) => (
                 <ImageNode
+                  key={x.title}
                   title={
                     <>
                       <span>{x.title}</span>

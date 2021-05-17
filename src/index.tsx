@@ -21,7 +21,7 @@ import 'aos/dist/aos.css';
 
 const browserHistory = createBrowserHistory();
 
-browserHistory.listen((location: any) => {
+browserHistory.listen((location: { action: string }) => {
   // Use setTimeout to make sure this runs after React Router's own listener
   setTimeout(() => {
     // Keep default behavior of restoring scroll position when user:

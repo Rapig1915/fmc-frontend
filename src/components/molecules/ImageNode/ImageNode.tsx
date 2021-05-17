@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { Image } from 'src/components/atoms';
-import { XOther } from 'src/common';
 
 interface ImageNodeProps {
   title: React.ReactNode;
@@ -12,11 +11,15 @@ interface ImageNodeProps {
   className?: string;
   align?: 'right' | 'left' | 'center';
   titleVariant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-  titleProps?: any;
-  imgProps?: any;
+  titleProps?: {
+    className: string;
+  };
+  imgProps?: {
+    className: string;
+  };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     alignItems: 'center',

@@ -3,6 +3,7 @@
 # ide
 /.idea
 /settings.json
+/.vscode
 
 # dependencies
 /node_modules

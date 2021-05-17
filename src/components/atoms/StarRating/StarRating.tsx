@@ -8,7 +8,7 @@ interface StarRatingProps {
   fill?: number;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   starDefault: {
     color: '#FFFFFF',
   },
@@ -32,7 +32,7 @@ const StarRating = (props: StarRatingProps): ReactElement => {
 
   return (
     <div className={className} {...rest}>
-      {XX.map((x, ind) => (
+      {XX.map((x) => (
         <Star
           key={x}
           className={
