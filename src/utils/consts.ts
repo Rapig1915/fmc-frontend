@@ -4,4 +4,9 @@ export const ENVIRONMENT = {
   PRODUCTION: 'production',
 };
 
-export default ENVIRONMENT;
+export const URL = {
+  HOME: '/home',
+  QUOTE: '/quote',
+  SINGUP: '/singup',
+  DASHBOARD: '/dashboard',
+};

@@ -4,7 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid } from '@material-ui/core';
 import { SectionHeader, ZipcodeQuote } from 'src/components/molecules';
 
-interface IntroProps {
+interface FollowUpProps {
   className?: undefined;
   title: React.ReactNode;
   comment: React.ReactNode;
@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Intro = (props: IntroProps): ReactElement => {
+const FollowUp = (props: FollowUpProps): ReactElement => {
   const { className, title, comment, toGetQuote, ...rest } = props;
   const classes = useStyles();
 
@@ -82,9 +82,9 @@ const Intro = (props: IntroProps): ReactElement => {
   );
 };
 
-Intro.defaultProps = {
+FollowUp.defaultProps = {
   className: undefined,
   toGetQuote: false,
 };
 
-export default Intro;
+export default FollowUp;

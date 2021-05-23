@@ -1,38 +1,58 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import { Divider } from '@material-ui/core';
-import { Topbar } from './components';
-
-const useStyles = makeStyles(() => ({
-  root: {},
-  content: {
-    height: '100%',
-  },
-}));
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useMediaQuery } from '@material-ui/core';
+import { CustomTheme } from 'src/themes';
+import { Topbar, Sidebar } from '../components';
 
 interface MinimalProps {
   children?: React.ReactNode;
-  className?: string;
 }
 
+const useStyles = makeStyles((theme: CustomTheme) => ({
+  root: {
+    height: '100%',
+    backgroundColor: theme.palette.background.default,
+  },
+}));
+
 const Minimal = (props: MinimalProps): ReactElement => {
-  const { children, className } = props;
+  const { children } = props;
 
   const classes = useStyles();
 
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.up('md'), {
+    defaultMatches: true,
+  });
+
+  const [openSidebar, setOpenSidebar] = useState(false);
+
+  const handleSidebarOpen = () => {
+    setOpenSidebar(true);
+  };
+
+  const handleSidebarClose = () => {
+    setOpenSidebar(false);
+  };
+
+  const open = isMd ? false : openSidebar;
+
   return (
-    <div className={clsx(classes.root, className)}>
-      <Topbar />
-      <Divider />
-      <main className={classes.content}>{children}</main>
+    <div
+      className={clsx({
+        [classes.root]: true,
+      })}
+    >
+      <Topbar showMenu={false} onSidebarOpen={handleSidebarOpen} />
+      <Sidebar onClose={handleSidebarClose} open={open} variant="temporary" />
+      <main>{children}</main>
     </div>
   );
 };
 
 Minimal.defaultProps = {
   children: undefined,
-  className: undefined,
 };
 
 export default Minimal;

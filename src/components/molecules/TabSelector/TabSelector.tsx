@@ -1,39 +1,44 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 
 interface TabSelectorProps {
   className?: string;
   selectedIndex?: number;
   items?: string[];
+  onTabSelected: (index: number, text: string) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     border: '2px solid #302A3C',
-    borderRadius: '27.5px',
+    borderRadius: 27.5,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    marginBottom: '30px',
+    marginBottom: theme.spacing(4),
     [theme.breakpoints.down('xs')]: {
-      marginBottom: '20px',
+      marginBottom: theme.spacing(2.5),
     },
+    maxHeight: 50,
   },
   item: {
     width: '100%',
-    borderRadius: '27.5px',
-    fontFamily: 'Lato',
-    fontWeight: 700,
+    height: '100%',
+    borderRadius: 27.5,
+    fontWeight: 500,
     fontStyle: 'normal',
-    fontSize: '20px',
-    lineHeight: '24px',
+    fontSize: 18,
+    lineHeight: '20px',
     padding: '8px',
-    textAlign: 'center',
     border: 0,
-    color: '#7E7A92',
+    color: '#A2A1A8',
+    textAlign: 'center',
+    display: 'table-cell',
+    background: theme.palette.common.white,
     cursor: 'pointer',
 
     [theme.breakpoints.down('xs')]: {
@@ -53,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
  * @param {TabSelectorProps} props
  */
 const TabSelector = (props: TabSelectorProps): ReactElement => {
-  const { className, selectedIndex, items, ...rest } = props;
+  const { className, selectedIndex, items, onTabSelected, ...rest } = props;
 
   const classes = useStyles();
 
@@ -61,16 +66,20 @@ const TabSelector = (props: TabSelectorProps): ReactElement => {
     <div className={clsx('tab-selector', classes.root, className)} {...rest}>
       {items &&
         items.map((item, index) => (
-          <div
+          <Typography
+            role="button"
+            tabIndex={0}
             key={`cta-${item}`}
             className={clsx(
               'tab-selector-item',
               classes.item,
               index === selectedIndex ? classes.itemSelected : undefined
             )}
+            onClick={() => onTabSelected(index, item)}
+            onKeyDown={() => {}}
           >
             {item}
-          </div>
+          </Typography>
         ))}
     </div>
   );

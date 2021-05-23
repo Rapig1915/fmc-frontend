@@ -17,6 +17,7 @@ import clsx from 'clsx';
 
 interface ToolbarProps {
   onSidebarOpen?: () => void;
+  showMenu?: boolean;
 }
 
 const useStyles = makeStyles((theme: CustomTheme) => ({
@@ -43,6 +44,14 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     lineHeight: '18px',
     letterSpacing: '0px',
     textAlign: 'left',
+
+    '& button': {
+      fontFamily: 'Artegra Sans',
+      background: 'transparent',
+      border: 'none',
+      color: '#FFFFFF',
+      cursor: 'pointer',
+    },
   },
   flexGrow: {
     flexGrow: 1,
@@ -122,11 +131,12 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     color: '#57FFC4',
     marginRight: '10px',
     marginLeft: '30px',
+    marginTop: '-2px',
   },
 }));
 
 const Topbar = (props: ToolbarProps): ReactElement => {
-  const { onSidebarOpen, ...rest } = props;
+  const { onSidebarOpen, showMenu, ...rest } = props;
 
   const classes = useStyles();
 
@@ -156,119 +166,126 @@ const Topbar = (props: ToolbarProps): ReactElement => {
               alt="thefront"
               lazy={false}
             />
-            <div>(214) 620-0702</div>
+            <button type="button" key="call">
+              (214) 620-0702
+            </button>
             <Image
               className={classes.contactImage2}
               src="/assets/badges/user.svg"
               alt="thefront"
               lazy={false}
             />
-            <div>(214) 620-0702</div>
+            <button type="button" key="login">
+              Login
+            </button>
           </div>
         </div>
       </Hidden>
-      <Toolbar disableGutters className={classes.toolbar} {...rest}>
-        <Hidden smUp>
-          <IconButton
-            className={classes.iconButton}
-            onClick={onSidebarOpen}
-            aria-label="Menu"
-          >
-            <Image src="/assets/menu/menu.svg" />
-          </IconButton>
-        </Hidden>
-        <div className={classes.logoContainer}>
-          <a href="/" title="thefront">
-            <Image
-              className={clsx(
-                classes.logoImage,
-                isXs ? classes.imageCenterAlign : ''
-              )}
-              src="/assets/logo.svg"
-              alt="thefront"
-              lazy={false}
-            />
-          </a>
-        </div>
-        <div className={classes.flexGrow} />
-        <div>
+      {showMenu && (
+        <Toolbar disableGutters className={classes.toolbar} {...rest}>
+          <Hidden smUp>
+            <IconButton
+              className={classes.iconButton}
+              onClick={onSidebarOpen}
+              aria-label="Menu"
+            >
+              <Image src="/assets/menu/menu.svg" />
+            </IconButton>
+          </Hidden>
+          <div className={classes.logoContainer}>
+            <a href="/" title="thefront">
+              <Image
+                className={clsx(
+                  classes.logoImage,
+                  isXs ? classes.imageCenterAlign : ''
+                )}
+                src="/assets/logo.svg"
+                alt="thefront"
+                lazy={false}
+              />
+            </a>
+          </div>
+          <div className={classes.flexGrow} />
+          <div>
+            <Hidden xsDown>
+              <List className={classes.navigationContainer}>
+                <ListItem className={classes.listItem}>
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    className={classes.listItemText}
+                    component="a"
+                    href="/home"
+                  >
+                    Services
+                  </Typography>
+                </ListItem>
+                <ListItem className={classes.listItem}>
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    className={classes.listItemText}
+                    component="a"
+                    href="/signup-simple"
+                  >
+                    Advice
+                  </Typography>
+                </ListItem>
+                <ListItem className={classes.listItem}>
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    className={classes.listItemText}
+                    component="a"
+                    href="/not-found"
+                  >
+                    Help
+                  </Typography>
+                </ListItem>
+                <ListItem className={classes.listItem}>
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    className={classes.listItemText}
+                    component="a"
+                    href="/not-found"
+                  >
+                    More
+                  </Typography>
+                </ListItem>
+              </List>
+            </Hidden>
+          </div>
+          <div className={classes.flexGrow} />
           <Hidden xsDown>
             <List className={classes.navigationContainer}>
               <ListItem className={classes.listItem}>
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  className={classes.listItemText}
-                  component="a"
-                  href="/home"
-                >
-                  Services
-                </Typography>
-              </ListItem>
-              <ListItem className={classes.listItem}>
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  className={classes.listItemText}
-                  component="a"
-                  href="/signup-simple"
-                >
-                  Advice
-                </Typography>
-              </ListItem>
-              <ListItem className={classes.listItem}>
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  className={classes.listItemText}
-                  component="a"
-                  href="/not-found"
-                >
-                  Help
-                </Typography>
-              </ListItem>
-              <ListItem className={classes.listItem}>
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  className={classes.listItemText}
-                  component="a"
-                  href="/not-found"
-                >
-                  More
-                </Typography>
+                <ButtonGetQuote
+                  rounded
+                  size="small"
+                  className={classes.buttonQuote}
+                />
               </ListItem>
             </List>
           </Hidden>
-        </div>
-        <div className={classes.flexGrow} />
-        <Hidden xsDown>
-          <List className={classes.navigationContainer}>
-            <ListItem className={classes.listItem}>
-              <ButtonGetQuote
-                rounded
-                size="small"
-                className={classes.buttonQuote}
-              />
-            </ListItem>
-          </List>
-        </Hidden>
-        <Hidden smUp>
-          <IconButton
-            className={classes.iconButton}
-            onClick={onSidebarOpen}
-            aria-label="Menu"
-          >
-            <Image src="/assets/menu/call.svg" />
-          </IconButton>
-        </Hidden>
-      </Toolbar>
+          <Hidden smUp>
+            <IconButton
+              className={classes.iconButton}
+              onClick={onSidebarOpen}
+              aria-label="Menu"
+            >
+              <Image src="/assets/menu/call.svg" />
+            </IconButton>
+          </Hidden>
+        </Toolbar>
+      )}
     </>
   );
 };
 
 Topbar.defaultProps = {
   onSidebarOpen: undefined,
+  showMenu: true,
 };
 
 export default Topbar;

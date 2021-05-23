@@ -10,6 +10,7 @@ interface ButtonGetQuoteProps {
   color?: PropTypes.Color | undefined;
   size?: 'medium' | 'large' | 'small';
   className?: string;
+  onClickHandler?: () => void;
 }
 
 const useStyles = makeStyles({
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
 export default function ButtonGetQuote(
   props: ButtonGetQuoteProps
 ): ReactElement {
-  const { rounded, color, size, className } = props;
+  const { rounded, color, size, className, onClickHandler } = props;
   const classes = useStyles({ rounded });
 
   return (
@@ -37,7 +38,7 @@ export default function ButtonGetQuote(
       size={size}
       className={clsx(classes.root, className)}
       endIcon={<ArrowForward />}
-      onClick={() => null}
+      onClick={onClickHandler}
     >
       Get quote
     </Button>
@@ -49,4 +50,5 @@ ButtonGetQuote.defaultProps = {
   color: 'primary',
   size: 'medium',
   className: undefined,
+  onClickHandler: undefined,
 };

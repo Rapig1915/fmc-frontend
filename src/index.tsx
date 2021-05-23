@@ -5,14 +5,14 @@ import { createBrowserHistory } from 'history';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import { Paper, CssBaseline } from '@material-ui/core';
+import { CssBaseline } from '@material-ui/core';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import { SnackbarProvider } from 'notistack';
 import AOS from 'aos';
 
 import { createFMCTheme, CustomTheme } from 'src/themes';
-import Routes from './Routes';
+import Routes from './routes';
 import reportWebVitals from './reportWebVitals';
 import { persistor, store } from './store';
 
@@ -53,11 +53,9 @@ const App = () => {
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <SnackbarProvider maxSnack={3}>
               <CssBaseline />
-              <Paper>
-                <Router history={browserHistory}>
-                  <Routes />
-                </Router>
-              </Paper>
+              <Router history={browserHistory}>
+                <Routes />
+              </Router>
             </SnackbarProvider>
           </MuiPickersUtilsProvider>
         </MuiThemeProvider>

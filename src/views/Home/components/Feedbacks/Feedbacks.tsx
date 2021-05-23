@@ -5,7 +5,7 @@ import { useMediaQuery, Grid, Button } from '@material-ui/core';
 import { DriveEta } from '@material-ui/icons';
 import { Image, ButtonGetQuote, StarRating } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
-import { itemsCustomer } from '../../data';
+import { itemsCustomer } from 'src/utils/data';
 
 interface FeedbacksProps {
   className?: undefined;
