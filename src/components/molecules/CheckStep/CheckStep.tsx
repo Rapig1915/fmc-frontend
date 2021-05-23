@@ -1,12 +1,9 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useMediaQuery, Grid, Box, Typography } from '@material-ui/core';
-import {
-  SectionHeader,
-  TabSelector,
-  ZipcodeQuote,
-} from 'src/components/molecules';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Typography } from '@material-ui/core';
+import { TabSelector } from 'src/components/molecules';
+import logger from 'src/utils/logger';
 
 interface CheckStepProps {
   className?: string;
@@ -31,7 +28,7 @@ const CheckStep = (props: CheckStepProps): ReactElement => {
   const classes = useStyles();
 
   const onCarOptionSelected = (index: number, text: string) => {
-    console.log(index, text);
+    logger.log(index, text);
   };
 
   return (
