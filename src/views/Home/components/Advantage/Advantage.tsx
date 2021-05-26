@@ -5,7 +5,8 @@ import { useMediaQuery, Grid, Typography, Hidden } from '@material-ui/core';
 import { Image, ButtonGetQuote } from 'src/components/atoms';
 import { ImageNode, TabSelector } from 'src/components/molecules';
 import { CustomTheme } from 'src/themes';
-import { itemsAdvantage, itemsShop } from '../../data';
+import { itemsAdvantage, itemsShop } from 'src/utils/data';
+import logger from 'src/utils/logger';
 
 interface AdvantageProps {
   className?: undefined;
@@ -170,10 +171,18 @@ const Advantage = (props: AdvantageProps): ReactElement => {
     defaultMatches: true,
   });
 
+  const onTabSelected = (index: number, text: string) => {
+    logger.log(index, text);
+  };
+
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Hidden mdUp>
-        <TabSelector items={['Fixmycar', 'Repair Shops']} selectedIndex={0} />
+        <TabSelector
+          items={['Fixmycar', 'Repair Shops']}
+          selectedIndex={0}
+          onTabSelected={onTabSelected}
+        />
       </Hidden>
       <Grid
         container

@@ -6,7 +6,7 @@ import { Check, KeyboardArrowRight } from '@material-ui/icons';
 import { Image, ButtonGetQuote, StarRating } from 'src/components/atoms';
 import { SectionHeader, ImageNode } from 'src/components/molecules';
 import { CardBase } from 'src/components/organisms';
-import { itemsCandidates } from '../../data';
+import { itemsCandidates } from 'src/utils/data';
 
 interface CandidatesProps {
   className?: undefined;

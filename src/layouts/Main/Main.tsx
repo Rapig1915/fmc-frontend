@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core';
 import { CustomTheme } from 'src/themes';
-import { Topbar, Footer, Sidebar } from './components';
+import { Topbar, Footer, Sidebar, Splash } from '../components';
 
 interface MainProps {
   children?: React.ReactNode;
@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   root: {
     height: '100%',
     backgroundColor: theme.palette.background.default,
+    position: 'relative',
   },
 }));
 
@@ -48,6 +49,7 @@ const Main = (props: MainProps): ReactElement => {
       <Sidebar onClose={handleSidebarClose} open={open} variant="temporary" />
       <main>{children}</main>
       <Footer />
+      <Splash show={false} />
     </div>
   );
 };

@@ -5,7 +5,8 @@ import { useMediaQuery, Grid, Chip, Hidden } from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { CustomTheme } from 'src/themes';
 import { TabSelector } from 'src/components/molecules';
-import { itemsLocation } from '../../data';
+import { itemsLocation } from 'src/utils/data';
+import logger from 'src/utils/logger';
 
 interface LocationProps {
   className?: undefined;
@@ -132,12 +133,17 @@ const Location = (props: LocationProps): ReactElement => {
     defaultMatches: true,
   });
 
+  const onTabSelected = (index: number, text: string) => {
+    logger.log(index, text);
+  };
+
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Hidden mdUp>
         <TabSelector
           items={itemsLocation.map((x) => x.state)}
           selectedIndex={0}
+          onTabSelected={onTabSelected}
         />
       </Hidden>
       <Grid

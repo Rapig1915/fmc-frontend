@@ -62,7 +62,6 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     width: '250px',
     height: '50px',
   },
-
   containerWarranty: {
     background: '#4A37B1',
     borderRadius: '7px',

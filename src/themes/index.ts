@@ -35,6 +35,16 @@ export const createFMCTheme = (): CustomTheme => {
             color: 'white',
           },
         },
+        MuiDialog: {
+          paper: {
+            borderRadius: '22px',
+          },
+        },
+        MuiBackdrop: {
+          root: {
+            backgroundColor: '#4A37B1E6', // Opacity 90%
+          },
+        },
       },
     })
   );

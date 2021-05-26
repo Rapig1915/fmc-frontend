@@ -10,7 +10,7 @@ import PinterestIcon from '@material-ui/icons/Pinterest';
 import { CustomTheme } from 'src/themes';
 import { Image } from 'src/components/atoms';
 
-import { itemFooter } from 'src/views/Home/data';
+import { itemFooter } from 'src/utils/data';
 
 interface FooterProps {
   className?: string;
