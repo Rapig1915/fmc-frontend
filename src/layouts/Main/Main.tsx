@@ -49,7 +49,7 @@ const Main = (props: MainProps): ReactElement => {
       <Sidebar onClose={handleSidebarClose} open={open} variant="temporary" />
       <main>{children}</main>
       <Footer />
-      <Splash show />
+      <Splash show={false} />
     </div>
   );
 };

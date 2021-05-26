@@ -5,7 +5,7 @@ export const ENVIRONMENT = {
 };
 
 export const URL = {
-  HOME: '/home',
+  HOME: '/',
   QUOTE: '/quote',
   SINGUP: '/singup',
   DASHBOARD: '/dashboard',
