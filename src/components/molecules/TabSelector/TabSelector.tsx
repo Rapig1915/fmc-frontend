@@ -5,9 +5,10 @@ import { Typography } from '@material-ui/core';
 
 interface TabSelectorProps {
   className?: string;
-  selectedIndex?: number;
-  items?: string[];
-  onTabSelected: (index: number, text: string) => void;
+  selectedValue?: string;
+  items?: { [val: string]: string };
+  disabled?: boolean;
+  onTabSelected: (val: string) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -35,11 +36,13 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '20px',
     padding: '8px',
     border: 0,
-    color: '#A2A1A8',
+    color: (props: TabSelectorProps) =>
+      props.disabled ? '#828188' : '#A2A1A8',
     textAlign: 'center',
     display: 'table-cell',
     background: theme.palette.common.white,
-    cursor: 'pointer',
+    cursor: (props: TabSelectorProps) =>
+      props.disabled ? 'no-drop' : 'pointer',
 
     [theme.breakpoints.down('xs')]: {
       padding: '5px',
@@ -58,27 +61,38 @@ const useStyles = makeStyles((theme) => ({
  * @param {TabSelectorProps} props
  */
 const TabSelector = (props: TabSelectorProps): ReactElement => {
-  const { className, selectedIndex, items, onTabSelected, ...rest } = props;
+  const {
+    className,
+    selectedValue,
+    items,
+    disabled,
+    onTabSelected,
+    ...rest
+  } = props;
 
-  const classes = useStyles();
+  const classes = useStyles(props);
+
+  const handleClick = (val: string | number) => {
+    if (!disabled) onTabSelected(val as string);
+  };
 
   return (
     <div className={clsx('tab-selector', classes.root, className)} {...rest}>
       {items &&
-        items.map((item, index) => (
+        Object.keys(items).map((val) => (
           <Typography
             role="button"
             tabIndex={0}
-            key={`cta-${item}`}
+            key={`tab-${val}`}
             className={clsx(
               'tab-selector-item',
               classes.item,
-              index === selectedIndex ? classes.itemSelected : undefined
+              val === selectedValue ? classes.itemSelected : undefined
             )}
-            onClick={() => onTabSelected(index, item)}
+            onClick={() => handleClick(val)}
             onKeyDown={() => {}}
           >
-            {item}
+            {items[val] || ''}
           </Typography>
         ))}
     </div>
@@ -87,8 +101,9 @@ const TabSelector = (props: TabSelectorProps): ReactElement => {
 
 TabSelector.defaultProps = {
   className: undefined,
-  selectedIndex: undefined,
-  items: [],
+  selectedValue: '',
+  items: {},
+  disabled: false,
 };
 
 export default TabSelector;
