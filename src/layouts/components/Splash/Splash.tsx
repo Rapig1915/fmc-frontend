@@ -1,23 +1,21 @@
 import React, { ReactElement } from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core';
-// import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-// import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
-// import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Image } from 'src/components/atoms';
-
-interface SplashProps {
-  show: boolean;
-}
+import { IReduxState } from 'src/store/reducers';
+import { useDispatch, useSelector } from 'react-redux';
+import { URL } from 'src/utils/consts';
+import { showSplash } from 'src/store/actions';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     textAlign: 'center',
     padding: theme.spacing(5),
+    maxWidth: 600,
   },
   title: {
     paddingTop: theme.spacing(0),
@@ -56,28 +54,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Splash = (props: SplashProps): ReactElement => {
-  const { show } = props;
+const Splash = (): ReactElement => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const classes = useStyles();
+  const history = useHistory();
+  const stateShowSplash = useSelector<IReduxState, boolean>(
+    (state: IReduxState) => state.quote.splash
+  );
+  const stateCustomer = useSelector<IReduxState, number>(
+    (state: IReduxState) => state.quote.customer
+  );
+  const dispatch = useDispatch();
 
-  // const [open, setOpen] = React.useState(true);
-
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
-
-  // const handleClose = () => {
-  //   //   setOpen(false);
-  // };
-
-  const cntHappyCustomers = 245;
+  React.useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (stateShowSplash) {
+        dispatch(showSplash(false));
+        history.push(URL.QUOTE);
+      }
+    }, 3000);
+    return () => clearTimeout(timeoutId);
+  }, [stateShowSplash, dispatch, history]);
 
   return (
     <Dialog
       fullScreen={fullScreen}
-      open={show}
+      open={stateShowSplash}
       // onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
       scroll="body"
@@ -90,24 +93,14 @@ const Splash = (props: SplashProps): ReactElement => {
           lazy={false}
         />
         <h3 className={classes.title}>
-          <b>{cntHappyCustomers} happy customers</b>
+          <b>{stateCustomer} happy customers</b>
           <br />
           had their car fixed in your area with Fixmycar!
         </h3>
         <CircularProgress />
       </DialogContent>
-      {/* <DialogActions>
-        <Button autoFocus onClick={handleClose} color="primary">
-          Disagree
-        </Button>
-        <Button onClick={handleClose} color="primary" autoFocus>
-          Agree
-        </Button>
-      </DialogActions> */}
     </Dialog>
   );
 };
-
-Splash.defaultProps = {};
 
 export default Splash;

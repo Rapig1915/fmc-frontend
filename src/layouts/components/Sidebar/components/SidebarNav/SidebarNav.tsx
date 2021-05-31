@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, Typography, ListItemIcon } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { ButtonGetQuote } from 'src/components/atoms';
+import { ButtonForward } from 'src/components/atoms';
 
 interface SidebarNavProps {
   className?: string;
@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
   divider: {
     width: '100%',
   },
-  buttonQuote: {
+  ButtonForward: {
     width: '150px',
     borderRadius: '31px',
   },
@@ -94,7 +94,7 @@ const SidebarNav = (props: SidebarNavProps): ReactElement => {
         </Typography>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <ButtonGetQuote rounded size="small" className={classes.buttonQuote} />
+        <ButtonForward rounded size="small" className={classes.ButtonForward} />
       </ListItem>
     </List>
   );

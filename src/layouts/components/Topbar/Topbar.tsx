@@ -11,7 +11,7 @@ import {
   useTheme,
 } from '@material-ui/core';
 
-import { Image, ButtonGetQuote } from 'src/components/atoms';
+import { Image, ButtonForward } from 'src/components/atoms';
 import { CustomTheme } from 'src/themes';
 import clsx from 'clsx';
 
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   flexGrow: {
     flexGrow: 1,
   },
-  buttonQuote: {
+  ButtonForward: {
     width: '150px',
     borderRadius: '31px',
   },
@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   logoContainer: {
     width: '100%',
     height: 28,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: 120,
       minWidth: 120,
       height: 32,
@@ -141,7 +141,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
   const classes = useStyles();
 
   const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.up('xs'), {
+  const isMd = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true,
   });
 
@@ -181,9 +181,9 @@ const Topbar = (props: ToolbarProps): ReactElement => {
           </div>
         </div>
       </Hidden>
-      {showMenu && (
+      {(!isMd || showMenu) && (
         <Toolbar disableGutters className={classes.toolbar} {...rest}>
-          <Hidden smUp>
+          <Hidden mdUp>
             <IconButton
               className={classes.iconButton}
               onClick={onSidebarOpen}
@@ -197,7 +197,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
               <Image
                 className={clsx(
                   classes.logoImage,
-                  isXs ? classes.imageCenterAlign : ''
+                  !isMd ? classes.imageCenterAlign : ''
                 )}
                 src="/assets/logo.svg"
                 alt="thefront"
@@ -207,7 +207,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
           </div>
           <div className={classes.flexGrow} />
           <div>
-            <Hidden xsDown>
+            <Hidden smDown>
               <List className={classes.navigationContainer}>
                 <ListItem className={classes.listItem}>
                   <Typography
@@ -257,18 +257,18 @@ const Topbar = (props: ToolbarProps): ReactElement => {
             </Hidden>
           </div>
           <div className={classes.flexGrow} />
-          <Hidden xsDown>
+          <Hidden smDown>
             <List className={classes.navigationContainer}>
               <ListItem className={classes.listItem}>
-                <ButtonGetQuote
+                <ButtonForward
                   rounded
                   size="small"
-                  className={classes.buttonQuote}
+                  className={classes.ButtonForward}
                 />
               </ListItem>
             </List>
           </Hidden>
-          <Hidden smUp>
+          <Hidden mdUp>
             <IconButton
               className={classes.iconButton}
               onClick={onSidebarOpen}
