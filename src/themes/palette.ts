@@ -57,9 +57,9 @@ export const palette: CustomPaletteOptions = {
   secondary: {
     light: '#ffb74d',
     // "main": "#f9b934",
-    main: '#66D5A2',
-    dark: '#f57c00',
-    contrastText: 'rgba(0, 0, 0, 0.87)',
+    main: '#ffffff',
+    dark: '#00f0f0',
+    contrastText: '#0000ff',
   },
   error: {
     light: '#e57373',

@@ -20,6 +20,7 @@ export const createFMCTheme = (): CustomTheme => {
       props: {
         MuiTextField: {
           variant: 'outlined',
+          size: 'medium',
         },
       },
       typography: {
@@ -32,17 +33,72 @@ export const createFMCTheme = (): CustomTheme => {
       overrides: {
         MuiButton: {
           containedSecondary: {
-            color: 'white',
+            color: '#7157FF',
+          },
+          label: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            alignContent: 'center',
+            justifyContent: 'space-around',
+          },
+        },
+        MuiRadio: {
+          colorSecondary: {
+            '&.Mui-checked': {
+              color: '#7157FF',
+            },
           },
         },
         MuiDialog: {
           paper: {
             borderRadius: '22px',
           },
+          paperWidthSm: {
+            maxWidth: 1000,
+          },
         },
         MuiBackdrop: {
           root: {
             backgroundColor: '#4A37B1E6', // Opacity 90%
+          },
+        },
+        MuiOutlinedInput: {
+          root: {
+            borderRadius: 5,
+          },
+          input: {
+            borderRadius: 5,
+            fontFamily: 'Lato',
+            fontWeight: 600,
+            fontSize: 17,
+            lineHeight: '21px',
+            color: '#2A2D3C',
+            border: '2px solid #D8D8D8',
+            paddingLeft: 20,
+            background: palette.common?.white,
+          },
+        },
+        MuiSelect: {
+          outlined: {
+            borderRadius: 5,
+          },
+        },
+        MuiInputLabel: {
+          outlined: {
+            fontFamily: 'Lato',
+            fontWeight: 600,
+            fontSize: 17,
+            lineHeight: '21px',
+            color: '#A2A1A8',
+            paddingLeft: 10,
+
+            '&.Mui-focused': {
+              display: 'none',
+            },
+            '&.MuiFormLabel-filled': {
+              display: 'none',
+            },
           },
         },
       },
