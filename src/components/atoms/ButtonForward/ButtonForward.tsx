@@ -5,10 +5,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import { PropTypes } from '@material-ui/core';
 import { ArrowForward } from '@material-ui/icons';
 
-interface ButtonGetQuoteProps {
+interface ButtonForwardProps {
+  title?: string;
   rounded?: boolean;
+  disabled?: boolean;
   color?: PropTypes.Color | undefined;
   size?: 'medium' | 'large' | 'small';
+  noIcon?: boolean;
+
   className?: string;
   onClickHandler?: () => void;
 }
@@ -16,7 +20,7 @@ interface ButtonGetQuoteProps {
 const useStyles = makeStyles({
   root: {
     border: 0,
-    borderRadius: (props: ButtonGetQuoteProps) =>
+    borderRadius: (props: ButtonForwardProps) =>
       props.rounded ? '31px' : undefined,
     textTransform: 'none',
     fontFamily: 'Artegra Sans',
@@ -25,10 +29,17 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ButtonGetQuote(
-  props: ButtonGetQuoteProps
-): ReactElement {
-  const { rounded, color, size, className, onClickHandler } = props;
+export default function ButtonForward(props: ButtonForwardProps): ReactElement {
+  const {
+    title,
+    rounded,
+    disabled,
+    color,
+    size,
+    className,
+    onClickHandler,
+    noIcon,
+  } = props;
   const classes = useStyles({ rounded });
 
   return (
@@ -37,16 +48,20 @@ export default function ButtonGetQuote(
       color={color}
       size={size}
       className={clsx(classes.root, className)}
-      endIcon={<ArrowForward />}
+      endIcon={!noIcon && <ArrowForward />}
       onClick={onClickHandler}
+      disabled={disabled}
     >
-      Get quote
+      {title}
     </Button>
   );
 }
 
-ButtonGetQuote.defaultProps = {
+ButtonForward.defaultProps = {
+  title: 'Get quote',
   rounded: false,
+  disabled: false,
+  noIcon: false,
   color: 'primary',
   size: 'medium',
   className: undefined,
