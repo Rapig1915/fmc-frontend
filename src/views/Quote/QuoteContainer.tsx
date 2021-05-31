@@ -5,16 +5,20 @@ import InfoIcon from '@material-ui/icons/Info';
 import { CustomTheme } from 'src/themes';
 import { Image } from 'src/components/atoms';
 import { URL } from 'src/utils/consts';
+import { CheckStep } from 'src/components/molecules';
+import { QuoteStep } from 'src/types';
 
 interface QuoteContainerProps {
   children?: ReactNode;
   className?: string;
+  currentStep: QuoteStep;
+  onStepChanged: (ns: QuoteStep) => void;
 }
 
 const useStyles = makeStyles((theme: CustomTheme) => ({
   root: {
     padding: theme.spacing(4),
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       padding: 0,
       paddingTop: theme.spacing(1),
     },
@@ -29,8 +33,9 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     '& h1': {
       margin: 0,
       color: theme.palette.common.white,
-      fontFamily: 'Pacifico Regular',
+      fontFamily: 'Pacifico',
       fontSize: 25,
+      fontWeight: 500,
       marginLeft: theme.spacing(6),
       textAlign: 'left',
     },
@@ -78,16 +83,28 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     borderBottomRightRadius: 9,
     padding: theme.spacing(4),
     alignContent: 'flex-start',
+    position: 'relative',
 
     [theme.breakpoints.down('sm')]: {
       borderRadius: 9,
+      minHeight: 500,
+      padding: theme.spacing(2),
     },
+  },
+  checkStep: {
+    position: 'absolute',
+    top: theme.spacing(2),
+    right: theme.spacing(4),
   },
 }));
 
 const QuoteContainer = (props: QuoteContainerProps): ReactElement => {
-  const { children, className } = props;
+  const { children, className, currentStep, onStepChanged } = props;
   const classes = useStyles();
+
+  const handleStepChange = (newStep: QuoteStep) => {
+    onStepChanged(newStep);
+  };
 
   return (
     <Grid container className={clsx(classes.root, className)}>
@@ -112,6 +129,14 @@ const QuoteContainer = (props: QuoteContainerProps): ReactElement => {
           </div>
         </Grid>
       </Hidden>
+      <Hidden smUp>
+        <Grid item xs={12}>
+          <CheckStep
+            currentStep={currentStep}
+            onStepChanged={handleStepChange}
+          />
+        </Grid>
+      </Hidden>
       <Grid
         container
         item
@@ -120,6 +145,13 @@ const QuoteContainer = (props: QuoteContainerProps): ReactElement => {
         xs={12}
         className={classes.contentHolder}
       >
+        <Hidden xsDown>
+          <CheckStep
+            className={classes.checkStep}
+            currentStep={currentStep}
+            onStepChanged={handleStepChange}
+          />
+        </Hidden>
         {children}
       </Grid>
     </Grid>

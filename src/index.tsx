@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -53,9 +53,9 @@ const App = () => {
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <SnackbarProvider maxSnack={3}>
               <CssBaseline />
-              <Router history={browserHistory}>
+              <BrowserRouter>
                 <Routes />
-              </Router>
+              </BrowserRouter>
             </SnackbarProvider>
           </MuiPickersUtilsProvider>
         </MuiThemeProvider>

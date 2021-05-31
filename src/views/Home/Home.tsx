@@ -99,8 +99,6 @@ const Home = (): ReactElement => {
 
   const dispatch = useDispatch();
 
-  if (true) console.log('hehe');
-
   const handleClickGetQuote = (payload: {
     zip?: string;
     customer?: number;
