@@ -5,17 +5,14 @@ import logger from 'src/utils/logger';
 axios.defaults.baseURL = apiBaseUrl;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-export const callApi = async (
-  apiConfig: AxiosRequestConfig
-): Promise<unknown> => {
+export const callApi = async <T>(apiConfig: AxiosRequestConfig): Promise<T> => {
   try {
     const response = await axios.request(apiConfig);
     return response.data;
   } catch (error) {
     logger.error(error);
+    return Promise.reject(error);
   }
-
-  return null;
 };
 
 export default callApi;
