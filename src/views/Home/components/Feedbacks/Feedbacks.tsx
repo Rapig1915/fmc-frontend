@@ -3,12 +3,13 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid, Button } from '@material-ui/core';
 import { DriveEta } from '@material-ui/icons';
-import { Image, ButtonGetQuote, StarRating } from 'src/components/atoms';
+import { Image, ButtonForward, StarRating } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
 import { itemsCustomer } from 'src/utils/data';
 
 interface FeedbacksProps {
   className?: undefined;
+  onGetQuote?: (payload: { zip?: string; customer?: number }) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -137,13 +138,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Feedbacks = (props: FeedbacksProps): ReactElement => {
-  const { className, ...rest } = props;
+  const { className, onGetQuote, ...rest } = props;
   const classes = useStyles();
 
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true,
   });
+
+  const handleForward = () => {
+    if (onGetQuote) onGetQuote({});
+  };
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
@@ -213,10 +218,11 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
             min fee. Save your dollars for something more useful than car
             repair!
           </p>
-          <ButtonGetQuote
+          <ButtonForward
             rounded
             size="large"
             className={classes.buttonGetQuote}
+            onClickHandler={() => handleForward()}
           />
         </Grid>
       </Grid>
@@ -226,6 +232,7 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
 
 Feedbacks.defaultProps = {
   className: undefined,
+  onGetQuote: undefined,
 };
 
 export default Feedbacks;

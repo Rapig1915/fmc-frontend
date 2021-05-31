@@ -1,3 +1,5 @@
+import { QuoteStep, CarSelectType } from 'src/types';
+
 export const integrations = [
   {
     logo: '/images/logos/slack.svg',
@@ -24,6 +26,11 @@ export const integrations = [
     name: 'Atlassian',
   },
 ];
+
+export const advantageCompareList = {
+  FIXMYCAR: 'Fixmycar',
+  REPAIR_SHOP: 'Repair Shop',
+};
 
 export const itemsAdvantage = [
   {
@@ -238,3 +245,175 @@ export const itemFooter = {
     'Hummerr',
   ],
 };
+
+// quote variables
+export const arrCarSelectTypes = {
+  [CarSelectType.BY_PLATE_NUMBER]: 'Plate number',
+  [CarSelectType.BY_YEAR_MAKE_MODEL]: 'Year/make/model',
+};
+
+export const arrQuoteSteps = [
+  QuoteStep.QUOTE_SEARCH_CAR,
+  QuoteStep.QUOTE_SERVICE_DESK,
+  QuoteStep.QUOTE_REVIEW,
+];
+
+export const allYears = {
+  2015: 2015,
+  2016: 2016,
+  2017: 2017,
+  2018: 2018,
+  2019: 2019,
+  2020: 2020,
+  2021: 2021,
+};
+
+export const allBrands = {
+  Audi: 'Audi',
+  Ford: 'Ford',
+  Benz: 'Benz',
+};
+
+export const allModels = {
+  V3: 'V3',
+  MM1: 'MM1',
+  H123: 'H123',
+};
+
+export const allMotors = {
+  V3: 'V3',
+  MM1: 'MM1',
+  H123: 'H123',
+};
+
+export const allStaticServices = [
+  {
+    name: 'Front brakes pads & rotors',
+    image: 'brakes',
+    select: false,
+  },
+  {
+    name: 'Used car',
+    image: 'used-car',
+    select: false,
+  },
+  {
+    name: 'Diagnosis / Inspection',
+    image: 'diagnosis',
+    select: true,
+  },
+  {
+    name: 'Oil Change',
+    image: 'oil-change',
+    select: false,
+  },
+  {
+    name: 'Replace Starter',
+    image: 'replace-starter',
+    select: true,
+  },
+  {
+    name: 'Replace Battery',
+    image: 'replace-battery',
+    select: false,
+  },
+];
+
+export const listNotSureReasons = [
+  {
+    id: 1,
+    title: 'I hear something',
+    subReason: [
+      'Knocking/Clunking sound',
+      'Whining sound',
+      'Grinding sound',
+      'Rattling sound',
+      'Humming sound',
+      'Starting trouble',
+    ],
+  },
+  {
+    id: 2,
+    title: 'I smell something',
+    subReason: [
+      'Knocking/Clunking sound',
+      'Whining sound',
+      'Grinding sound',
+      'Rattling sound',
+      'Humming sound',
+      'Starting trouble',
+    ],
+  },
+  {
+    id: 3,
+    title: 'I feel something',
+    subReason: [
+      'Knocking/Clunking sound',
+      'Whining sound',
+      'Grinding sound',
+      'Rattling sound',
+      'Humming sound',
+      'Starting trouble',
+    ],
+  },
+  {
+    id: 4,
+    title: 'I see something',
+    subReason: [
+      'Knocking/Clunking sound',
+      'Whining sound',
+      'Grinding sound',
+      'Rattling sound',
+      'Humming sound',
+      'Starting trouble',
+    ],
+  },
+  {
+    id: 5,
+    title: 'Warning light',
+    subReason: [
+      'Knocking/Clunking sound',
+      'Whining sound',
+      'Grinding sound',
+      'Rattling sound',
+      'Humming sound',
+      'Starting trouble',
+    ],
+  },
+  {
+    id: 6,
+    title: 'Starting trouble',
+    subReason: [
+      'Knocking/Clunking sound',
+      'Whining sound',
+      'Grinding sound',
+      'Rattling sound',
+      'Humming sound',
+      'Starting trouble',
+    ],
+  },
+  {
+    id: 7,
+    title: 'Failed smog check',
+    subReason: [
+      'Knocking/Clunking sound',
+      'Whining sound',
+      'Grinding sound',
+      'Rattling sound',
+      'Humming sound',
+      'Starting trouble',
+    ],
+  },
+  {
+    id: 8,
+    title: 'Car is dead',
+    subReason: [
+      'Knocking/Clunking sound',
+      'Whining sound',
+      'Grinding sound',
+      'Rattling sound',
+      'Humming sound',
+      'Starting trouble',
+    ],
+  },
+];

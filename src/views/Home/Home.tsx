@@ -1,12 +1,13 @@
 import React, { ReactElement } from 'react';
+import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { colors, Hidden, useMediaQuery, useTheme } from '@material-ui/core';
-import { Section } from 'src/components/organisms';
-
+import { setZip, showSplash } from 'src/store/actions';
 import { CustomTheme } from 'src/themes';
-import { Image, ButtonGetQuote } from 'src/components/atoms';
+import { Image, ButtonForward } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
+import { Section } from 'src/components/organisms';
 import {
   Intro,
   Advantage,
@@ -94,11 +95,32 @@ const Home = (): ReactElement => {
     defaultMatches: true,
   });
 
+  const refFollowUpZip = React.useRef<HTMLDivElement>(null);
+
+  const dispatch = useDispatch();
+
+  if (true) console.log('hehe');
+
+  const handleClickGetQuote = (payload: {
+    zip?: string;
+    customer?: number;
+  }) => {
+    if (!payload.zip) {
+      if (refFollowUpZip)
+        refFollowUpZip.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+    } else {
+      dispatch(setZip(payload.zip || '', payload.customer || 0));
+      dispatch(showSplash(true));
+    }
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.shape}>
         <Section className={classes.pagePaddingTop}>
-          <Intro />
+          <Intro onGetQuote={handleClickGetQuote} />
         </Section>
         <Hidden mdUp>
           <Section
@@ -129,7 +151,7 @@ const Home = (): ReactElement => {
           />
         </Section>
         <Section className={classes.sectionNoPaddingTop}>
-          <Advantage />
+          <Advantage onGetQuote={handleClickGetQuote} />
         </Section>
         <Section className={classes.pagePaddingTop}>
           <FollowUp title="How it works" comment="It's simpler than 1,2,3" />
@@ -149,10 +171,11 @@ const Home = (): ReactElement => {
         <Section
           className={clsx(classes.sectionNoPaddingTop, classes.alignCenter)}
         >
-          <ButtonGetQuote
+          <ButtonForward
             rounded
             size="large"
             className={classes.buttonGetQuote}
+            onClickHandler={() => handleClickGetQuote({})}
           />
         </Section>
         <Section className={classes.pagePaddingTop}>
@@ -178,19 +201,22 @@ const Home = (): ReactElement => {
           />
         </Section>
         <Section className={classes.sectionNoPaddingTop}>
-          <Feedbacks />
+          <Feedbacks onGetQuote={handleClickGetQuote} />
         </Section>
         <Section className={classes.pagePaddingTop}>
-          <Candidates />
+          <Candidates onGetQuote={handleClickGetQuote} />
         </Section>
         <Section
           className={clsx(classes.pagePaddingTop, classes.positionRelative)}
         >
-          <FollowUp
-            title="Find your mechanic"
-            comment="In 120+ cities and growing"
-            toGetQuote
-          />
+          <div ref={refFollowUpZip}>
+            <FollowUp
+              title="Find your mechanic"
+              comment="In 120+ cities and growing"
+              toGetQuote
+              onGetQuote={handleClickGetQuote}
+            />
+          </div>
         </Section>
         <Section className={classes.sectionNoPaddingTop}>
           <Location />

@@ -7,6 +7,7 @@ import { SectionHeader, ZipcodeQuote } from 'src/components/molecules';
 
 interface IntroProps {
   className?: undefined;
+  onGetQuote?: (payload: { zip?: string; customer?: number }) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Intro = (props: IntroProps): ReactElement => {
-  const { className, ...rest } = props;
+  const { className, onGetQuote, ...rest } = props;
   const classes = useStyles();
 
   const theme = useTheme();
@@ -89,7 +90,12 @@ const Intro = (props: IntroProps): ReactElement => {
                 <br /> come to you
               </span>
             }
-            ctaGroup={[<ZipcodeQuote className={classes.zipQuote} />]}
+            ctaGroup={[
+              <ZipcodeQuote
+                className={classes.zipQuote}
+                onGetQuote={onGetQuote}
+              />,
+            ]}
             align={isMd ? 'left' : 'center'}
             disableGutter
             titleVariant="h6"
@@ -127,6 +133,7 @@ const Intro = (props: IntroProps): ReactElement => {
 
 Intro.defaultProps = {
   className: undefined,
+  onGetQuote: undefined,
 };
 
 export default Intro;

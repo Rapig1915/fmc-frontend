@@ -3,13 +3,14 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid, Hidden } from '@material-ui/core';
 import { Check, KeyboardArrowRight } from '@material-ui/icons';
-import { Image, ButtonGetQuote, StarRating } from 'src/components/atoms';
+import { Image, ButtonForward, StarRating } from 'src/components/atoms';
 import { SectionHeader, ImageNode } from 'src/components/molecules';
 import { CardBase } from 'src/components/organisms';
 import { itemsCandidates } from 'src/utils/data';
 
 interface CandidatesProps {
   className?: undefined;
+  onGetQuote?: (payload: { zip?: string; customer?: number }) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -153,13 +154,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Candidates = (props: CandidatesProps): ReactElement => {
-  const { className, ...rest } = props;
+  const { className, onGetQuote, ...rest } = props;
   const classes = useStyles();
 
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true,
   });
+
+  const handleForward = () => {
+    if (onGetQuote) onGetQuote({});
+  };
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
@@ -187,10 +192,11 @@ const Candidates = (props: CandidatesProps): ReactElement => {
             }
             ctaGroup={[
               <Hidden smDown>
-                <ButtonGetQuote
+                <ButtonForward
                   rounded
                   size="large"
                   className={classes.buttonGetQuote}
+                  onClickHandler={() => handleForward()}
                 />
               </Hidden>,
             ]}
@@ -264,10 +270,11 @@ const Candidates = (props: CandidatesProps): ReactElement => {
         </Grid>
         <Hidden smUp>
           <Grid item xs={12} sm={12}>
-            <ButtonGetQuote
+            <ButtonForward
               rounded
               size="large"
               className={classes.buttonGetQuote}
+              onClickHandler={() => handleForward()}
             />
           </Grid>
         </Hidden>
@@ -278,6 +285,7 @@ const Candidates = (props: CandidatesProps): ReactElement => {
 
 Candidates.defaultProps = {
   className: undefined,
+  onGetQuote: undefined,
 };
 
 export default Candidates;

@@ -9,6 +9,7 @@ interface FollowUpProps {
   title: React.ReactNode;
   comment: React.ReactNode;
   toGetQuote?: boolean;
+  onGetQuote?: (payload: { zip?: string; customer?: number }) => void;
 }
 
 const useStyles = makeStyles(() => ({
@@ -35,7 +36,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const FollowUp = (props: FollowUpProps): ReactElement => {
-  const { className, title, comment, toGetQuote, ...rest } = props;
+  const { className, title, comment, toGetQuote, onGetQuote, ...rest } = props;
   const classes = useStyles();
 
   const theme = useTheme();
@@ -69,7 +70,12 @@ const FollowUp = (props: FollowUpProps): ReactElement => {
               className: classes.introTitle,
             }}
             ctaGroup={[
-              toGetQuote && <ZipcodeQuote className={classes.zipQuote} />,
+              toGetQuote && (
+                <ZipcodeQuote
+                  className={classes.zipQuote}
+                  onGetQuote={onGetQuote}
+                />
+              ),
             ]}
             subtitleVariant="h6"
             subtitleProps={{
@@ -85,6 +91,7 @@ const FollowUp = (props: FollowUpProps): ReactElement => {
 FollowUp.defaultProps = {
   className: undefined,
   toGetQuote: false,
+  onGetQuote: undefined,
 };
 
 export default FollowUp;
