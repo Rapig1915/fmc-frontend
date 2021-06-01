@@ -7,11 +7,6 @@ export interface IApiActionPayload {
   error?: string;
 }
 
-export interface IApiAction {
-  type: string;
-  payload: IApiActionPayload;
-}
-
 export interface IApiState {
   [type: string]: {
     inProgress: boolean;

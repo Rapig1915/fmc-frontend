@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import { useHistory } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,9 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Image } from 'src/components/atoms';
 import { IReduxState } from 'src/store/reducers';
-import { useDispatch, useSelector } from 'react-redux';
-import { URL } from 'src/utils/consts';
-import { showSplash } from 'src/store/actions';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -54,34 +51,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Splash = (): ReactElement => {
+interface SplashProps {
+  show: boolean;
+}
+
+const Splash = (props: SplashProps): ReactElement => {
+  const { show } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const classes = useStyles();
-  const history = useHistory();
-  const stateShowSplash = useSelector<IReduxState, boolean>(
-    (state: IReduxState) => state.quote.splash
-  );
+
   const stateCustomer = useSelector<IReduxState, number>(
     (state: IReduxState) => state.quote.customer
   );
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (stateShowSplash) {
-        dispatch(showSplash(false));
-        history.push(URL.QUOTE);
-      }
-    }, 3000);
-    return () => clearTimeout(timeoutId);
-  }, [stateShowSplash, dispatch, history]);
 
   return (
     <Dialog
       fullScreen={fullScreen}
-      open={stateShowSplash}
-      // onClose={handleClose}
+      open={show}
       aria-labelledby="responsive-dialog-title"
       scroll="body"
     >

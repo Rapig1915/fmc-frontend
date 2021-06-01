@@ -1,10 +1,14 @@
-import { API_CALL_FAILURE, API_CALL_START, IApiAction } from '../types';
+import { API_CALL_FAILURE, API_CALL_START, IReduxAction } from '../types';
 
-export const setApiCallStart = (api: string): IApiAction => ({
+export const setApiCallStart = (api: string): IReduxAction => ({
   type: API_CALL_START,
   payload: { api },
 });
-export const setApiCallFailure = (api: string, error: string): IApiAction => ({
+
+export const setApiCallFailure = (
+  api: string,
+  error: string
+): IReduxAction => ({
   type: API_CALL_FAILURE,
   payload: { api, error },
 });

@@ -66,8 +66,12 @@ const ZipcodeQuote = (props: ZipcodeQuoteProps): ReactElement => {
     const v = evt.target.value as string;
     setZip(v);
 
-    const happyCustomer = await getHappyCustomer(v);
-    setCustomer((happyCustomer && happyCustomer['times-used']) || 0);
+    if (v.length === 5) {
+      const happyCustomer = await getHappyCustomer(v);
+      setCustomer((happyCustomer && happyCustomer['times-used']) || 0);
+    } else {
+      setCustomer(0);
+    }
   };
 
   const handleGetQuote = () => {

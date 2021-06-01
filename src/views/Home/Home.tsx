@@ -1,13 +1,22 @@
 import React, { ReactElement } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { colors, Hidden, useMediaQuery, useTheme } from '@material-ui/core';
-import { setZip, showSplash } from 'src/store/actions';
+import {
+  Box,
+  colors,
+  Hidden,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
+import { setZip } from 'src/store/actions';
 import { CustomTheme } from 'src/themes';
 import { Image, ButtonForward } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
 import { Section } from 'src/components/organisms';
+import { Splash } from 'src/layouts/components';
+import { URL } from 'src/utils/consts';
 import {
   Intro,
   Advantage,
@@ -88,6 +97,9 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
 }));
 
 const Home = (): ReactElement => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const classes = useStyles();
 
   const theme = useTheme();
@@ -97,7 +109,7 @@ const Home = (): ReactElement => {
 
   const refFollowUpZip = React.useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch();
+  const [openSplash, setOpenSplash] = React.useState(false);
 
   const handleClickGetQuote = (payload: {
     zip?: string;
@@ -110,13 +122,17 @@ const Home = (): ReactElement => {
         });
     } else {
       dispatch(setZip(payload.zip || '', payload.customer || 0));
-      dispatch(showSplash(true));
+
+      setOpenSplash(true);
+      setTimeout(() => {
+        history.push(URL.QUOTE);
+      }, 3000);
     }
   };
 
   return (
-    <div className={classes.root}>
-      <div className={classes.shape}>
+    <Box className={classes.root}>
+      <Box className={classes.shape}>
         <Section className={classes.pagePaddingTop}>
           <Intro onGetQuote={handleClickGetQuote} />
         </Section>
@@ -219,8 +235,9 @@ const Home = (): ReactElement => {
         <Section className={classes.sectionNoPaddingTop}>
           <Location />
         </Section>
-      </div>
-    </div>
+      </Box>
+      <Splash show={openSplash} />
+    </Box>
   );
 };
 

@@ -1,15 +1,8 @@
-import {
-  IQuoteActionPayload,
-  IReduxAction,
-  ISplashActionPayload,
-  QUOTE_SET_ZIP,
-  QUOTE_SHOW_SPLASH,
-} from '../types';
+import { IQuoteActionPayload, IReduxAction, QUOTE_SET_ZIP } from '../types';
 
 const initialState = {
   zip: '',
   customer: 0,
-  splash: false,
 };
 
 export default (
@@ -23,11 +16,6 @@ export default (
         zip: (action.payload as IQuoteActionPayload).zip || state.zip,
         customer:
           (action.payload as IQuoteActionPayload).customer || state.customer,
-      };
-    case QUOTE_SHOW_SPLASH:
-      return {
-        ...state,
-        splash: (action.payload as ISplashActionPayload).show || false,
       };
     default:
       return state;

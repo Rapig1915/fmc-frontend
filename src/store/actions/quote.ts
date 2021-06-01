@@ -1,16 +1,8 @@
-import {
-  IQuoteAction,
-  ISplashAction,
-  QUOTE_SET_ZIP,
-  QUOTE_SHOW_SPLASH,
-} from '../types';
+import { IReduxAction, QUOTE_SET_ZIP } from '../types';
 
-export const showSplash = (show: boolean): ISplashAction => ({
-  type: QUOTE_SHOW_SPLASH,
-  payload: { show },
-});
-
-export const setZip = (zip: string, customer: number): IQuoteAction => ({
+export const setZip = (zip: string, customer: number): IReduxAction => ({
   type: QUOTE_SET_ZIP,
   payload: { zip, customer },
 });
+
+export const setX = 0;
