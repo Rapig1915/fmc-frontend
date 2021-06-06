@@ -417,3 +417,44 @@ export const listNotSureReasons = [
     ],
   },
 ];
+
+export const faq = [
+  {
+    q: 'Does the inspection include the travel fee?',
+    a:
+      'The insepction service includes all the travel fees. The fixed price you get, is the fixed price you pay.',
+  },
+  {
+    q: 'How long does it take for a tech to contact me?',
+    a:
+      'The insepction service includes all the travel fees. The fixed price you get, is the fixed price you pay.',
+  },
+  {
+    q: 'If a tech cannot find me, will they call?',
+    a:
+      'The insepction service includes all the travel fees. The fixed price you get, is the fixed price you pay.',
+  },
+  {
+    q: 'If my car cannot be fixed, what happens?',
+    a:
+      'The insepction service includes all the travel fees. The fixed price you get, is the fixed price you pay.',
+  },
+  {
+    q: 'May I use the same tech in the future?',
+    a:
+      'The insepction service includes all the travel fees. The fixed price you get, is the fixed price you pay.',
+  },
+  {
+    q: 'What if I find a cheaper alternative?',
+    a:
+      'The insepction service includes all the travel fees. The fixed price you get, is the fixed price you pay.',
+  },
+];
+
+export const carLocations = [
+  'Driveway',
+  'Business Parking Lot',
+  'Apartment Parking Lot',
+  'Street Parking',
+  'Other',
+];

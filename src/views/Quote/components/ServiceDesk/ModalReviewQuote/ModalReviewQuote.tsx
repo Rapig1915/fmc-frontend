@@ -12,19 +12,14 @@ import {
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { ButtonForward, Image } from 'src/components/atoms';
-import {
-  ArrowBackIos,
-  ArrowForwardIos,
-  Check,
-  Close,
-  Help,
-} from '@material-ui/icons';
+import { ArrowBackIos, Check, Close, Help } from '@material-ui/icons';
 import { ImageNode } from 'src/components/molecules';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
 } from 'src/components/organisms';
+import BoxFAQ from './BoxFAQ';
 
 interface ModalReviewQuoteProps {
   show: boolean;
@@ -74,13 +69,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'none',
       },
     },
-  },
-
-  reasonTitle: {
-    fontSize: 18,
-    lineHeight: '21px',
-    fontWeight: 600,
-    color: '#79739C',
   },
 
   intro: {
@@ -408,33 +396,10 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                   imgProps={{ className: classes.imgHappyCustomer }}
                   className={classes.containerHappyCustomer}
                 />
-                <ImageNode
-                  key="faq"
-                  title={
-                    <>
-                      <b>FAQs</b>
-                      <br />
-                      Got questions?
-                      <ArrowForwardIos className="arrow" />
-                    </>
-                  }
-                  imgUrl="/assets/badges/question-secondary.svg"
-                  titleProps={{ className: classes.titleHappyCustomer }}
-                  imgProps={{ className: classes.imgHappyCustomer }}
-                  className={classes.containerHappyCustomer}
-                />
+                <BoxFAQ />
               </AccordionDetails>
             </Accordion>
             <DialogActions className={classes.actionContainer}>
-              <ButtonForward
-                key="same-day-service"
-                title="Request same-day service"
-                color="secondary"
-                size="large"
-                rounded
-                noIcon
-                onClickHandler={handleStartOver}
-              />
               <ButtonForward
                 key="schedule-service"
                 title="Schedule service"

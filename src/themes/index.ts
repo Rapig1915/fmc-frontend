@@ -77,6 +77,16 @@ export const createFMCTheme = (): CustomTheme => {
             border: '2px solid #D8D8D8',
             paddingLeft: 20,
             background: palette.common?.white,
+
+            '.with-start-icon &': {
+              paddingLeft: 40,
+            },
+          },
+          multiline: {
+            padding: 0,
+          },
+          inputMultiline: {
+            padding: 20,
           },
         },
         MuiSelect: {
@@ -93,12 +103,21 @@ export const createFMCTheme = (): CustomTheme => {
             color: '#A2A1A8',
             paddingLeft: 10,
 
+            '.with-start-icon &': {
+              paddingLeft: 40,
+            },
+
             '&.Mui-focused': {
               display: 'none',
             },
             '&.MuiFormLabel-filled': {
               display: 'none',
             },
+          },
+        },
+        MuiSvgIcon: {
+          colorSecondary: {
+            color: '#BDC1DA',
           },
         },
       },

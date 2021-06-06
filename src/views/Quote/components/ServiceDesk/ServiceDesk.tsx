@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
@@ -7,6 +7,8 @@ import ServiceBar from './ServiceBar';
 import ServiceGallery from './ServiceGallery';
 import ServiceSummary from './ServiceSummary';
 import { ModalReviewQuote } from './ModalReviewQuote';
+import { ModalScheduleService } from './ModalScheduleService';
+import { ServiceDeskContext } from './ServiceDeskContext';
 
 interface ServiceDeskProps {
   className?: string;
@@ -48,30 +50,51 @@ const ServiceDesk = (props: ServiceDeskProps): ReactElement => {
 
   const [openModalReview, setOpenModalReview] = useState(false);
 
+  const [openModalSchedule, setOpenModalSchedule] = useState(false);
+
+  const [services, setServices] = useState<string[]>([]);
+
   const handleContinue = () => {
-    setOpenModalReview(true);
+    // setOpenModalReview(true);
+    setOpenModalSchedule(true);
   };
 
+  const handleSetServices = useCallback(
+    (data: string[]) => setServices(data),
+    []
+  );
+
   return (
-    <Box className={clsx('quote-choose-service', classes.root, className)}>
-      <Typography className={classes.title}>How can we help?</Typography>
-      <ServiceBar onGoToReview={handleContinue} />
-      <ServiceGallery />
-      <Box className={classes.summaryContainer}>
-        <ServiceSummary className={classes.summaryService} />
-        <ButtonForward
-          title="Continue"
-          rounded
-          size="large"
-          onClickHandler={handleContinue}
-          className={classes.buttonContinue}
+    <ServiceDeskContext.Provider
+      value={{
+        services,
+        handleSetServices,
+      }}
+    >
+      <Box className={clsx('quote-choose-service', classes.root, className)}>
+        <Typography className={classes.title}>How can we help?</Typography>
+        <ServiceBar onGoToReview={handleContinue} />
+        <ServiceGallery />
+        <Box className={classes.summaryContainer}>
+          <ServiceSummary className={classes.summaryService} />
+          <ButtonForward
+            title="Continue"
+            rounded
+            size="large"
+            onClickHandler={handleContinue}
+            className={classes.buttonContinue}
+          />
+        </Box>
+        <ModalReviewQuote
+          show={openModalReview}
+          onClose={() => setOpenModalReview(false)}
+        />
+        <ModalScheduleService
+          show={openModalSchedule}
+          onClose={() => setOpenModalSchedule(false)}
         />
       </Box>
-      <ModalReviewQuote
-        show={openModalReview}
-        onClose={() => setOpenModalReview(false)}
-      />
-    </Box>
+    </ServiceDeskContext.Provider>
   );
 };
 

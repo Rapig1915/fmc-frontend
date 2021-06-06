@@ -1,9 +1,10 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import { ImageNode } from 'src/components/molecules';
 import { allStaticServices } from 'src/utils/data';
+import { ServiceDeskContext } from './ServiceDeskContext';
 
 interface ServiceGalleryProps {
   className?: string;
@@ -58,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ServiceGallery = (props: ServiceGalleryProps): ReactElement => {
   const { className } = props;
+  const { services, handleSetServices } = useContext(ServiceDeskContext);
 
   const classes = useStyles();
 

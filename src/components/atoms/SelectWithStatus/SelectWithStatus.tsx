@@ -1,7 +1,13 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
 import { CheckCircle } from '@material-ui/icons';
 
 interface SelectWithStatusProps {
@@ -10,6 +16,7 @@ interface SelectWithStatusProps {
   disabled?: boolean;
   className?: string;
   defaultValue?: string;
+  start?: React.ReactNode;
   valueChanged?: (v: string) => void;
 }
 
@@ -35,6 +42,15 @@ const useStyles = makeStyles((theme) => ({
       border: '2px solid #36D9A0',
     },
   },
+  start: {
+    position: 'absolute',
+    background: 'transparent',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 50,
+  },
 }));
 
 /**
@@ -49,6 +65,7 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
     valueChanged,
     defaultValue,
     items,
+    start,
     disabled,
   } = props;
 
@@ -66,13 +83,18 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
   return (
     <FormControl
       variant="outlined"
-      className={clsx(classes.formControl, classes.root, className)}
+      className={clsx(
+        classes.formControl,
+        classes.root,
+        className,
+        start && 'with-start-icon'
+      )}
     >
       <InputLabel>{label}</InputLabel>
       <Select
         value={val && items && items[val] ? val : ''}
         onChange={handleChange}
-        className={val ? classes.inputChecked : ''}
+        className={clsx({ [classes.inputChecked]: !!val })}
         disabled={disabled}
       >
         <MenuItem value="" key="item-empty">
@@ -85,6 +107,7 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
             </MenuItem>
           ))}
       </Select>
+      {start && <Box className={classes.start}>{start}</Box>}
       {!!val && <CheckCircle className={classes.checked} />}
     </FormControl>
   );
@@ -96,6 +119,7 @@ SelectWithStatus.defaultProps = {
   className: '',
   defaultValue: '',
   valueChanged: undefined,
+  start: undefined,
   disabled: false,
 };
 
