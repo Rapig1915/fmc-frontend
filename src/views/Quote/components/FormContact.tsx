@@ -1,9 +1,9 @@
 import React, { ReactElement, useContext } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Grid, Hidden, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import ButtonForward from 'src/components/atoms/ButtonForward';
-import { Image, InputWithStatus } from 'src/components/atoms';
+import { InputWithStatus } from 'src/components/atoms';
 import { Email, Lock, Person, Phone } from '@material-ui/icons';
 import { QuoteShowModal } from 'src/types';
 import { QuoteContext } from '../QuoteContext';
