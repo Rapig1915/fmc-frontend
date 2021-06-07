@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
-import { itemsLocation } from 'src/utils/data';
+import { stateList } from 'src/utils/data';
 import { InputWithStatus, SelectWithStatus } from 'src/components/atoms';
 
 interface FormPlateNumberProps {
@@ -38,10 +38,10 @@ const FormPlateNumber = (props: FormPlateNumberProps): ReactElement => {
 
   const classes = useStyles({ show });
 
-  const optionStates = itemsLocation.reduce((obj, x) => {
+  const optionStates = stateList.reduce((obj, x) => {
     return {
       ...obj,
-      [x.state]: x.state,
+      [x]: x,
     };
   }, {});
 

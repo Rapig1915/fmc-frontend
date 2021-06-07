@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   DialogActions,
@@ -8,8 +8,10 @@ import {
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import { ButtonForward } from 'src/components/atoms';
 import { Close } from '@material-ui/icons';
+
+import { ButtonForward } from 'src/components/atoms';
+import { QuoteContext } from 'src/views/Quote/QuoteContext';
 import ModalReasonAccordion from './ModalReasonAccordion';
 import ModalReasonOther from './ModalReasonOther';
 import ModalReasonCheck from './ModalReasonCheck';
@@ -17,7 +19,7 @@ import ModalReasonCheck from './ModalReasonCheck';
 interface ModalNotSureProps {
   show: boolean;
   onClose: () => void;
-  onGoToReview: () => void;
+  onContinue: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -61,68 +63,53 @@ enum ReasonStep {
 }
 
 const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
-  const { show, onClose, onGoToReview } = props;
+  const { show, onClose, onContinue } = props;
   const classes = useStyles();
 
   const [reasonStep, setReasonStep] = useState(ReasonStep.START);
-  const [reasonData, setReasonData] = useState({
-    reasonId: 0,
-    reason: '',
-    subReason: '',
-    otherReason: '',
-    note: '',
-  });
 
-  const handleMainReasonChange = (
-    id: number,
-    reason: string,
-    subReason: string
-  ) => {
-    setReasonData((state) => ({
-      ...state,
+  const { reason, handleSetReason } = useContext(QuoteContext);
+
+  const handleMainReasonChange = (id: number, r: string, subR: string) => {
+    handleSetReason({
       reasonId: id,
-      reason,
-      subReason,
+      reason: r,
+      subReason: subR,
       otherReason: '',
       note: '',
-    }));
+    });
   };
 
   const handleOtherReasonChange = (s: string) => {
-    setReasonData((state) => ({
-      ...state,
+    handleSetReason({
+      ...reason,
       otherReason: s,
       note: '',
-    }));
+    });
   };
 
   const handleNoteChange = (n: string) => {
-    setReasonData((state) => ({
-      ...state,
+    handleSetReason({
+      ...reason,
       note: n,
-    }));
+    });
   };
 
   const handleContinue = () => {
     if (reasonStep === ReasonStep.START) {
-      if (
-        reasonData.reasonId &&
-        reasonData.reason &&
-        reasonData.subReason !== 'Other'
-      )
+      if (reason.reasonId && reason.reason && reason.subReason !== 'Other')
         setReasonStep(ReasonStep.CHECK);
-      else if (reasonData.subReason === 'Other')
-        setReasonStep(ReasonStep.OTHER);
+      else if (reason.subReason === 'Other') setReasonStep(ReasonStep.OTHER);
     } else if (reasonStep === ReasonStep.OTHER) {
       if (
-        reasonData.reasonId &&
-        reasonData.reason &&
-        reasonData.subReason === 'Other' &&
-        reasonData.otherReason
+        reason.reasonId &&
+        reason.reason &&
+        reason.subReason === 'Other' &&
+        reason.otherReason
       )
         setReasonStep(ReasonStep.CHECK);
     } else if (reasonStep === ReasonStep.CHECK) {
-      onGoToReview();
+      onContinue();
     }
   };
 
@@ -152,22 +139,22 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
       <DialogContent>
         {reasonStep === ReasonStep.START && (
           <ModalReasonAccordion
-            reasonId={reasonData.reasonId}
-            subReason={reasonData.subReason}
+            reasonId={reason.reasonId}
+            subReason={reason.subReason}
             onChange={handleMainReasonChange}
           />
         )}
         {reasonStep === ReasonStep.OTHER && (
           <ModalReasonOther
-            reason={reasonData.reason}
-            otherReason={reasonData.otherReason}
+            reason={reason.reason}
+            otherReason={reason.otherReason}
             onOtherReasonChange={handleOtherReasonChange}
           />
         )}
         {reasonStep === ReasonStep.CHECK && (
           <ModalReasonCheck
-            reason={reasonData.reason}
-            note={reasonData.note}
+            reason={reason.reason}
+            note={reason.note}
             onNoteChange={handleNoteChange}
           />
         )}

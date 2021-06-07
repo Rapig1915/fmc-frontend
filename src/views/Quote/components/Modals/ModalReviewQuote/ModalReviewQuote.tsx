@@ -1,4 +1,5 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
@@ -14,11 +15,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { ButtonForward, Image } from 'src/components/atoms';
 import { ArrowBackIos, Check, Close, Help } from '@material-ui/icons';
 import { ImageNode } from 'src/components/molecules';
+import { IReduxState } from 'src/store/reducers';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
 } from 'src/components/organisms';
+import { QuoteContext } from 'src/views/Quote/QuoteContext';
+import { QuoteShowModal } from 'src/types';
 import BoxFAQ from './BoxFAQ';
 
 interface ModalReviewQuoteProps {
@@ -89,6 +93,11 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     marginTop: theme.spacing(1),
     marginRight: theme.spacing(3),
+    // backgroundImage: 'url(/assets/mazda.png)',
+    // backgroundPosition: 'center',
+    // backgroundRepeat: 'no-repeat',
+    // backgroundSize: 'contain',
+    // overflow: 'hidden'
   },
   titleMazda: {
     color: '#685364',
@@ -144,7 +153,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    padding: theme.spacing(1),
+    padding: theme.spacing(0),
   },
   inspectTitle: {
     marginTop: theme.spacing(0.5),
@@ -185,6 +194,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     marginTop: theme.spacing(1),
     marginRight: theme.spacing(3),
+
+    [theme.breakpoints.down('xs')]: {
+      margin: theme.spacing(1),
+    },
   },
   titleHappyCustomer: {
     color: '#7E7A92',
@@ -240,9 +253,15 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   const { show, onClose } = props;
   const classes = useStyles();
 
-  const cntHappyCustomers = 245;
+  const cntHappyCustomers = useSelector(
+    (state: IReduxState) => state.quote.customer
+  );
 
-  const handleSchedule = () => {};
+  const { handleShowModal } = useContext(QuoteContext);
+
+  const handleSchedule = () => {
+    handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
+  };
 
   const handleStartOver = () => {};
 
@@ -289,7 +308,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                     <b>Mazda 3, 2006</b>
                   </>
                 }
-                imgUrl="/assets/mazda.png"
+                imgUrl="/assets/brands/audi.svg"
                 titleProps={{ className: classes.titleMazda }}
                 imgProps={{ className: classes.imgMazda }}
                 className={classes.containerMazda}

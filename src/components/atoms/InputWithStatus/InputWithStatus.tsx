@@ -12,6 +12,7 @@ interface InputWithStatusProps {
   start?: React.ReactNode;
   valueChanged?: (v: string) => void;
   disabled?: boolean;
+  password?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +61,7 @@ const InputWithStatus = (props: InputWithStatusProps): ReactElement => {
     placeholder,
     start,
     disabled,
+    password,
     multiline,
   } = props;
 
@@ -86,6 +88,7 @@ const InputWithStatus = (props: InputWithStatusProps): ReactElement => {
     >
       <TextField
         autoComplete="off"
+        type={password ? 'password' : 'text'}
         value={val}
         placeholder={placeholder}
         onChange={handleChange}
@@ -107,6 +110,7 @@ InputWithStatus.defaultProps = {
   start: undefined,
   disabled: false,
   multiline: false,
+  password: false,
 };
 
 export default InputWithStatus;

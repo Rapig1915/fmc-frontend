@@ -25,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     marginTop: theme.spacing(1),
     marginRight: theme.spacing(3),
+
+    [theme.breakpoints.down('xs')]: {
+      margin: theme.spacing(1),
+    },
   },
   titleHappyCustomer: {
     color: '#7E7A92',
@@ -59,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.common.white,
     borderRadius: 5,
     position: 'relative',
+
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(1),
+      paddingRight: theme.spacing(2),
+      margin: theme.spacing(1),
+    },
   },
   faqQ: {
     fontWeight: 600,

@@ -119,6 +119,9 @@ export const createFMCTheme = (): CustomTheme => {
           colorSecondary: {
             color: '#BDC1DA',
           },
+          colorAction: {
+            color: '#FFFFFF',
+          },
         },
       },
     })

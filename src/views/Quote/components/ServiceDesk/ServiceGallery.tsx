@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import { ImageNode } from 'src/components/molecules';
 import { allStaticServices } from 'src/utils/data';
-import { ServiceDeskContext } from './ServiceDeskContext';
+import { QuoteContext } from '../../QuoteContext';
 
 interface ServiceGalleryProps {
   className?: string;
@@ -59,9 +59,17 @@ const useStyles = makeStyles((theme) => ({
 
 const ServiceGallery = (props: ServiceGalleryProps): ReactElement => {
   const { className } = props;
-  const { services, handleSetServices } = useContext(ServiceDeskContext);
+  const { services, handleSetServices } = useContext(QuoteContext);
 
   const classes = useStyles();
+
+  const handleSelectService = (s: string) => {
+    if (services.includes(s)) {
+      handleSetServices(services.filter((x) => x !== s));
+    } else {
+      handleSetServices([...services, s]);
+    }
+  };
 
   return (
     <Box className={clsx('quote-service-gallery', classes.root, className)}>
@@ -71,16 +79,23 @@ const ServiceGallery = (props: ServiceGalleryProps): ReactElement => {
             key={b.name}
             title={b.name}
             imgUrl={`/assets/services/${b.image}${
-              b.select ? '-selected' : ''
+              services.includes(b.name) ? '-selected' : ''
             }.svg`}
             titleProps={{
-              className: clsx(classes.titleBadge, b.select ? 'selected' : ''),
+              className: clsx(
+                classes.titleBadge,
+                services.includes(b.name) ? 'selected' : ''
+              ),
             }}
             imgProps={{
-              className: clsx(classes.imgBadge, b.select ? 'selected' : ''),
+              className: clsx(
+                classes.imgBadge,
+                services.includes(b.name) ? 'selected' : ''
+              ),
             }}
             align="center"
             className={classes.boxBadge}
+            onClickHandler={() => handleSelectService(b.name)}
           />
         ))}
     </Box>

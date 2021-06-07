@@ -48,6 +48,15 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
 
   const classes = useStyles({ show });
 
+  const optionYear = Array(50)
+    .fill(0)
+    .reduce((obj, x, index) => {
+      return {
+        ...obj,
+        [2021 - index]: 2021 - index,
+      };
+    }, {});
+
   const [vehicleList, setVehicleList] = useState<[ItemVehicle]>();
 
   React.useEffect(() => {
@@ -120,11 +129,12 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
       )}
     >
       <Box className={classes.yearContainer}>
-        <InputWithStatus
-          key="input-year"
-          placeholder="Year"
+        <SelectWithStatus
+          key="select-year"
+          label="Year"
+          items={optionYear}
           defaultValue={inputData.year}
-          valueChanged={(val) => handleInputChange('year', val)}
+          valueChanged={(val: string) => handleInputChange('year', val)}
         />
         <SelectWithStatus
           key="select-brand"

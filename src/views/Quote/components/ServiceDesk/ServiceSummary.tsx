@@ -1,8 +1,9 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import { RemoveCircleRounded } from '@material-ui/icons';
+import { QuoteContext } from '../../QuoteContext';
 
 interface ServiceSummaryProps {
   className?: string;
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#57FFC4',
     height: 20,
     width: 'auto',
+    cursor: 'pointer',
   },
 }));
 
@@ -53,14 +55,21 @@ const ServiceSummary = (props: ServiceSummaryProps): ReactElement => {
 
   const classes = useStyles();
 
-  const selectedServices = ['Engine', 'Clutch', 'Suspension'];
+  const { services, handleSetServices } = useContext(QuoteContext);
+
+  const handleRemoveService = (s: string) => {
+    handleSetServices(services.filter((x) => x !== s));
+  };
 
   return (
     <Box className={clsx('quote-summary-services', classes.root, className)}>
       <Typography className={classes.title}>Summary of services</Typography>
-      {selectedServices.map((x) => (
+      {services.map((x) => (
         <Box key={`service-${x}`} className={classes.itemContainerService}>
-          <RemoveCircleRounded className={classes.iconService} />
+          <RemoveCircleRounded
+            className={classes.iconService}
+            onClick={() => handleRemoveService(x)}
+          />
           <Typography className={classes.textService}>{x}</Typography>
         </Box>
       ))}

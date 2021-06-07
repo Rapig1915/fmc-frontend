@@ -4,11 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import { ArrowForwardIos, Help, Search } from '@material-ui/icons';
 import ButtonForward from 'src/components/atoms/ButtonForward';
-import ModalNotSure from './ModalNotSure/ModalNotSure';
+import { ModalNotSure } from '../Modals';
 
 interface ServiceBarProps {
   className?: string;
-  onGoToReview: () => void;
+  onContinue: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ServiceBar = (props: ServiceBarProps): ReactElement => {
-  const { className, onGoToReview } = props;
+  const { className, onContinue } = props;
 
   const classes = useStyles();
 
@@ -92,9 +92,9 @@ const ServiceBar = (props: ServiceBarProps): ReactElement => {
 
   const [openModalNotSure, setOpenModalNotSure] = useState(false);
 
-  const handleGoToReview = () => {
+  const handleContinue = () => {
     setOpenModalNotSure(false);
-    onGoToReview();
+    onContinue();
   };
 
   return (
@@ -124,7 +124,7 @@ const ServiceBar = (props: ServiceBarProps): ReactElement => {
       <ModalNotSure
         show={openModalNotSure}
         onClose={() => setOpenModalNotSure(false)}
-        onGoToReview={() => handleGoToReview()}
+        onContinue={() => handleContinue()}
       />
     </Box>
   );

@@ -23,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 23,
     lineHeight: '24px',
     fontWeight: 900,
+
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+    },
   },
   textSelectedServices: {
     fontSize: 18,

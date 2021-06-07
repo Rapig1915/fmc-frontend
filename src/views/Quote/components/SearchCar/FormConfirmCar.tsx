@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
-import { Image, InputWithStatus, SelectWithStatus } from 'src/components/atoms';
+import { Image, SelectWithStatus } from 'src/components/atoms';
 import { allBrands, allModels, allMotors } from 'src/utils/data';
 
 interface FormConfirmCarProps {
@@ -63,6 +63,15 @@ const FormConfirmCar = (props: FormConfirmCarProps): ReactElement => {
 
   const classes = useStyles({ show });
 
+  const optionYear = Array(50)
+    .fill(0)
+    .reduce((obj, x, index) => {
+      return {
+        ...obj,
+        [2021 - index]: 2021 - index,
+      };
+    }, {});
+
   return (
     <Box className={clsx('quote-confirm-car', classes.root, className)}>
       <Typography className={classes.title}>Is this your car?</Typography>
@@ -70,11 +79,12 @@ const FormConfirmCar = (props: FormConfirmCarProps): ReactElement => {
 
       <Box className={classes.lineContainer}>
         <Typography className={classes.lineLabel}>Year</Typography>
-        <InputWithStatus
-          key="input-year"
+        <SelectWithStatus
+          key="select-brand"
           className={classes.flexGrow}
-          placeholder="Year"
-          defaultValue="2020"
+          label="Year"
+          items={optionYear}
+          defaultValue="2021"
           disabled
         />
       </Box>

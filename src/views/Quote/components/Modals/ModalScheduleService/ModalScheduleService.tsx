@@ -1,12 +1,14 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
   DialogActions,
   DialogTitle,
+  Grid,
   IconButton,
-  TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,16 +24,35 @@ import {
   DirectionsCar,
   LocationOn,
 } from '@material-ui/icons';
-import { carLocations } from 'src/utils/data';
+import { DatePicker } from '@material-ui/pickers';
 
-interface ModalReviewQuoteProps {
+import moment from 'moment';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+
+import { carLocations } from 'src/utils/data';
+import clsx from 'clsx';
+import { QuoteContext } from 'src/views/Quote/QuoteContext';
+import { QuoteShowModal } from 'src/types';
+
+interface ModalScheduleServiceProps {
   show: boolean;
   onClose: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
+  '@global': {
+    '*::-webkit-scrollbar': {
+      width: '0.4em',
+    },
+    '*::-webkit-scrollbar-track': {},
+    '*::-webkit-scrollbar-thumb': {
+      backgroundColor: '#79739C',
+      outline: 0,
+      borderRadius: 3.5,
+    },
+  },
   root: {
-    minWidth: 900,
+    minWidth: 700,
     [theme.breakpoints.down('sm')]: {
       minWidth: 300,
     },
@@ -112,11 +133,66 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
     },
   },
+
+  containerDatepicker: {
+    borderRadius: 5,
+  },
+  containerTimeSlots: {
+    margin: 0,
+    padding: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    maxHeight: 310,
+    overflowY: 'scroll',
+
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+    },
+  },
+  itemTimeSlot: {
+    cursor: 'pointer',
+    background: theme.palette.common.white,
+    marginBottom: theme.spacing(0.5),
+    borderRadius: 6,
+    padding: theme.spacing(1.5),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 18,
+    fontWeight: 500,
+    color: '#7E7A92',
+    border: '1px solid #7E7A92',
+
+    '&.selected': {
+      background: theme.palette.primary.main,
+      color: theme.palette.common.white,
+    },
+
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1),
+      fontSize: 15,
+    },
+
+    [theme.breakpoints.down('xs')]: {
+      margin: theme.spacing(0.3),
+      width: '45%',
+      flexGrow: 1,
+    },
+  },
 }));
 
-const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
+const ModalScheduleService = (
+  props: ModalScheduleServiceProps
+): ReactElement => {
   const { show, onClose } = props;
   const classes = useStyles();
+
+  const theme = useTheme();
+  const isSm = useMediaQuery(theme.breakpoints.down('sm'), {
+    defaultMatches: true,
+  });
 
   const optionCarLocations = carLocations.reduce((obj, x) => {
     return {
@@ -125,9 +201,27 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     };
   }, {});
 
-  const [date, setDate] = React.useState<Date | null>(new Date());
+  // The first commit of Material-UI
+  const [date, changeDate] = React.useState<MaterialUiPickersDate>(moment());
 
-  const handleSchedule = () => {};
+  const handleChangeDate = (newDate: MaterialUiPickersDate) => {
+    changeDate(newDate);
+  };
+
+  const timeSlots = [
+    '9am - 10am',
+    '10am - 11am',
+    '11am - 12pm',
+    '12pm - 1pm',
+    '1pm - 2pm',
+    '2pm - 3pm',
+    '3pm - 4pm',
+  ];
+
+  const { handleShowModal } = useContext(QuoteContext);
+  const handleSchedule = () => {
+    handleShowModal(QuoteShowModal.FINISH_BOOKING);
+  };
 
   return (
     <Dialog
@@ -157,7 +251,42 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
           </Typography>
         </Box>
         <Box key="pick-date-time" className={classes.boxDateTime}>
-          Date time
+          <Grid container spacing={2}>
+            <Grid
+              item
+              sm={9}
+              md={8}
+              xs={12}
+              className={classes.containerDatepicker}
+            >
+              <DatePicker
+                orientation={isSm ? 'portrait' : 'landscape'}
+                variant="static"
+                openTo="date"
+                value={date}
+                onChange={handleChangeDate}
+              />
+            </Grid>
+            <Grid
+              item
+              sm={3}
+              md={4}
+              xs={12}
+              className={classes.containerTimeSlots}
+            >
+              {timeSlots.map((tm, index) => (
+                <Box
+                  key={`tm-${tm}`}
+                  className={clsx(
+                    classes.itemTimeSlot,
+                    index === 2 && 'selected'
+                  )}
+                >
+                  {tm}
+                </Box>
+              ))}
+            </Grid>
+          </Grid>
         </Box>
         <Box key="pick-location-title" flexDirection="row" display="flex">
           <LocationOn color="primary" />
@@ -198,6 +327,6 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   );
 };
 
-ModalReviewQuote.defaultProps = {};
+ModalScheduleService.defaultProps = {};
 
-export default ModalReviewQuote;
+export default ModalScheduleService;

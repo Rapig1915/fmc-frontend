@@ -68,8 +68,11 @@ const CheckStep = (props: CheckStepProps): ReactElement => {
   const currentStepIndex = parseInt(currentStep as string, 10);
 
   const renderStep = (step: QuoteStep, index: number) => {
+    const bInvalid: boolean = currentStepIndex < 0 || currentStepIndex > 2;
     const bChecked: boolean = currentStepIndex >= index;
     const bCurrent: boolean = currentStepIndex === index;
+
+    if (bInvalid) return '';
 
     if (bChecked && bCurrent) {
       return (

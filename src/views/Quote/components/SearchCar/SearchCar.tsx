@@ -1,14 +1,16 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Hidden, Typography } from '@material-ui/core';
 import { TabSelector } from 'src/components/molecules';
 import ButtonForward from 'src/components/atoms/ButtonForward';
+import { Image } from 'src/components/atoms';
 import { arrCarSelectTypes } from 'src/utils/data';
-import { CarSelectType } from 'src/types';
+import { CarSelectType, QuoteShowModal } from 'src/types';
 import FormPlateNumber from './FormPlateNumber';
 import FormYearMakeModel from './FormYearMakeModel';
 import FormConfirmCar from './FormConfirmCar';
+import { QuoteContext } from '../../QuoteContext';
 
 interface SearchCarProps {
   className?: string;
@@ -34,10 +36,20 @@ const useStyles = makeStyles((theme) => ({
   },
 
   actionContainer: {
+    width: '100%',
     minHeight: 70,
     display: 'flex',
     alignItems: 'flex-end',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+
+    [theme.breakpoints.up('sm')]: {
+      justifyContent: 'flex-end',
+    },
+
+    '& .button-mobile-info': {
+      width: 45,
+      height: 45,
+    },
   },
 }));
 
@@ -66,11 +78,16 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     if (onConfirm) onConfirm();
   };
 
+  const { handleShowModal } = useContext(QuoteContext);
+  const handleShowIntro = () => {
+    handleShowModal(QuoteShowModal.SERVICE_INTRO);
+  };
+
   return (
     <Box className={clsx('quote-search-car', classes.root, className)}>
       <Typography className={classes.title}>Tell us about your car?</Typography>
       <Grid container className={classes.contentContainer}>
-        <Grid item md={8} sm={8} xs={12}>
+        <Grid item md={8} sm={12} xs={12}>
           <TabSelector
             items={arrCarSelectTypes}
             onTabSelected={onCarOptionSelected}
@@ -91,7 +108,16 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
           />
           <FormConfirmCar show={isReadyToConfirm} />
         </Grid>
-        <Grid item md={4} sm={4} xs={12} className={classes.actionContainer}>
+        <Grid item md={4} sm={12} xs={12} className={classes.actionContainer}>
+          <Hidden smUp>
+            <Box onClick={handleShowIntro}>
+              <Image
+                src="/assets/menu/toggle-information.svg"
+                lazy={false}
+                className="button-mobile-info"
+              />
+            </Box>
+          </Hidden>
           {!isReadyToConfirm ? (
             <ButtonForward
               title="Search"

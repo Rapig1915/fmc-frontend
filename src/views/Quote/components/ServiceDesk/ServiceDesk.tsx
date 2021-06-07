@@ -1,17 +1,17 @@
-import React, { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography } from '@material-ui/core';
-import ButtonForward from 'src/components/atoms/ButtonForward';
+import { Box, Hidden, Typography } from '@material-ui/core';
+import { ButtonForward, Image } from 'src/components/atoms';
+import { QuoteShowModal } from 'src/types';
 import ServiceBar from './ServiceBar';
 import ServiceGallery from './ServiceGallery';
 import ServiceSummary from './ServiceSummary';
-import { ModalReviewQuote } from './ModalReviewQuote';
-import { ModalScheduleService } from './ModalScheduleService';
-import { ServiceDeskContext } from './ServiceDeskContext';
+import { QuoteContext } from '../../QuoteContext';
 
 interface ServiceDeskProps {
   className?: string;
+  onContinue?: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +37,22 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
     width: '100%',
   },
+  actionContainer: {
+    width: '100%',
+    minHeight: 70,
+    display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+
+    [theme.breakpoints.up('sm')]: {
+      justifyContent: 'flex-end',
+    },
+
+    '& .button-mobile-info': {
+      width: 45,
+      height: 45,
+    },
+  },
   buttonContinue: {
     maxWidth: 150,
     float: 'right',
@@ -44,62 +60,52 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ServiceDesk = (props: ServiceDeskProps): ReactElement => {
-  const { className } = props;
+  const { className, onContinue } = props;
 
   const classes = useStyles();
 
-  const [openModalReview, setOpenModalReview] = useState(false);
-
-  const [openModalSchedule, setOpenModalSchedule] = useState(false);
-
-  const [services, setServices] = useState<string[]>([]);
-
   const handleContinue = () => {
-    // setOpenModalReview(true);
-    setOpenModalSchedule(true);
+    if (onContinue) onContinue();
   };
 
-  const handleSetServices = useCallback(
-    (data: string[]) => setServices(data),
-    []
-  );
+  const { handleShowModal } = useContext(QuoteContext);
+  const handleShowIntro = () => {
+    handleShowModal(QuoteShowModal.SERVICE_INTRO);
+  };
 
   return (
-    <ServiceDeskContext.Provider
-      value={{
-        services,
-        handleSetServices,
-      }}
-    >
-      <Box className={clsx('quote-choose-service', classes.root, className)}>
-        <Typography className={classes.title}>How can we help?</Typography>
-        <ServiceBar onGoToReview={handleContinue} />
-        <ServiceGallery />
-        <Box className={classes.summaryContainer}>
-          <ServiceSummary className={classes.summaryService} />
-          <ButtonForward
-            title="Continue"
-            rounded
-            size="large"
-            onClickHandler={handleContinue}
-            className={classes.buttonContinue}
-          />
-        </Box>
-        <ModalReviewQuote
-          show={openModalReview}
-          onClose={() => setOpenModalReview(false)}
-        />
-        <ModalScheduleService
-          show={openModalSchedule}
-          onClose={() => setOpenModalSchedule(false)}
+    <Box className={clsx('quote-choose-service', classes.root, className)}>
+      <Typography className={classes.title}>How can we help?</Typography>
+      <ServiceBar onContinue={handleContinue} />
+      <ServiceGallery />
+      <Box className={classes.summaryContainer}>
+        <ServiceSummary className={classes.summaryService} />
+      </Box>
+      <Box className={classes.actionContainer}>
+        <Hidden smUp>
+          <Box onClick={handleShowIntro}>
+            <Image
+              src="/assets/menu/toggle-information.svg"
+              lazy={false}
+              className="button-mobile-info"
+            />
+          </Box>
+        </Hidden>
+        <ButtonForward
+          title="Continue"
+          rounded
+          size="large"
+          onClickHandler={handleContinue}
+          className={classes.buttonContinue}
         />
       </Box>
-    </ServiceDeskContext.Provider>
+    </Box>
   );
 };
 
 ServiceDesk.defaultProps = {
   className: undefined,
+  onContinue: undefined,
 };
 
 export default ServiceDesk;
