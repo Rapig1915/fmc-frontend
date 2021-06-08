@@ -22,7 +22,7 @@ import {
   AccordionSummary,
 } from 'src/components/organisms';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
-import { QuoteShowModal } from 'src/types';
+import { IAppointment, QuoteShowModal } from 'src/types';
 import BoxFAQ from './BoxFAQ';
 
 interface ModalReviewQuoteProps {
@@ -257,6 +257,10 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     (state: IReduxState) => state.quote.customer
   );
 
+  const appointment: IAppointment | null = useSelector(
+    (state: IReduxState) => state.quote.appointment
+  );
+
   const { handleShowModal } = useContext(QuoteContext);
 
   const handleSchedule = () => {
@@ -264,6 +268,11 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const handleStartOver = () => {};
+
+  if ((!appointment || !appointment.id) && show) {
+    // error no active appointment
+    handleShowModal(QuoteShowModal.NONE);
+  }
 
   return (
     <Dialog
@@ -305,10 +314,15 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                 key="mazda"
                 title={
                   <>
-                    <b>Mazda 3, 2006</b>
+                    <b>
+                      {appointment?.attributes.car.make}{' '}
+                      {appointment?.attributes.car.year}
+                    </b>
                   </>
                 }
-                imgUrl="/assets/brands/audi.svg"
+                imgUrl={`/assets/brands/${appointment?.attributes.car.make
+                  .replace(' ', '-')
+                  .toLocaleLowerCase()}.svg`}
                 titleProps={{ className: classes.titleMazda }}
                 imgProps={{ className: classes.imgMazda }}
                 className={classes.containerMazda}
@@ -375,31 +389,23 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                   Inspection:
                 </Typography>
                 <Box className={classes.flexGrow} />
-                <Typography className={classes.titleAccordion}>$70</Typography>
+                <Typography className={classes.titleAccordion}>
+                  ${appointment?.attributes.diagnosis_fee}
+                </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.accordionDetail}>
                 <Box className={classes.inspectContainer}>
                   <Typography className={classes.inspectTitle} key="title-1">
                     Includes:
                   </Typography>
-                  <Typography
-                    className={classes.inspectContent}
-                    key="content-1-1"
-                  >
-                    <Check /> Complete inspection of the issue
-                  </Typography>
-                  <Typography
-                    className={classes.inspectContent}
-                    key="content-1-2"
-                  >
-                    <Check /> Complimentary multi-point inspection
-                  </Typography>
-                  <Typography
-                    className={classes.inspectContent}
-                    key="content-1-3"
-                  >
-                    <Check /> $35 goes towards the repair price
-                  </Typography>
+                  {appointment?.attributes.services.map((s) => (
+                    <Typography
+                      className={classes.inspectContent}
+                      key={`service-${s}`}
+                    >
+                      <Check /> {s}
+                    </Typography>
+                  ))}
                 </Box>
                 <ImageNode
                   key="happy-customers"

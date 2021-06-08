@@ -1,9 +1,9 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
-import { Image, SelectWithStatus } from 'src/components/atoms';
-import { allBrands, allModels, allMotors } from 'src/utils/data';
+import { Image, InputWithStatus } from 'src/components/atoms';
+import { QuoteContext } from '../../QuoteContext';
 
 interface FormConfirmCarProps {
   className?: string;
@@ -63,14 +63,7 @@ const FormConfirmCar = (props: FormConfirmCarProps): ReactElement => {
 
   const classes = useStyles({ show });
 
-  const optionYear = Array(50)
-    .fill(0)
-    .reduce((obj, x, index) => {
-      return {
-        ...obj,
-        [2021 - index]: 2021 - index,
-      };
-    }, {});
+  const { car } = useContext(QuoteContext);
 
   return (
     <Box className={clsx('quote-confirm-car', classes.root, className)}>
@@ -79,45 +72,33 @@ const FormConfirmCar = (props: FormConfirmCarProps): ReactElement => {
 
       <Box className={classes.lineContainer}>
         <Typography className={classes.lineLabel}>Year</Typography>
-        <SelectWithStatus
-          key="select-brand"
+        <InputWithStatus
           className={classes.flexGrow}
-          label="Year"
-          items={optionYear}
-          defaultValue="2021"
+          value={car.attributes.year}
           disabled
         />
       </Box>
       <Box className={classes.lineContainer}>
-        <Typography className={classes.lineLabel}>Brand</Typography>
-        <SelectWithStatus
-          key="select-brand"
+        <Typography className={classes.lineLabel}>Make</Typography>
+        <InputWithStatus
           className={classes.flexGrow}
-          label="Brand"
-          items={allBrands}
-          defaultValue="Audi"
+          value={car.attributes.make}
           disabled
         />
       </Box>
       <Box className={classes.lineContainer}>
         <Typography className={classes.lineLabel}>Model</Typography>
-        <SelectWithStatus
-          key="select-model"
+        <InputWithStatus
           className={classes.flexGrow}
-          label="Model"
-          items={allModels}
-          defaultValue="V3"
+          value={car.attributes.model}
           disabled
         />
       </Box>
       <Box className={classes.lineContainer}>
         <Typography className={classes.lineLabel}>Motor</Typography>
-        <SelectWithStatus
-          key="select-motor"
+        <InputWithStatus
           className={classes.flexGrow}
-          label="Motor"
-          items={allMotors}
-          defaultValue="MM1"
+          value={car.attributes.engine_size}
           disabled
         />
       </Box>

@@ -1,6 +1,21 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import React, { ReactElement, useCallback, useState } from 'react';
-import { QuoteShowModal, QuoteStep } from 'src/types';
+import {
+  QuoteShowModal,
+  QuoteStep,
+  RequestConfirmAppointment,
+  RequestCreateAppointment,
+  RequestUpdateAppointmentTime,
+  ResponseAppointment,
+} from 'src/types';
+import {
+  confirmAppointment,
+  createAppointment,
+  updateAppointmentTime,
+} from 'src/api/quote';
+import { IReduxState } from 'src/store/reducers';
+import { setAppointment } from 'src/store/actions';
 import { FormContact, SearchCar, ServiceDesk } from './components';
 import SimpleCongrats from './components/SimpleCongrats';
 import QuoteContainer from './QuoteContainer';
@@ -12,7 +27,12 @@ import {
   ModalFinishBooking,
   ModalServiceIntro,
 } from './components/Modals';
-import { IQuoteReason, QuoteContext } from './QuoteContext';
+import {
+  IQuoteReason,
+  IQuoteCar,
+  QuoteContext,
+  IQuoteContact,
+} from './QuoteContext';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -20,6 +40,14 @@ const useStyles = makeStyles(() => ({
 
 const Quote = (): ReactElement => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const zip = useSelector((state: IReduxState) => state.quote.zip);
+
+  const appId = useSelector(
+    (state: IReduxState) =>
+      state.quote.appointment && state.quote.appointment.id
+  );
 
   /**
    * Quote Context
@@ -53,6 +81,101 @@ const Quote = (): ReactElement => {
     (newReason: IQuoteReason) => setReason(newReason),
     []
   );
+
+  const [car, setCar] = useState<IQuoteCar>({
+    search: {
+      plate_number: '',
+      state: '',
+    },
+    attributes: {
+      year: '',
+      make: '',
+      model: '',
+      engine_size: '',
+      mileage: '',
+    },
+  });
+  const handleSetCar = useCallback((newCar: IQuoteCar) => setCar(newCar), []);
+
+  const [contact, setContact] = useState<IQuoteContact>({
+    name: '',
+    email: '',
+    password: '',
+    phone: '',
+  });
+  const handleSetContact = useCallback(
+    (newContact: IQuoteContact) => setContact(newContact),
+    []
+  );
+
+  const handleCreateAppointment = async () => {
+    const data: RequestCreateAppointment = {
+      car_attributes: {
+        ...car.attributes,
+      },
+      tracking_attributes: {
+        utm_source: '',
+        utm_medium: '',
+        utm_term: '',
+        utm_content: '',
+        utm_campaign: '',
+        gclid: '',
+      },
+      location_attributes: {
+        zip,
+      },
+      address: zip,
+      diagnosis_input: reason.reason,
+      services,
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
+    };
+
+    const resp: ResponseAppointment = await createAppointment(data);
+
+    if (!resp || !resp.data) {
+      // error handling
+      return;
+    }
+
+    dispatch(setAppointment(resp.data));
+    handleShowModal(QuoteShowModal.REVIEW_QUOTE);
+  };
+  const handleUpdateAppointmentTime = async (
+    data: RequestUpdateAppointmentTime
+  ) => {
+    if (!appId) {
+      // error handling
+      return;
+    }
+
+    const resp: ResponseAppointment = await updateAppointmentTime(appId, data);
+
+    if (!resp || !resp.data) {
+      // error handling
+      return;
+    }
+
+    dispatch(setAppointment(resp.data));
+    handleShowModal(QuoteShowModal.FINISH_BOOKING);
+  };
+  const handleConfirmAppointment = async (data: RequestConfirmAppointment) => {
+    if (!appId) {
+      // error handling
+      return;
+    }
+
+    const resp: ResponseAppointment = await confirmAppointment(appId, data);
+
+    if (!resp || !resp.data) {
+      // error handling
+      return;
+    }
+
+    dispatch(setAppointment(resp.data));
+    // handleShowModal(QuoteShowModal.CONGRATS);
+  };
 
   /**
    * Event Handlers
@@ -103,6 +226,16 @@ const Quote = (): ReactElement => {
 
         reason,
         handleSetReason,
+
+        car,
+        handleSetCar,
+
+        contact,
+        handleSetContact,
+
+        handleCreateAppointment,
+        handleUpdateAppointmentTime,
+        handleConfirmAppointment,
       }}
     >
       <Container className={classes.root}>

@@ -6,7 +6,8 @@ import { TabSelector } from 'src/components/molecules';
 import ButtonForward from 'src/components/atoms/ButtonForward';
 import { Image } from 'src/components/atoms';
 import { arrCarSelectTypes } from 'src/utils/data';
-import { CarSelectType, QuoteShowModal } from 'src/types';
+import { ICarMeta, CarSelectType, QuoteShowModal } from 'src/types';
+import { checkPlateNumber } from 'src/api/quote';
 import FormPlateNumber from './FormPlateNumber';
 import FormYearMakeModel from './FormYearMakeModel';
 import FormConfirmCar from './FormConfirmCar';
@@ -62,19 +63,78 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     Object.keys(arrCarSelectTypes)[0]
   );
 
-  const onCarOptionSelected = (key: string) => {
-    setCarSelectType(key);
-  };
+  const { car, handleSetCar } = useContext(QuoteContext);
 
-  const [isReadyToSearch, setIsReadyToSearch] = useState(true);
+  const isReadyToSearch =
+    (carSelectType === CarSelectType.BY_PLATE_NUMBER &&
+      !!car.search.plate_number &&
+      !!car.search.state) ||
+    (carSelectType === CarSelectType.BY_YEAR_MAKE_MODEL &&
+      !!car.attributes.year &&
+      !!car.attributes.make &&
+      !!car.attributes.model &&
+      !!car.attributes.engine_size);
   const [isReadyToConfirm, setIsReadyToConfirm] = useState(false);
 
-  const handleSearch = () => {
-    setIsReadyToConfirm(true);
+  const onCarOptionSelected = (key: string) => {
+    setIsReadyToConfirm(false);
+
+    setCarSelectType(key);
+    if (key === CarSelectType.BY_PLATE_NUMBER)
+      handleSetCar({
+        ...car,
+        attributes: {
+          year: '',
+          make: '',
+          model: '',
+          engine_size: '',
+          mileage: '',
+        },
+      });
+  };
+
+  const handleSearch = async () => {
+    if (carSelectType === CarSelectType.BY_PLATE_NUMBER) {
+      if (!car.search.plate_number || !car.search.state) return;
+
+      const resp = await checkPlateNumber(
+        car.search.plate_number,
+        car.search.state
+      );
+
+      if (!resp || !resp.specifications) {
+        return;
+      }
+
+      const carMeta: ICarMeta = resp.specifications;
+
+      if (!carMeta) return;
+      handleSetCar({
+        ...car,
+        attributes: {
+          year: carMeta.year,
+          make: carMeta.make,
+          model: carMeta.model,
+          engine_size: carMeta.engine,
+          mileage: '',
+        },
+      });
+
+      setIsReadyToConfirm(true);
+    } else {
+      if (
+        !car.attributes.year ||
+        !car.attributes.make ||
+        !car.attributes.model ||
+        !car.attributes.engine_size
+      )
+        return;
+
+      setIsReadyToConfirm(true);
+    }
   };
 
   const handleConfirm = () => {
-    setIsReadyToSearch(false);
     if (onConfirm) onConfirm();
   };
 
@@ -92,7 +152,6 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
             items={arrCarSelectTypes}
             onTabSelected={onCarOptionSelected}
             selectedValue={carSelectType}
-            disabled={isReadyToConfirm}
           />
           <FormPlateNumber
             show={

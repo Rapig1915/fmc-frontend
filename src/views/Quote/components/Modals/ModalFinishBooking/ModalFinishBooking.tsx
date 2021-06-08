@@ -1,22 +1,23 @@
 import React, { ReactElement, useContext } from 'react';
+import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
   DialogActions,
   DialogTitle,
-  Grid,
   IconButton,
   Typography,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import { ArrowBackIos, Check, Close, CreditCard } from '@material-ui/icons';
+import { ArrowBackIos, Close, CreditCard } from '@material-ui/icons';
 
 import { ButtonForward, Image } from 'src/components/atoms';
 import { cardTypes } from 'src/utils/data';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
 import { QuoteShowModal } from 'src/types';
+import { IReduxState } from 'src/store/reducers';
 import CheckoutForm from './CheckoutForm';
 import MechanicInfo from './MechanicInfo';
 
@@ -26,21 +27,13 @@ interface ModalFinishBookingProps {
 }
 
 const useStyles = makeStyles((theme) => ({
-  '@global': {
-    '*::-webkit-scrollbar': {
-      width: '0.4em',
-    },
-    '*::-webkit-scrollbar-track': {},
-    '*::-webkit-scrollbar-thumb': {
-      backgroundColor: '#79739C',
-      outline: 0,
-      borderRadius: 3.5,
-    },
-  },
   root: {
     minWidth: 600,
     [theme.breakpoints.down('sm')]: {
-      minWidth: 300,
+      minWidth: 500,
+    },
+    [theme.breakpoints.down('xs')]: {
+      minWidth: 320,
     },
   },
   flexGrow: {
@@ -120,77 +113,22 @@ const useStyles = makeStyles((theme) => ({
     color: '#667296',
     marginBottom: theme.spacing(3),
   },
-
-  buttonPayFull: {
-    background: '#2CC791',
-    borderRadius: 5,
-    padding: theme.spacing(2),
-    paddingLeft: theme.spacing(4),
-
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: theme.spacing(2),
-    },
-
-    '& .MuiSvgIcon-root': {
-      marginRight: theme.spacing(3),
-
-      [theme.breakpoints.down('sm')]: {
-        marginRight: theme.spacing(1),
-      },
-    },
-    '& .titleAction': {
-      fontWeight: 800,
-      fontSize: 16,
-      color: theme.palette.common.white,
-    },
-    '& .descAction': {
-      fontWeight: 500,
-      fontSize: 16,
-      color: '#247056',
-
-      [theme.breakpoints.down('sm')]: {
-        fontSize: 14,
-        width: 'max-content',
-      },
-    },
-  },
-  buttonPayInstallment: {
-    display: 'none',
-    background: '#BDC1DA',
-    borderRadius: 5,
-    padding: theme.spacing(2),
-    paddingLeft: theme.spacing(4),
-
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: theme.spacing(2),
-    },
-
-    '& .titleAction': {
-      fontWeight: 800,
-      fontSize: 16,
-      color: '#79739C',
-    },
-    '& .descAction': {
-      fontWeight: 500,
-      fontSize: 16,
-      color: '#79739c',
-
-      [theme.breakpoints.down('sm')]: {
-        fontSize: 14,
-        width: 'max-content',
-      },
-    },
-  },
 }));
 
 const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
   const { show, onClose } = props;
   const classes = useStyles();
 
+  const appointmentStatus = useSelector(
+    (state: IReduxState) => state.quote.appointment?.attributes.status
+  );
+
   const { handleShowModal } = useContext(QuoteContext);
   const handleFinishBooking = () => {
     handleShowModal(QuoteShowModal.CONGRATS);
   };
+
+  const isReadyToFinishBooking = appointmentStatus === 'booked';
 
   return (
     <Dialog
@@ -241,57 +179,6 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
             Not until service is completed.
           </Typography>
           <Box key="action-payment">
-            <Grid container spacing={2}>
-              <Grid item sm={6} xs={12}>
-                <Box
-                  key="action-pay-full"
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  className={classes.buttonPayFull}
-                >
-                  <Check color="action" fontSize="large" />
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="flex-start"
-                    justifyContent="center"
-                  >
-                    <Typography key="title" className="titleAction">
-                      Book Now
-                    </Typography>
-                    <Typography key="description" className="descAction">
-                      Pay in Full later
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-              <Grid item sm={6} xs={12}>
-                <Box
-                  key="action-pay-installment"
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  className={classes.buttonPayInstallment}
-                >
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="flex-start"
-                    justifyContent="center"
-                  >
-                    <Typography key="title" className="titleAction">
-                      Book Now
-                    </Typography>
-                    <Typography key="description" className="descAction">
-                      Pay in installments later
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-            </Grid>
             <CheckoutForm />
             <Box
               key="image-payments"
@@ -314,6 +201,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
             size="large"
             rounded
             onClickHandler={handleFinishBooking}
+            disabled={!isReadyToFinishBooking}
           />
         </DialogActions>
       </DialogContent>

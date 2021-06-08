@@ -15,7 +15,7 @@ interface SelectWithStatusProps {
   label?: string;
   disabled?: boolean;
   className?: string;
-  defaultValue?: string;
+  value?: string;
   start?: React.ReactNode;
   valueChanged?: (v: string) => void;
 }
@@ -63,7 +63,7 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
     label,
     className,
     valueChanged,
-    defaultValue,
+    value,
     items,
     start,
     disabled,
@@ -71,12 +71,8 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
 
   const classes = useStyles();
 
-  const [val, setVal] = React.useState(defaultValue);
-
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const v = event.target.value as string;
-    setVal(v);
-
     if (valueChanged) valueChanged(v);
   };
 
@@ -92,9 +88,9 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
     >
       <InputLabel>{label}</InputLabel>
       <Select
-        value={val && items && items[val] ? val : ''}
+        value={value && items && items[value] ? value : ''}
         onChange={handleChange}
-        className={clsx({ [classes.inputChecked]: !!val })}
+        className={clsx({ [classes.inputChecked]: !!value })}
         disabled={disabled}
       >
         <MenuItem value="" key="item-empty">
@@ -108,7 +104,7 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
           ))}
       </Select>
       {start && <Box className={classes.start}>{start}</Box>}
-      {!!val && <CheckCircle className={classes.checked} />}
+      {!!value && <CheckCircle className={classes.checked} />}
     </FormControl>
   );
 };
@@ -117,7 +113,7 @@ SelectWithStatus.defaultProps = {
   items: {},
   label: '',
   className: '',
-  defaultValue: '',
+  value: '',
   valueChanged: undefined,
   start: undefined,
   disabled: false,

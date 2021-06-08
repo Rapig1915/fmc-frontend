@@ -1,8 +1,16 @@
-import { IQuoteActionPayload, IReduxAction, QUOTE_SET_ZIP } from '../types';
+import { IAppointment } from 'src/types';
+import {
+  IQuoteState,
+  IQuoteZipcodePayload,
+  IReduxAction,
+  QUOTE_SET_APPOINTMENT,
+  QUOTE_SET_ZIP,
+} from '../types';
 
-const initialState = {
+const initialState: IQuoteState = {
   zip: '',
   customer: 0,
+  appointment: null,
 };
 
 export default (
@@ -13,9 +21,14 @@ export default (
     case QUOTE_SET_ZIP:
       return {
         ...state,
-        zip: (action.payload as IQuoteActionPayload).zip || state.zip,
+        zip: (action.payload as IQuoteZipcodePayload).zip || state.zip,
         customer:
-          (action.payload as IQuoteActionPayload).customer || state.customer,
+          (action.payload as IQuoteZipcodePayload).customer || state.customer,
+      };
+    case QUOTE_SET_APPOINTMENT:
+      return {
+        ...state,
+        appointment: action.payload as IAppointment,
       };
     default:
       return state;

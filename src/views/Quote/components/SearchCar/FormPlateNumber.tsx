@@ -1,9 +1,10 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import { stateList } from 'src/utils/data';
 import { InputWithStatus, SelectWithStatus } from 'src/components/atoms';
+import { QuoteContext } from '../../QuoteContext';
 
 interface FormPlateNumberProps {
   className?: string;
@@ -45,6 +46,28 @@ const FormPlateNumber = (props: FormPlateNumberProps): ReactElement => {
     };
   }, {});
 
+  const { car, handleSetCar } = useContext(QuoteContext);
+
+  const handleChangePlateNumber = (val: string) => {
+    handleSetCar({
+      ...car,
+      search: {
+        ...car.search,
+        plate_number: val,
+      },
+    });
+  };
+
+  const handleChangeState = (val: string) => {
+    handleSetCar({
+      ...car,
+      search: {
+        ...car.search,
+        state: val,
+      },
+    });
+  };
+
   return (
     <Box
       className={clsx(
@@ -53,8 +76,17 @@ const FormPlateNumber = (props: FormPlateNumberProps): ReactElement => {
         className
       )}
     >
-      <InputWithStatus placeholder="Plate number" />
-      <SelectWithStatus items={optionStates} label="State" />
+      <InputWithStatus
+        placeholder="Plate number"
+        value={car.search.plate_number}
+        valueChanged={handleChangePlateNumber}
+      />
+      <SelectWithStatus
+        items={optionStates}
+        label="State"
+        value={car.search.state}
+        valueChanged={handleChangeState}
+      />
     </Box>
   );
 };

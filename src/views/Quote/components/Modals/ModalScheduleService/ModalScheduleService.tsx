@@ -1,4 +1,6 @@
 import React, { ReactElement, useContext } from 'react';
+import { useSelector } from 'react-redux';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
@@ -28,11 +30,11 @@ import { DatePicker } from '@material-ui/pickers';
 
 import moment from 'moment';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-
-import { carLocations } from 'src/utils/data';
-import clsx from 'clsx';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
-import { QuoteShowModal } from 'src/types';
+import { ResponseAvailability } from 'src/types';
+import { carLocations } from 'src/utils/data';
+import { IReduxState } from 'src/store/reducers';
+import { checkAvailability } from 'src/api/quote';
 
 interface ModalScheduleServiceProps {
   show: boolean;
@@ -163,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 18,
     fontWeight: 500,
     color: '#7E7A92',
-    border: '1px solid #7E7A92',
+    border: '1px solid #FFFFFF',
 
     '&.selected': {
       background: theme.palette.primary.main,
@@ -193,6 +195,76 @@ const ModalScheduleService = (
   const isSm = useMediaQuery(theme.breakpoints.down('sm'), {
     defaultMatches: true,
   });
+  const { handleUpdateAppointmentTime } = useContext(QuoteContext);
+
+  const appointmentId = useSelector(
+    (state: IReduxState) => state.quote.appointment?.id
+  );
+
+  const [date, changeDate] = React.useState<MaterialUiPickersDate>(moment());
+
+  const [timeSlots, setTimeSlots] = React.useState<{ [dt: string]: string[] }>(
+    {}
+  );
+
+  const keyDate = (date && date.format('YYYY-MM-DD')) || '';
+
+  const timeSlotsToday = (timeSlots && timeSlots[keyDate]) || [];
+
+  const [selectedTimeSlotIndex, setSelectedTimeSlotIndex] = React.useState(0);
+
+  const [location, setLocation] = React.useState({
+    type_of_site: '',
+    exact_address: '',
+    description: '',
+  });
+
+  const isReadyToSchedule =
+    timeSlotsToday &&
+    timeSlotsToday[selectedTimeSlotIndex] &&
+    location.type_of_site &&
+    location.exact_address &&
+    location.description;
+
+  React.useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (!appointmentId) return;
+
+      const resp: ResponseAvailability = await checkAvailability(appointmentId);
+
+      if (!resp || !resp.data) {
+        return;
+      }
+
+      setTimeSlots(resp.data.attributes.availability);
+    });
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [appointmentId]);
+
+  const handleSchedule = () => {
+    if (isReadyToSchedule) {
+      handleUpdateAppointmentTime({
+        appointment_day: keyDate,
+        appointment_time: timeSlotsToday[selectedTimeSlotIndex],
+        hints_to_find: location.description,
+        exact_address: location.exact_address,
+      });
+    }
+  };
+
+  const handleChangeDate = (newDate: MaterialUiPickersDate) => {
+    changeDate(newDate);
+  };
+
+  const handleLocationInputChange = (key: string, value: string) => {
+    setLocation({
+      ...location,
+      [key]: value,
+    });
+  };
 
   const optionCarLocations = carLocations.reduce((obj, x) => {
     return {
@@ -200,28 +272,6 @@ const ModalScheduleService = (
       [x]: x,
     };
   }, {});
-
-  // The first commit of Material-UI
-  const [date, changeDate] = React.useState<MaterialUiPickersDate>(moment());
-
-  const handleChangeDate = (newDate: MaterialUiPickersDate) => {
-    changeDate(newDate);
-  };
-
-  const timeSlots = [
-    '9am - 10am',
-    '10am - 11am',
-    '11am - 12pm',
-    '12pm - 1pm',
-    '1pm - 2pm',
-    '2pm - 3pm',
-    '3pm - 4pm',
-  ];
-
-  const { handleShowModal } = useContext(QuoteContext);
-  const handleSchedule = () => {
-    handleShowModal(QuoteShowModal.FINISH_BOOKING);
-  };
 
   return (
     <Dialog
@@ -274,13 +324,14 @@ const ModalScheduleService = (
               xs={12}
               className={classes.containerTimeSlots}
             >
-              {timeSlots.map((tm, index) => (
+              {timeSlotsToday.map((tm, index) => (
                 <Box
                   key={`tm-${tm}`}
                   className={clsx(
                     classes.itemTimeSlot,
-                    index === 2 && 'selected'
+                    index === selectedTimeSlotIndex && 'selected'
                   )}
+                  onClick={() => setSelectedTimeSlotIndex(index)}
                 >
                   {tm}
                 </Box>
@@ -300,15 +351,27 @@ const ModalScheduleService = (
               start={<LocationOn color="secondary" />}
               items={optionCarLocations}
               label="Your car Location"
+              value={location.type_of_site}
+              valueChanged={(val: string) =>
+                handleLocationInputChange('type_of_site', val)
+              }
             />
             <InputWithStatus
               start={<DirectionsCar color="secondary" />}
               placeholder="Address where your car is"
+              value={location.exact_address}
+              valueChanged={(val: string) =>
+                handleLocationInputChange('exact_address', val)
+              }
             />
           </Box>
           <Box key="location-info-2" className={classes.boxLocation}>
             <InputWithStatus
               placeholder="Describe your car and location"
+              value={location.description}
+              valueChanged={(val: string) =>
+                handleLocationInputChange('description', val)
+              }
               multiline
             />
           </Box>
@@ -320,6 +383,7 @@ const ModalScheduleService = (
             size="large"
             rounded
             onClickHandler={handleSchedule}
+            disabled={!isReadyToSchedule}
           />
         </DialogActions>
       </DialogContent>

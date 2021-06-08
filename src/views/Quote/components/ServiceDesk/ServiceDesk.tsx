@@ -68,7 +68,7 @@ const ServiceDesk = (props: ServiceDeskProps): ReactElement => {
     if (onContinue) onContinue();
   };
 
-  const { handleShowModal } = useContext(QuoteContext);
+  const { services, handleShowModal } = useContext(QuoteContext);
   const handleShowIntro = () => {
     handleShowModal(QuoteShowModal.SERVICE_INTRO);
   };
@@ -97,6 +97,7 @@ const ServiceDesk = (props: ServiceDeskProps): ReactElement => {
           size="large"
           onClickHandler={handleContinue}
           className={classes.buttonContinue}
+          disabled={services.length <= 0}
         />
       </Box>
     </Box>

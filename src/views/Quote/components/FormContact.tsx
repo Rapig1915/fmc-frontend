@@ -5,7 +5,6 @@ import { Box, Grid, Typography } from '@material-ui/core';
 import ButtonForward from 'src/components/atoms/ButtonForward';
 import { InputWithStatus } from 'src/components/atoms';
 import { Email, Lock, Person, Phone } from '@material-ui/icons';
-import { QuoteShowModal } from 'src/types';
 import { QuoteContext } from '../QuoteContext';
 
 interface FormContactProps {
@@ -80,10 +79,34 @@ const FormContact = (props: FormContactProps): ReactElement => {
 
   const classes = useStyles();
 
-  const { handleShowModal } = useContext(QuoteContext);
-  const handleContinue = () => {
-    if (modalView) handleShowModal(QuoteShowModal.REVIEW_QUOTE);
+  const { handleCreateAppointment } = useContext(QuoteContext);
+
+  const { contact, handleSetContact } = useContext(QuoteContext);
+
+  const handleInputChange = (key: string, value: string) => {
+    handleSetContact({
+      ...contact,
+      [key]: value,
+    });
   };
+
+  const handleContinue = () => {
+    if (modalView) handleCreateAppointment();
+  };
+
+  const validateEmail = (em: string) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(em).toLowerCase());
+  };
+
+  const PHONE_NUMBER_LENGTH = 10;
+  const isReadyToContinue =
+    !!contact.name &&
+    !!contact.email &&
+    !!contact.password &&
+    !!contact.phone &&
+    validateEmail(contact.email) &&
+    contact.phone.length === PHONE_NUMBER_LENGTH;
 
   return (
     <Box
@@ -108,6 +131,8 @@ const FormContact = (props: FormContactProps): ReactElement => {
             <InputWithStatus
               className={classes.flexGrow}
               placeholder="First And Last Name"
+              value={contact.name}
+              valueChanged={(val: string) => handleInputChange('name', val)}
               start={<Person color="secondary" />}
             />
           </Box>
@@ -115,6 +140,9 @@ const FormContact = (props: FormContactProps): ReactElement => {
             <InputWithStatus
               className={classes.flexGrow}
               placeholder="Email"
+              email
+              value={contact.email}
+              valueChanged={(val: string) => handleInputChange('email', val)}
               start={<Email color="secondary" />}
             />
           </Box>
@@ -122,6 +150,8 @@ const FormContact = (props: FormContactProps): ReactElement => {
             <InputWithStatus
               className={classes.flexGrow}
               placeholder="Password"
+              value={contact.password}
+              valueChanged={(val: string) => handleInputChange('password', val)}
               start={<Lock color="secondary" />}
               password
             />
@@ -129,7 +159,10 @@ const FormContact = (props: FormContactProps): ReactElement => {
           <Box key="input-phone" className={classes.lineContainer}>
             <InputWithStatus
               className={classes.flexGrow}
-              placeholder="Cell phone number"
+              placeholder={`Cell phone number (${PHONE_NUMBER_LENGTH} digits)`}
+              value={contact.phone}
+              forceLength={PHONE_NUMBER_LENGTH}
+              valueChanged={(val: string) => handleInputChange('phone', val)}
               start={<Phone color="secondary" />}
             />
           </Box>
@@ -145,6 +178,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
             rounded
             size="large"
             onClickHandler={handleContinue}
+            disabled={!isReadyToContinue}
           />
         </Grid>
       </Grid>

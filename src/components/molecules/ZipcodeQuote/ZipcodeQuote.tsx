@@ -62,6 +62,8 @@ const ZipcodeQuote = (props: ZipcodeQuoteProps): ReactElement => {
   const [customer, setCustomer] = useState(0);
   const [zip, setZip] = useState('');
 
+  const isReadyToQuote = !!zip && !!customer;
+
   const handleChange = async (evt: ChangeEvent<{ value: unknown }>) => {
     const v = evt.target.value as string;
     setZip(v);
@@ -91,8 +93,9 @@ const ZipcodeQuote = (props: ZipcodeQuoteProps): ReactElement => {
         size="medium"
         className={classes.ButtonForward}
         onClickHandler={handleGetQuote}
+        disabled={!isReadyToQuote}
       />
-      {zip && customer && (
+      {!!zip && !!customer && (
         <Typography className={classes.customer}>
           <b>{customer}</b> customers have used
         </Typography>

@@ -1,16 +1,19 @@
 import React, { ReactElement } from 'react';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import { Image, StarRating } from 'src/components/atoms';
 import { Check } from '@material-ui/icons';
 
 import { itemsCandidates } from 'src/utils/data';
+import { IReduxState } from 'src/store/reducers';
 
 const useStyles = makeStyles((theme) => ({
   imgCandidate: {
     width: 100,
     height: 100,
     marginRight: theme.spacing(3),
+    borderRadius: 100,
   },
   countReview: {
     fontWeight: 500,
@@ -48,6 +51,10 @@ const MechanicInfo = (props: { className: string }): ReactElement => {
 
   const candidate = itemsCandidates[0];
 
+  const mechanic = useSelector(
+    (state: IReduxState) => state.quote.appointment?.attributes.mechanic
+  );
+
   return (
     <Box className={className}>
       <Box
@@ -59,7 +66,7 @@ const MechanicInfo = (props: { className: string }): ReactElement => {
       >
         <Image
           className={classes.imgCandidate}
-          src={`/assets/candidates/${candidate.photoASE}`}
+          src={mechanic?.photo || ''}
           lazy={false}
         />
         <Box
@@ -70,12 +77,12 @@ const MechanicInfo = (props: { className: string }): ReactElement => {
         >
           <StarRating />
           <Typography className={classes.countReview}>
-            {candidate.review} reviews
+            {mechanic?.reviews} reviews
           </Typography>
         </Box>
       </Box>
       <Typography className={classes.nameCandidate}>
-        {candidate.name}
+        {mechanic?.name}
       </Typography>
       <Box key="mention" className={classes.containerMention}>
         {candidate.mention &&

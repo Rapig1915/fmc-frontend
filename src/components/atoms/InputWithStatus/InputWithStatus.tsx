@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement, useState } from 'react';
+import React, { ChangeEvent, ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, FormControl, TextField } from '@material-ui/core';
@@ -7,12 +7,14 @@ import { CheckCircle } from '@material-ui/icons';
 interface InputWithStatusProps {
   placeholder?: string;
   className?: string;
-  defaultValue?: string;
+  value?: string;
   multiline?: boolean;
   start?: React.ReactNode;
   valueChanged?: (v: string) => void;
   disabled?: boolean;
   password?: boolean;
+  email?: boolean;
+  forceLength?: number;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -57,24 +59,32 @@ const InputWithStatus = (props: InputWithStatusProps): ReactElement => {
   const {
     className,
     valueChanged,
-    defaultValue,
+    value,
     placeholder,
     start,
     disabled,
     password,
     multiline,
+    email,
+    forceLength,
   } = props;
-
-  const [val, setVal] = useState(defaultValue);
 
   const classes = useStyles();
 
   const handleChange = (evt: ChangeEvent<{ value: unknown }>) => {
     const v = evt.target.value as string;
-    setVal(v);
-
     if (valueChanged) valueChanged(v);
   };
+
+  const validateEmail = (em: string) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(em).toLowerCase());
+  };
+
+  const isCheck =
+    !!value &&
+    (!email || validateEmail(value)) &&
+    (!forceLength || value.length === forceLength);
 
   return (
     <FormControl
@@ -89,28 +99,30 @@ const InputWithStatus = (props: InputWithStatusProps): ReactElement => {
       <TextField
         autoComplete="off"
         type={password ? 'password' : 'text'}
-        value={val}
+        value={value}
         placeholder={placeholder}
         onChange={handleChange}
-        className={val ? classes.inputChecked : ''}
+        className={value ? classes.inputChecked : ''}
         disabled={disabled}
         multiline={multiline}
       />
       {start && <Box className={classes.start}>{start}</Box>}
-      {!!val && <CheckCircle className={classes.checked} />}
+      {!!isCheck && <CheckCircle className={classes.checked} />}
     </FormControl>
   );
 };
 
 InputWithStatus.defaultProps = {
   className: '',
-  defaultValue: '',
+  value: '',
   valueChanged: undefined,
   placeholder: '',
   start: undefined,
   disabled: false,
   multiline: false,
   password: false,
+  forceLength: 0,
+  email: false,
 };
 
 export default InputWithStatus;

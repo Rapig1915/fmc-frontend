@@ -1,5 +1,10 @@
 import React from 'react';
-import { QuoteShowModal, QuoteStep } from 'src/types';
+import {
+  QuoteShowModal,
+  QuoteStep,
+  RequestConfirmAppointment,
+  RequestUpdateAppointmentTime,
+} from 'src/types';
 
 export interface IQuoteReason {
   reasonId: number;
@@ -7,6 +12,27 @@ export interface IQuoteReason {
   subReason: string;
   otherReason: string;
   note: string;
+}
+
+export interface IQuoteCar {
+  search: {
+    plate_number: string;
+    state: string;
+  };
+  attributes: {
+    year: string;
+    make: string;
+    model: string;
+    engine_size: string;
+    mileage: string;
+  };
+}
+
+export interface IQuoteContact {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
 }
 
 export interface IQuoteContext {
@@ -21,6 +47,16 @@ export interface IQuoteContext {
 
   reason: IQuoteReason;
   handleSetReason: (newReason: IQuoteReason) => void;
+
+  car: IQuoteCar;
+  handleSetCar: (newCar: IQuoteCar) => void;
+
+  contact: IQuoteContact;
+  handleSetContact: (newContact: IQuoteContact) => void;
+
+  handleCreateAppointment: () => void;
+  handleUpdateAppointmentTime: (data: RequestUpdateAppointmentTime) => void;
+  handleConfirmAppointment: (data: RequestConfirmAppointment) => void;
 }
 
 export const QuoteContext = React.createContext<IQuoteContext>({
@@ -41,4 +77,31 @@ export const QuoteContext = React.createContext<IQuoteContext>({
     note: '',
   },
   handleSetReason: () => {},
+
+  car: {
+    search: {
+      plate_number: '',
+      state: '',
+    },
+    attributes: {
+      year: '',
+      make: '',
+      model: '',
+      engine_size: '',
+      mileage: '',
+    },
+  },
+  handleSetCar: () => {},
+
+  contact: {
+    name: '',
+    email: '',
+    password: '',
+    phone: '',
+  },
+  handleSetContact: () => {},
+
+  handleCreateAppointment: () => {},
+  handleUpdateAppointmentTime: () => {},
+  handleConfirmAppointment: () => {},
 });

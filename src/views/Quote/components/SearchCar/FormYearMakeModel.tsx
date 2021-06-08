@@ -1,10 +1,11 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import { InputWithStatus, SelectWithStatus } from 'src/components/atoms';
 import { getVehicles } from 'src/api/quote';
-import { ItemVehicle } from 'src/types';
+import { IVehicle } from 'src/types';
+import { QuoteContext } from '../../QuoteContext';
 
 interface FormYearMakeModelProps {
   className?: string;
@@ -57,7 +58,7 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
       };
     }, {});
 
-  const [vehicleList, setVehicleList] = useState<[ItemVehicle]>();
+  const [vehicleList, setVehicleList] = useState<[IVehicle]>();
 
   React.useEffect(() => {
     setTimeout(async () => {
@@ -66,25 +67,22 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
     });
   }, []);
 
-  const [inputData, setInputData] = useState({
-    year: '',
-    brand: '',
-    model: '',
-    engine: '',
-    mileage: '',
-  });
+  const { car, handleSetCar } = useContext(QuoteContext);
 
   const handleInputChange = (key: string, value: string) => {
-    setInputData((state) => ({
-      ...state,
-      [key]: value,
-    }));
+    handleSetCar({
+      ...car,
+      attributes: {
+        ...car.attributes,
+        [key]: value,
+      },
+    });
   };
 
-  const allBrands =
+  const allMakes =
     (vehicleList &&
       vehicleList.reduce((obj, x) => {
-        return inputData.year === x.attributes.year
+        return car.attributes.year === x.attributes.year
           ? {
               ...obj,
               [x.attributes.make]: x.attributes.make,
@@ -96,8 +94,8 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
   const allModels =
     (vehicleList &&
       vehicleList.reduce((obj, x) => {
-        return inputData.year === x.attributes.year &&
-          inputData.brand === x.attributes.make
+        return car.attributes.year === x.attributes.year &&
+          car.attributes.make === x.attributes.make
           ? {
               ...obj,
               [x.attributes.model]: x.attributes.model,
@@ -109,9 +107,9 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
   const allMotors =
     (vehicleList &&
       vehicleList.reduce((obj, x) => {
-        return inputData.year === x.attributes.year &&
-          inputData.brand === x.attributes.make &&
-          inputData.model === x.attributes.model
+        return car.attributes.year === x.attributes.year &&
+          car.attributes.make === x.attributes.make &&
+          car.attributes.model === x.attributes.model
           ? {
               ...obj,
               [x.attributes.engine_size]: x.attributes.engine_size,
@@ -133,36 +131,36 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
           key="select-year"
           label="Year"
           items={optionYear}
-          defaultValue={inputData.year}
+          value={car.attributes.year}
           valueChanged={(val: string) => handleInputChange('year', val)}
         />
         <SelectWithStatus
-          key="select-brand"
+          key="select-make"
           className={classes.flexGrow}
-          label="Brand"
-          items={allBrands}
-          defaultValue={inputData.brand}
-          valueChanged={(val: string) => handleInputChange('brand', val)}
+          label="Make"
+          items={allMakes}
+          value={car.attributes.make}
+          valueChanged={(val: string) => handleInputChange('make', val)}
         />
       </Box>
       <SelectWithStatus
         key="select-model"
         label="Model"
         items={allModels}
-        defaultValue={inputData.model}
+        value={car.attributes.model}
         valueChanged={(val: string) => handleInputChange('model', val)}
       />
       <SelectWithStatus
         key="select-engine"
         label="Engine"
         items={allMotors}
-        defaultValue={inputData.engine}
-        valueChanged={(val: string) => handleInputChange('engine', val)}
+        value={car.attributes.engine_size}
+        valueChanged={(val: string) => handleInputChange('engine_size', val)}
       />
       <InputWithStatus
         key="input-mileage"
         placeholder="Mileage"
-        defaultValue={inputData.mileage}
+        value={car.attributes.mileage}
         valueChanged={(val) => handleInputChange('mileage', val)}
       />
     </Box>
