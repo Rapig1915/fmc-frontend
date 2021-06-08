@@ -249,6 +249,7 @@ const ModalScheduleService = (
       handleUpdateAppointmentTime({
         appointment_day: keyDate,
         appointment_time: timeSlotsToday[selectedTimeSlotIndex],
+        type_of_site: location.type_of_site,
         hints_to_find: location.description,
         exact_address: location.exact_address,
       });

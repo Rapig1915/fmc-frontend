@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useMediaQuery } from '@material-ui/core';
+import { Typography, useMediaQuery } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -79,11 +79,11 @@ const Splash = (props: SplashProps): ReactElement => {
           alt="certified"
           lazy={false}
         />
-        <h3 className={classes.title}>
+        <Typography className={classes.title}>
           <b>{stateCustomer} happy customers</b>
           <br />
           had their car fixed in your area with Fixmycar!
-        </h3>
+        </Typography>
         <CircularProgress />
       </DialogContent>
     </Dialog>

@@ -42,6 +42,7 @@ export interface RequestCreateAppointment {
 export interface RequestUpdateAppointmentTime {
   appointment_day: string;
   appointment_time: string;
+  type_of_site: string;
   hints_to_find: string;
   exact_address: string;
 }
