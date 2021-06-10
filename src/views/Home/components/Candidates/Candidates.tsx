@@ -196,7 +196,7 @@ const Candidates = (props: CandidatesProps): ReactElement => {
                   rounded
                   size="large"
                   className={classes.buttonGetQuote}
-                  onClickHandler={() => handleForward()}
+                  onClickHandler={handleForward}
                 />
               </Hidden>,
             ]}
@@ -230,7 +230,7 @@ const Candidates = (props: CandidatesProps): ReactElement => {
               >
                 <Image
                   className={classes.imgCandidate}
-                  src={`/assets/candidates/${x.photo}`}
+                  src={x.photo}
                   lazy={false}
                 />
                 <StarRating />
@@ -250,11 +250,9 @@ const Candidates = (props: CandidatesProps): ReactElement => {
                   {x.badge &&
                     x.badge.map((b) => (
                       <ImageNode
-                        key={b}
-                        title={b}
-                        imgUrl={`/assets/badges/${b
-                          .toLowerCase()
-                          .replace(' ', '-')}.svg`}
+                        key={b.name}
+                        title={b.name}
+                        imgUrl={b.img}
                         titleProps={{ className: classes.titleBadge }}
                         imgProps={{ className: classes.imgBadge }}
                         align="center"

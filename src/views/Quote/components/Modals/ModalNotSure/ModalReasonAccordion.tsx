@@ -70,7 +70,7 @@ const ModalReasonAccordion = (
   const handleSubReasonSelect = (
     rId: number,
     r: string,
-    evt: ChangeEvent<{ value: unknown }>
+    evt: ChangeEvent<{ value: string }>
   ) => {
     const v = evt.target.value as string;
     onChange(rId, r, v);

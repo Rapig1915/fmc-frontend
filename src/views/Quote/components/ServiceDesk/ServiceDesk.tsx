@@ -4,6 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Hidden, Typography } from '@material-ui/core';
 import { ButtonForward, Image } from 'src/components/atoms';
 import { QuoteShowModal } from 'src/types';
+
+import SvgToggleInformation from 'src/assets/menu/toggle-information.svg';
+
 import ServiceBar from './ServiceBar';
 import ServiceGallery from './ServiceGallery';
 import ServiceSummary from './ServiceSummary';
@@ -85,7 +88,7 @@ const ServiceDesk = (props: ServiceDeskProps): ReactElement => {
         <Hidden smUp>
           <Box onClick={handleShowIntro}>
             <Image
-              src="/assets/menu/toggle-information.svg"
+              src={SvgToggleInformation}
               lazy={false}
               className="button-mobile-info"
             />

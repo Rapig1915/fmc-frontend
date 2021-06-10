@@ -5,6 +5,8 @@ import InfoIcon from '@material-ui/icons/Info';
 import { Image } from 'src/components/atoms';
 import { URL } from 'src/utils/consts';
 
+import ImageQuoteIntro from 'src/assets/quote-intro.png';
+
 interface ServiceIntroProps {
   className?: string;
   modalView?: boolean;
@@ -105,7 +107,7 @@ const ServiceIntro = (props: ServiceIntroProps): ReactElement => {
       </h3>
       <Image
         className={classes.image}
-        src="/assets/quote-intro.png"
+        src={ImageQuoteIntro}
         alt="quote"
         lazy={false}
       />

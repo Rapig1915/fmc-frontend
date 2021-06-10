@@ -7,6 +7,8 @@ import { Image, ButtonForward, StarRating } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
 import { itemsCustomer } from 'src/utils/data';
 
+import ImageFeedbackBack from 'src/assets/feedback-back.png';
+
 interface FeedbacksProps {
   className?: undefined;
   onGetQuote?: (payload: { zip?: string; customer?: number }) => void;
@@ -173,7 +175,7 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
               <ImageNode
                 key={x.name}
                 title={<span>{x.name}</span>}
-                imgUrl={`/assets/${x.img}`}
+                imgUrl={x.img}
                 titleProps={{ className: classes.nameCustomer }}
                 imgProps={{ className: classes.imgCustomer }}
                 className={clsx(
@@ -209,7 +211,7 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
           </div>
           <Image
             className={classes.imgFeedbackBack}
-            src="/assets/feedback-back.png"
+            src={ImageFeedbackBack}
             lazy
           />
           <p className={classes.textFeedback}>
@@ -222,7 +224,7 @@ const Feedbacks = (props: FeedbacksProps): ReactElement => {
             rounded
             size="large"
             className={classes.buttonGetQuote}
-            onClickHandler={() => handleForward()}
+            onClickHandler={handleForward}
           />
         </Grid>
       </Grid>

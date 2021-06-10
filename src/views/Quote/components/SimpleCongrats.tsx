@@ -7,6 +7,8 @@ import { Box, Typography } from '@material-ui/core';
 import { ButtonForward, Image } from 'src/components/atoms';
 import { URL } from 'src/utils/consts';
 
+import CongratsBg from 'src/assets/congrats-bg.svg';
+
 interface SimpleCongratsProps {
   className?: string;
 }
@@ -77,11 +79,7 @@ const SimpleCongrats = (props: SimpleCongratsProps): ReactElement => {
 
   return (
     <Box className={clsx(className, classes.root)}>
-      <Image
-        src="/assets/congrats-bg.svg"
-        className={classes.titleBgImg}
-        lazy={false}
-      />
+      <Image src={CongratsBg} className={classes.titleBgImg} lazy={false} />
       <Typography key="title" className={classes.titleText}>
         Congrats!
       </Typography>

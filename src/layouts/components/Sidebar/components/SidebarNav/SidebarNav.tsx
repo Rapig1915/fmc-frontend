@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
   divider: {
     width: '100%',
   },
-  ButtonForward: {
+  buttonForward: {
     width: '150px',
     borderRadius: '31px',
   },
@@ -94,7 +94,7 @@ const SidebarNav = (props: SidebarNavProps): ReactElement => {
         </Typography>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <ButtonForward rounded size="small" className={classes.ButtonForward} />
+        <ButtonForward rounded size="small" className={classes.buttonForward} />
       </ListItem>
     </List>
   );

@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { useSelector } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Typography, useMediaQuery } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -6,7 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Image } from 'src/components/atoms';
 import { IReduxState } from 'src/store/reducers';
-import { useSelector } from 'react-redux';
+
+import ImageSplash from 'src/assets/splash.png';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -75,7 +77,7 @@ const Splash = (props: SplashProps): ReactElement => {
       <DialogContent className={classes.container}>
         <Image
           className={classes.imageSplash}
-          src="/assets/splash.png"
+          src={ImageSplash}
           alt="certified"
           lazy={false}
         />

@@ -18,6 +18,9 @@ import { cardTypes } from 'src/utils/data';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
 import { QuoteShowModal } from 'src/types';
 import { IReduxState } from 'src/store/reducers';
+
+import SvgMechanic from 'src/assets/mechanic.svg';
+
 import CheckoutForm from './CheckoutForm';
 import MechanicInfo from './MechanicInfo';
 
@@ -159,7 +162,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
           display="flex"
           alignItems="center"
         >
-          <Image src="/assets/mechanic.svg" />
+          <Image src={SvgMechanic} />
           <Typography className={classes.titleDatetime} noWrap>
             Your mechanic
           </Typography>

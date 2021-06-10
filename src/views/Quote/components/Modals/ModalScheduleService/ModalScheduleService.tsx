@@ -16,6 +16,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import {
   ButtonForward,
+  GoogleAddressInputWithStatus,
   InputWithStatus,
   SelectWithStatus,
 } from 'src/components/atoms';
@@ -357,16 +358,17 @@ const ModalScheduleService = (
                 handleLocationInputChange('type_of_site', val)
               }
             />
-            <InputWithStatus
+          </Box>
+          <Box key="location-info-2" className={classes.boxLocation}>
+            <GoogleAddressInputWithStatus
               start={<DirectionsCar color="secondary" />}
-              placeholder="Address where your car is"
               value={location.exact_address}
               valueChanged={(val: string) =>
                 handleLocationInputChange('exact_address', val)
               }
             />
           </Box>
-          <Box key="location-info-2" className={classes.boxLocation}>
+          <Box key="location-info-3" className={classes.boxLocation}>
             <InputWithStatus
               placeholder="Describe your car and location"
               value={location.description}

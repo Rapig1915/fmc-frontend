@@ -4,6 +4,10 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid } from '@material-ui/core';
 import { ImageNode } from 'src/components/molecules';
 
+import SvgHandMoney from 'src/assets/badges/hand-money.svg';
+import SvgHandMobile from 'src/assets/badges/hand-mobile.svg';
+import SvgHandCar from 'src/assets/badges/hand-car.svg';
+
 interface FeaturesProps {
   className?: undefined;
 }
@@ -66,7 +70,7 @@ const Features = (props: FeaturesProps): ReactElement => {
         >
           <ImageNode
             title="Affordable"
-            imgUrl="/assets/badges/hand-money.svg"
+            imgUrl={SvgHandMoney}
             titleProps={{ className: classes.title }}
             imgProps={{ className: classes.img }}
           />
@@ -82,7 +86,7 @@ const Features = (props: FeaturesProps): ReactElement => {
         >
           <ImageNode
             title="Same day service"
-            imgUrl="/assets/badges/hand-mobile.svg"
+            imgUrl={SvgHandMobile}
             titleProps={{ className: classes.title }}
             imgProps={{ className: classes.img }}
           />
@@ -98,7 +102,7 @@ const Features = (props: FeaturesProps): ReactElement => {
         >
           <ImageNode
             title="Certified technicians"
-            imgUrl="/assets/badges/hand-car.svg"
+            imgUrl={SvgHandCar}
             titleProps={{ className: classes.title }}
             imgProps={{ className: classes.img }}
           />

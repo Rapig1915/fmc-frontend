@@ -71,7 +71,7 @@ const InputWithStatus = (props: InputWithStatusProps): ReactElement => {
 
   const classes = useStyles();
 
-  const handleChange = (evt: ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (evt: ChangeEvent<{ value: string }>) => {
     const v = evt.target.value as string;
     if (valueChanged) valueChanged(v);
   };

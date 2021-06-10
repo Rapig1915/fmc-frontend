@@ -1,10 +1,12 @@
 import React, { ReactElement, useState } from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import { Add, ArrowForwardIos, ExpandMore, Remove } from '@material-ui/icons';
 import { ImageNode } from 'src/components/molecules';
 import { faq } from 'src/utils/data';
-import clsx from 'clsx';
+
+import ImageFaq from 'src/assets/faq.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -143,7 +145,7 @@ const BoxFAQ = (): ReactElement => {
             )}
           </>
         }
-        imgUrl="/assets/faq.png"
+        imgUrl={ImageFaq}
         titleProps={{ className: classes.titleHappyCustomer }}
         imgProps={{ className: classes.imgHappyCustomer }}
         className={classes.containerHappyCustomer}

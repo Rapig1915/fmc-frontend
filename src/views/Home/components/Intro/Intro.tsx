@@ -5,6 +5,9 @@ import { useMediaQuery, Grid } from '@material-ui/core';
 import { Image } from 'src/components/atoms';
 import { SectionHeader, ZipcodeQuote } from 'src/components/molecules';
 
+import SvgCertified from 'src/assets/badges/certified.svg';
+import ImageIntroBackground from 'src/assets/intro-background.png';
+
 interface IntroProps {
   className?: undefined;
   onGetQuote?: (payload: { zip?: string; customer?: number }) => void;
@@ -77,7 +80,7 @@ const Intro = (props: IntroProps): ReactElement => {
               <>
                 <Image
                   className={classes.certifiedImage}
-                  src="/assets/badges/certified.svg"
+                  src={SvgCertified}
                   alt="certified"
                   lazy={false}
                 />
@@ -118,7 +121,7 @@ const Intro = (props: IntroProps): ReactElement => {
           // data-aos="fade-up"
         >
           <Image
-            src="/assets/intro-background.png"
+            src={ImageIntroBackground}
             alt="TheFront Company"
             className={classes.image}
             data-aos="flip-left"

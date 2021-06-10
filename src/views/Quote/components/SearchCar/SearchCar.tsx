@@ -8,6 +8,9 @@ import { Image } from 'src/components/atoms';
 import { arrCarSelectTypes } from 'src/utils/data';
 import { ICarMeta, CarSelectType, QuoteShowModal } from 'src/types';
 import { checkPlateNumber } from 'src/api/quote';
+
+import SvgToggleInformation from 'src/assets/menu/toggle-information.svg';
+
 import FormPlateNumber from './FormPlateNumber';
 import FormYearMakeModel from './FormYearMakeModel';
 import FormConfirmCar from './FormConfirmCar';
@@ -171,7 +174,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
           <Hidden smUp>
             <Box onClick={handleShowIntro}>
               <Image
-                src="/assets/menu/toggle-information.svg"
+                src={SvgToggleInformation}
                 lazy={false}
                 className="button-mobile-info"
               />

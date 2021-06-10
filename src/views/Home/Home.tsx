@@ -17,6 +17,11 @@ import { ImageNode } from 'src/components/molecules';
 import { Section } from 'src/components/organisms';
 import { Splash } from 'src/layouts/components';
 import { URL } from 'src/utils/consts';
+
+import SvgSecurity from 'src/assets/badges/security.svg';
+import ImageWorkStepLogo from 'src/assets/work-step-logo.png';
+import SvgLove from 'src/assets/badges/love.svg';
+
 import {
   Intro,
   Advantage,
@@ -148,7 +153,7 @@ const Home = (): ReactElement => {
                   24 months / 24,000 mi waranty on each job.
                 </>
               }
-              imgUrl="/assets/badges/security.svg"
+              imgUrl={SvgSecurity}
               titleProps={{ className: classes.titleWarranty }}
               imgProps={{ className: classes.imgWarranty }}
               className={classes.containerWarranty}
@@ -178,7 +183,7 @@ const Home = (): ReactElement => {
         >
           <Image
             className={classes.imgWorkStepLogo}
-            src="/assets/work-step-logo.png"
+            src={ImageWorkStepLogo}
             lazy
           />
         </Section>
@@ -199,7 +204,7 @@ const Home = (): ReactElement => {
                 People
                 <Image
                   className={classes.imgLove}
-                  src="/assets/badges/love.svg"
+                  src={SvgLove}
                   alt="love"
                   lazy={false}
                 />

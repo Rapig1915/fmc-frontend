@@ -49,7 +49,7 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
 
   const classes = useStyles({ show });
 
-  const optionYear = Array(50)
+  const optionYear = Array(32)
     .fill(0)
     .reduce((obj, x, index) => {
       return {
@@ -58,16 +58,16 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
       };
     }, {});
 
+  const { car, handleSetCar } = useContext(QuoteContext);
+
   const [vehicleList, setVehicleList] = useState<[IVehicle]>();
 
   React.useEffect(() => {
     setTimeout(async () => {
-      const resp = await getVehicles('', '', '');
+      const resp = await getVehicles(car.attributes.year, '', '');
       if (resp && resp.data) setVehicleList(resp.data);
     });
-  }, []);
-
-  const { car, handleSetCar } = useContext(QuoteContext);
+  }, [car.attributes.year]);
 
   const handleInputChange = (key: string, value: string) => {
     handleSetCar({

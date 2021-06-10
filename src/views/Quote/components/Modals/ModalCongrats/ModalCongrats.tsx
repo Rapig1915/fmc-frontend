@@ -16,6 +16,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { ButtonForward, Image } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
 import { URL } from 'src/utils/consts';
+
+import SvgCongratsBg from 'src/assets/congrats-bg.svg';
+import SvgQuestion from 'src/assets/badges/question-primary.svg';
+import SvgInformation from 'src/assets/badges/information-primary.svg';
+
 import HelperQuestions from './HelperQuestions';
 
 interface ModalCongratsProps {
@@ -162,7 +167,7 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
       <DialogTitle className={classes.title}>
         <Box className={classes.container}>
           <Image
-            src="/assets/congrats-bg.svg"
+            src={SvgCongratsBg}
             className={classes.titleBgImg}
             lazy={false}
           />
@@ -192,7 +197,7 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
                 Call us (214) 620-0702
               </>
             }
-            imgUrl="/assets/badges/question-primary.svg"
+            imgUrl={SvgQuestion}
             titleProps={{ className: classes.titleQuestion }}
             imgProps={{ className: classes.imgQuestion }}
             className={classes.containerQuestion}
@@ -206,7 +211,7 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
                 See your service request in your Active
               </>
             }
-            imgUrl="/assets/badges/information-primary.svg"
+            imgUrl={SvgInformation}
             titleProps={{ className: classes.titleQuestion }}
             imgProps={{ className: classes.imgQuestion }}
             className={classes.containerQuestion}

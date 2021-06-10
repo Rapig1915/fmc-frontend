@@ -8,7 +8,7 @@ import {
   AccordionSummary,
 } from 'src/components/organisms';
 
-interface ModalReasonOtherProps {
+interface ModalReasonCheckProps {
   reason: string;
   note: string;
   onNoteChange: (val: string) => void;
@@ -106,11 +106,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ModalReasonOther = (props: ModalReasonOtherProps): ReactElement => {
+const ModalReasonCheck = (props: ModalReasonCheckProps): ReactElement => {
   const { reason, note, onNoteChange } = props;
   const classes = useStyles();
 
-  const handleChange = (evt: ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (evt: ChangeEvent<{ value: string }>) => {
     const v = evt.target.value as string;
     onNoteChange(v);
   };
@@ -163,6 +163,6 @@ const ModalReasonOther = (props: ModalReasonOtherProps): ReactElement => {
   );
 };
 
-ModalReasonOther.defaultProps = {};
+ModalReasonCheck.defaultProps = {};
 
-export default ModalReasonOther;
+export default ModalReasonCheck;

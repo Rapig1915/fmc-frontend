@@ -57,7 +57,7 @@ const ModalReasonOther = (props: ModalReasonOtherProps): ReactElement => {
   const { reason, otherReason, onOtherReasonChange } = props;
   const classes = useStyles();
 
-  const handleChange = (evt: ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (evt: ChangeEvent<{ value: string }>) => {
     const v = evt.target.value as string;
     onOtherReasonChange(v);
   };

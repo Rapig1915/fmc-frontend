@@ -71,7 +71,9 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
 
   const classes = useStyles();
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (
+    event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>
+  ) => {
     const v = event.target.value as string;
     if (valueChanged) valueChanged(v);
   };

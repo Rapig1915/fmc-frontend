@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Toolbar,
@@ -13,7 +14,13 @@ import {
 
 import { ButtonForward, Image } from 'src/components/atoms';
 import { CustomTheme } from 'src/themes';
-import clsx from 'clsx';
+
+import SvgSecurity from 'src/assets/badges/security.svg';
+import SvgPhone from 'src/assets/badges/phone.svg';
+import SvgUser from 'src/assets/badges/user.svg';
+import SvgMenu from 'src/assets/menu/menu.svg';
+import SvgLogo from 'src/assets/logo.svg';
+import SvgCall from 'src/assets/menu/call.svg';
 
 interface ToolbarProps {
   onSidebarOpen?: () => void;
@@ -152,7 +159,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
           <div className={classes.contactInfoContainer}>
             <Image
               className={classes.contactImage1}
-              src="/assets/badges/security.svg"
+              src={SvgSecurity}
               alt="thefront"
               lazy={false}
             />
@@ -162,7 +169,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
             <div className={classes.flexGrow} />
             <Image
               className={classes.contactImage2}
-              src="/assets/badges/phone.svg"
+              src={SvgPhone}
               alt="thefront"
               lazy={false}
             />
@@ -171,7 +178,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
             </button>
             <Image
               className={classes.contactImage2}
-              src="/assets/badges/user.svg"
+              src={SvgUser}
               alt="thefront"
               lazy={false}
             />
@@ -189,7 +196,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
               onClick={onSidebarOpen}
               aria-label="Menu"
             >
-              <Image src="/assets/menu/menu.svg" />
+              <Image src={SvgMenu} />
             </IconButton>
           </Hidden>
           <div className={classes.logoContainer}>
@@ -199,7 +206,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
                   classes.logoImage,
                   isXs ? classes.imageCenterAlign : ''
                 )}
-                src="/assets/logo.svg"
+                src={SvgLogo}
                 alt="thefront"
                 lazy={false}
               />
@@ -274,7 +281,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
               onClick={onSidebarOpen}
               aria-label="Menu"
             >
-              <Image src="/assets/menu/call.svg" />
+              <Image src={SvgCall} />
             </IconButton>
           </Hidden>
         </Toolbar>

@@ -27,14 +27,13 @@ export const getVehicles = async (
   make: string | undefined,
   model: string | undefined
 ): Promise<ResponseVehicle> => {
+  let query = `year=${year}`;
+  if (make) query += `&make=${make}`;
+  if (model) query += `&model=${model}`;
+
   return callApi<ResponseVehicle>({
-    url: '/api/v2/vehicles',
+    url: `/api/v2/vehicles?${query}`,
     method: 'GET',
-    data: {
-      year: year || '',
-      make: make || '',
-      model: model || '',
-    },
   });
 };
 

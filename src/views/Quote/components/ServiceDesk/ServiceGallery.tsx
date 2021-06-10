@@ -78,9 +78,7 @@ const ServiceGallery = (props: ServiceGalleryProps): ReactElement => {
           <ImageNode
             key={b.name}
             title={b.name}
-            imgUrl={`/assets/services/${b.image}${
-              services.includes(b.name) ? '-selected' : ''
-            }.svg`}
+            imgUrl={services.includes(b.name) ? b.imageSelected : b.image}
             titleProps={{
               className: clsx(
                 classes.titleBadge,

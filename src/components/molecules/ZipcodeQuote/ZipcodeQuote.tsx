@@ -54,9 +54,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ZipcodeQuote = (props: ZipcodeQuoteProps): ReactElement => {
-  const { className, onGetQuote, ...rest } = props;
-
+const ZipcodeQuote = ({
+  className,
+  onGetQuote,
+  ...rest
+}: ZipcodeQuoteProps): ReactElement => {
   const classes = useStyles();
 
   const [customer, setCustomer] = useState(0);
@@ -64,7 +66,7 @@ const ZipcodeQuote = (props: ZipcodeQuoteProps): ReactElement => {
 
   const isReadyToQuote = !!zip && !!customer;
 
-  const handleChange = async (evt: ChangeEvent<{ value: unknown }>) => {
+  const handleChange = async (evt: ChangeEvent<{ value: string }>) => {
     const v = evt.target.value as string;
     setZip(v);
 

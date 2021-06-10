@@ -7,6 +7,8 @@ import { arrQuoteSteps } from 'src/utils/data';
 import { Image } from 'src/components/atoms';
 import { QuoteStep } from 'src/types';
 
+import SvgCar from 'src/assets/badges/car.svg';
+
 interface CheckStepProps {
   className?: string;
   currentStep: QuoteStep;
@@ -79,7 +81,7 @@ const CheckStep = (props: CheckStepProps): ReactElement => {
         <Image
           className={clsx(classes.step, 'step-current')}
           key={step}
-          src="/assets/badges/car.svg"
+          src={SvgCar}
           lazy={false}
         />
       );

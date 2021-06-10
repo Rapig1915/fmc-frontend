@@ -12,6 +12,8 @@ import {
 } from 'src/utils/data';
 import logger from 'src/utils/logger';
 
+import SvgLogoWhite from 'src/assets/logo-white.svg';
+
 interface AdvantageProps {
   className?: undefined;
   onGetQuote?: (payload: { zip?: string; customer?: number }) => void;
@@ -218,7 +220,7 @@ const Advantage = (props: AdvantageProps): ReactElement => {
           />
           <Image
             className={classes.logoImage}
-            src="/assets/logo-white.svg"
+            src={SvgLogoWhite}
             alt="certified"
             lazy={false}
           />
@@ -232,7 +234,7 @@ const Advantage = (props: AdvantageProps): ReactElement => {
                     <p>{x.subtitle}</p>
                   </>
                 }
-                imgUrl={`/assets/${x.img}`}
+                imgUrl={x.img}
                 titleProps={{ className: classes.titleAdvantage }}
                 imgProps={{ className: classes.imgAdvantage }}
                 className={classes.badgeAdvantage}
@@ -242,7 +244,7 @@ const Advantage = (props: AdvantageProps): ReactElement => {
             size="large"
             color="default"
             className={classes.ButtonForward}
-            onClickHandler={() => handleForward()}
+            onClickHandler={handleForward}
           />
         </Grid>
         <Hidden smDown>
@@ -271,7 +273,7 @@ const Advantage = (props: AdvantageProps): ReactElement => {
                       <p>{x.subtitle}</p>
                     </>
                   }
-                  imgUrl={`/assets/${x.img}`}
+                  imgUrl={x.img}
                   titleProps={{ className: classes.titleShop }}
                   imgProps={{ className: classes.imgShop }}
                   className={classes.badgeShop}

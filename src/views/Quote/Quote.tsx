@@ -198,7 +198,7 @@ const Quote = (): ReactElement => {
   const renderStepComponent = () => {
     return (
       (step === QuoteStep.QUOTE_SEARCH_CAR && (
-        <SearchCar onConfirm={() => handleConfirmCar()} />
+        <SearchCar onConfirm={handleConfirmCar} />
       )) ||
       (step === QuoteStep.QUOTE_SERVICE_DESK && (
         <ServiceDesk

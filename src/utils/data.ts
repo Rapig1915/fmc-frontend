@@ -1,3 +1,9 @@
+import iconAdvantage from 'src/assets/advantage';
+import imgCandidate from 'src/assets/candidates';
+import imgCustomer from 'src/assets/customers';
+import imgBadge from 'src/assets/badges';
+import imgService from 'src/assets/services';
+
 import { QuoteStep, CarSelectType } from 'src/types';
 
 export const integrations = [
@@ -34,19 +40,19 @@ export const advantageCompareList = {
 
 export const itemsAdvantage = [
   {
-    img: 'badges/advantage-money.svg',
+    img: iconAdvantage.money,
     title: 'Affordable & honest',
     subtitle:
       "Fixed & upfront pricing. No hidden fees and you'll get the lowest prices guaranteed.",
   },
   {
-    img: 'badges/advantage-ring.svg',
+    img: iconAdvantage.ring,
     title: "We'll come to you",
     subtitle:
       'Friendly, car mechanics will come to your home, office or parking lot.',
   },
   {
-    img: 'badges/advantage-time.svg',
+    img: iconAdvantage.time,
     title: 'Flexible hours',
     subtitle:
       'Open every-day from 9am - 9pm. Book our epxerienced certified technicians today.',
@@ -55,17 +61,17 @@ export const itemsAdvantage = [
 
 export const itemsShop = [
   {
-    img: 'badges/advantage-shop-money.svg',
+    img: iconAdvantage.shop_money,
     title: 'Expensive & devius',
     subtitle: '30% more expensive and come with additional fees & upsells.',
   },
   {
-    img: 'badges/advantage-shop-location.svg',
+    img: iconAdvantage.shop_location,
     title: 'Inconvinient service locations',
     subtitle: 'Repairs must be done at a physical auto repair shop.',
   },
   {
-    img: 'badges/advantage-shop-rigid.svg',
+    img: iconAdvantage.shop_rigid,
     title: 'Rigid hours',
     subtitle: 'Open limited hours and at times closed on weekends.',
   },
@@ -73,19 +79,19 @@ export const itemsShop = [
 
 export const itemsCustomer = [
   {
-    img: 'customers/mariah.png',
+    img: imgCustomer.mariah,
     name: 'Mariah Heighl',
   },
   {
-    img: 'customers/johnny.png',
+    img: imgCustomer.johnny,
     name: 'Johnny Riece',
   },
   {
-    img: 'customers/marian.png',
+    img: imgCustomer.marian,
     name: 'Marian Huves',
   },
   {
-    img: 'customers/alice.png',
+    img: imgCustomer.alice,
     name: 'Alice Bleu',
   },
 ];
@@ -150,7 +156,7 @@ export const itemsLocation = [
 export const itemsCandidates = [
   {
     name: 'Steve Gerrard',
-    photo: 'steven.png',
+    photo: imgCandidate.steven,
     photoASE: 'steven-ase.png',
     rating: 5,
     review: 106,
@@ -162,17 +168,35 @@ export const itemsCandidates = [
       "Passed FixMyCar's test",
     ],
     badge: [
-      'Brakes',
-      'Suspension',
-      'Engine',
-      'Electrical',
-      'Diagnosis',
-      'European Cars',
+      {
+        name: 'Brakes',
+        img: imgBadge.brakes,
+      },
+      {
+        name: 'Suspension',
+        img: imgBadge.suspension,
+      },
+      {
+        name: 'Engine',
+        img: imgBadge.engine,
+      },
+      {
+        name: 'Electrical',
+        img: imgBadge.electrical,
+      },
+      {
+        name: 'Diagnosis',
+        img: imgBadge.diagnosis,
+      },
+      {
+        name: 'European Cars',
+        img: imgBadge.european_cars,
+      },
     ],
   },
   {
     name: 'Mark Zuckerberg',
-    photo: 'mark.png',
+    photo: imgCandidate.mark,
     rating: 5,
     review: 106,
     bio:
@@ -183,12 +207,30 @@ export const itemsCandidates = [
       "Passed FixMyCar's test",
     ],
     badge: [
-      'Brakes',
-      'Suspension',
-      'Engine',
-      'Electrical',
-      'Diagnosis',
-      'European Cars',
+      {
+        name: 'Brakes',
+        img: imgBadge.brakes,
+      },
+      {
+        name: 'Suspension',
+        img: imgBadge.suspension,
+      },
+      {
+        name: 'Engine',
+        img: imgBadge.engine,
+      },
+      {
+        name: 'Electrical',
+        img: imgBadge.electrical,
+      },
+      {
+        name: 'Diagnosis',
+        img: imgBadge.diagnosis,
+      },
+      {
+        name: 'European Cars',
+        img: imgBadge.european_cars,
+      },
     ],
   },
 ];
@@ -338,33 +380,33 @@ export const allMotors = {
 export const allStaticServices = [
   {
     name: 'Front brakes pads & rotors',
-    image: 'brakes',
-    select: false,
+    image: imgService.brakes,
+    imageSelected: imgService.brakes_selected,
   },
   {
     name: 'Used car',
-    image: 'used-car',
-    select: false,
+    image: imgService.used_car,
+    imageSelected: imgService.used_car_selected,
   },
   {
     name: 'Diagnosis / Inspection',
-    image: 'diagnosis',
-    select: true,
+    image: imgService.diagnosis,
+    imageSelected: imgService.diagnosis_selected,
   },
   {
     name: 'Oil Change',
-    image: 'oil-change',
-    select: false,
+    image: imgService.oil_change,
+    imageSelected: imgService.oil_change_selected,
   },
   {
     name: 'Replace Starter',
-    image: 'replace-starter',
-    select: true,
+    image: imgService.replace_starter,
+    imageSelected: imgService.replace_starter_selected,
   },
   {
     name: 'Replace Battery',
-    image: 'replace-battery',
-    select: false,
+    image: imgService.replace_battery,
+    imageSelected: imgService.replace_battery_selected,
   },
 ];
 

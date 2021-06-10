@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     height: 100,
     marginRight: theme.spacing(3),
     borderRadius: 100,
+    objectFit: 'cover',
   },
   countReview: {
     fontWeight: 500,

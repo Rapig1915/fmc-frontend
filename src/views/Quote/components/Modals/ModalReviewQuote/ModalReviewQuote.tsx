@@ -23,6 +23,14 @@ import {
 } from 'src/components/organisms';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
 import { IAppointment, QuoteShowModal } from 'src/types';
+
+import SvgSecurity from 'src/assets/badges/security.svg';
+import SvgAdvantageMoney from 'src/assets/advantage/money.svg';
+import SvgQuestion from 'src/assets/badges/question.svg';
+import SvgDiagnosis from 'src/assets/badges/diagnosis.svg';
+import ImageHappyCustomer from 'src/assets/happy-customer.png';
+import ImageBrand from 'src/assets/brands';
+
 import BoxFAQ from './BoxFAQ';
 
 interface ModalReviewQuoteProps {
@@ -88,16 +96,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   imgMazda: {
+    maxHeight: 300,
     objectFit: 'contain',
     color: theme.palette.common.white,
     margin: theme.spacing(2),
     marginTop: theme.spacing(1),
     marginRight: theme.spacing(3),
-    // backgroundImage: 'url(/assets/mazda.png)',
-    // backgroundPosition: 'center',
-    // backgroundRepeat: 'no-repeat',
-    // backgroundSize: 'contain',
-    // overflow: 'hidden'
   },
   titleMazda: {
     color: '#685364',
@@ -274,6 +278,11 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     handleShowModal(QuoteShowModal.NONE);
   }
 
+  const keyBrand =
+    appointment?.attributes.car.make.replace(' ', '-').toLocaleLowerCase() ||
+    'blank';
+  const imageBrand = ImageBrand[keyBrand] || ImageBrand.blank;
+
   return (
     <Dialog
       open={show}
@@ -320,9 +329,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                     </b>
                   </>
                 }
-                imgUrl={`/assets/brands/${appointment?.attributes.car.make
-                  .replace(' ', '-')
-                  .toLocaleLowerCase()}.svg`}
+                imgUrl={imageBrand}
                 titleProps={{ className: classes.titleMazda }}
                 imgProps={{ className: classes.imgMazda }}
                 className={classes.containerMazda}
@@ -336,7 +343,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                     24 months / 24,000 mi waranty on each job.
                   </>
                 }
-                imgUrl="/assets/badges/security.svg"
+                imgUrl={SvgSecurity}
                 titleProps={{ className: classes.titleWarranty }}
                 imgProps={{ className: classes.imgWarranty }}
                 className={classes.containerWarranty}
@@ -350,7 +357,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                     All prices are fixed
                   </>
                 }
-                imgUrl="/assets/badges/advantage-money.svg"
+                imgUrl={SvgAdvantageMoney}
                 titleProps={{ className: classes.titleWarranty }}
                 imgProps={{ className: classes.imgWarranty }}
                 className={classes.containerWarranty}
@@ -364,7 +371,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                     Call us (214) 620-0702
                   </>
                 }
-                imgUrl="/assets/badges/question.svg"
+                imgUrl={SvgQuestion}
                 titleProps={{ className: classes.titleWarranty }}
                 imgProps={{ className: classes.imgWarranty }}
                 className={classes.containerWarranty}
@@ -381,10 +388,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
           >
             <Accordion square expanded className={classes.accordion}>
               <AccordionSummary>
-                <Image
-                  src="/assets/badges/Diagnosis.svg"
-                  className={classes.imageAccordion}
-                />
+                <Image src={SvgDiagnosis} className={classes.imageAccordion} />
                 <Typography className={classes.titleAccordion}>
                   Inspection:
                 </Typography>
@@ -416,7 +420,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                       Booked the same service in your area
                     </>
                   }
-                  imgUrl="/assets/happy-customer.png"
+                  imgUrl={ImageHappyCustomer}
                   titleProps={{ className: classes.titleHappyCustomer }}
                   imgProps={{ className: classes.imgHappyCustomer }}
                   className={classes.containerHappyCustomer}
