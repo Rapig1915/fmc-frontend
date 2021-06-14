@@ -44,7 +44,7 @@ const CompletedService = (props: CompletedServiceProps): ReactElement => {
 
   const quotes = useSelector(
     (state: IReduxState) => state.auth.appointments
-  ).filter((x) => x.attributes.status === 'quote_requested');
+  ).filter((x) => x.attributes.status === 'complete');
 
   const renderQuotes = () => {
     return quotes.map((q) => <ItemQuote key={q.id} data={q} miniMode />);

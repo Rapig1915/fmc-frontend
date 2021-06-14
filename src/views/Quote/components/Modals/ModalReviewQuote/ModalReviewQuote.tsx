@@ -429,7 +429,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
               </AccordionDetails>
             </Accordion>
             <DialogActions className={classes.actionContainer}>
-              {appointment?.attributes.status === 'quote_requsted' && (
+              {appointment?.attributes.status !== 'complete' && (
                 <ButtonForward
                   key="schedule-service"
                   title="Schedule service"

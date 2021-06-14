@@ -198,7 +198,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
           </Box>
         </Box>
         <DialogActions className={classes.actionContainer}>
-          {appointmentStatus === 'quote_requsted' && (
+          {appointmentStatus !== 'complete' && (
             <ButtonForward
               key="finish-booking"
               title="Finish booking"
