@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { CustomTheme } from 'src/themes';
+import { Container } from '@material-ui/core';
 
 interface SectionProps {
   className?: string;
@@ -13,7 +14,6 @@ interface SectionProps {
 
 const useStyles = makeStyles((theme: CustomTheme) => ({
   root: {
-    maxWidth: theme.layout?.contentWidth,
     width: '100%',
     margin: '0 auto',
     padding: theme.spacing(6, 2),
@@ -50,19 +50,21 @@ const Section = (props: SectionProps): ReactElement => {
   const classes = useStyles();
 
   return (
-    <section
-      className={clsx(
-        'section',
-        classes.root,
-        fullWidth ? classes.fullWidth : {},
-        narrow ? classes.narrow : {},
-        disablePadding ? classes.disablePadding : {},
-        className
-      )}
-      {...rest}
-    >
-      {children}
-    </section>
+    <Container>
+      <section
+        className={clsx(
+          'section',
+          classes.root,
+          fullWidth ? classes.fullWidth : {},
+          narrow ? classes.narrow : {},
+          disablePadding ? classes.disablePadding : {},
+          className
+        )}
+        {...rest}
+      >
+        {children}
+      </section>
+    </Container>
   );
 };
 

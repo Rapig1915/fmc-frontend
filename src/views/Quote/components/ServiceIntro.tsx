@@ -10,14 +10,20 @@ import ImageQuoteIntro from 'src/assets/quote-intro.png';
 interface ServiceIntroProps {
   className?: string;
   modalView?: boolean;
+  rounded?: boolean;
+  withLink?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
   intro: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
     background: '#493F82',
     padding: theme.spacing(4),
     borderTopLeftRadius: 9,
     borderBottomLeftRadius: 9,
+    borderRadius: (props: ServiceIntroProps) => (props.rounded ? 9 : undefined),
     textAlign: 'center',
     position: 'relative',
     [theme.breakpoints.down('sm')]: {
@@ -47,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(6),
       textAlign: 'left',
     },
+  },
+  flexGrow: {
+    flexGrow: 1,
   },
   icon: {
     color: theme.palette.common.white,
@@ -86,9 +95,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ServiceIntro = (props: ServiceIntroProps): ReactElement => {
-  const { className, modalView } = props;
+  const { className, modalView, rounded, withLink } = props;
 
-  const classes = useStyles();
+  const classes = useStyles({ rounded });
 
   return (
     <Box
@@ -105,15 +114,18 @@ const ServiceIntro = (props: ServiceIntroProps): ReactElement => {
         Changing your oil every 3,000 miles will help your car last to a ripe
         old age!
       </h3>
+      <Box className={classes.flexGrow} />
       <Image
         className={classes.image}
         src={ImageQuoteIntro}
         alt="quote"
         lazy={false}
       />
-      <a href={URL.DASHBOARD} className={classes.linkTerm}>
-        Terms & Conditions
-      </a>
+      {withLink && (
+        <a href={URL.DASHBOARD} className={classes.linkTerm}>
+          Terms & Conditions
+        </a>
+      )}
     </Box>
   );
 };
@@ -121,6 +133,8 @@ const ServiceIntro = (props: ServiceIntroProps): ReactElement => {
 ServiceIntro.defaultProps = {
   className: undefined,
   modalView: false,
+  rounded: false,
+  withLink: true,
 };
 
 export default ServiceIntro;

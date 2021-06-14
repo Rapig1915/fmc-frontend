@@ -1,11 +1,16 @@
 import React, { ReactElement } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 
-import { Main as MainLayout, Minimal as MinimalLayout } from 'src/layouts';
+import {
+  Main as MainLayout,
+  Minimal as MinimalLayout,
+  Dashboard as DashboardLayout,
+  Blank as BlankLayout,
+} from 'src/layouts';
 import { URL } from 'src/utils/consts';
 
 import RouteWithLayout from './RouteWithLayout';
-import { Quote, Home } from '../views';
+import { Quote, Home, Dashboard, Login } from '../views';
 
 const Routes = (): ReactElement => {
   return (
@@ -21,6 +26,18 @@ const Routes = (): ReactElement => {
         exact
         layout={MinimalLayout}
         path={URL.QUOTE}
+      />
+      <RouteWithLayout
+        component={Dashboard}
+        exact
+        layout={DashboardLayout}
+        path={URL.DASHBOARD}
+      />
+      <RouteWithLayout
+        component={Login}
+        exact
+        layout={BlankLayout}
+        path={URL.LOGIN}
       />
       <Redirect to={URL.HOME} />
     </Switch>

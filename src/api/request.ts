@@ -5,8 +5,13 @@ import logger from 'src/utils/logger';
 axios.defaults.baseURL = apiBaseUrl;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-export const callApi = async <T>(apiConfig: AxiosRequestConfig): Promise<T> => {
+export const callApi = async <T>(
+  apiConfig: AxiosRequestConfig,
+  token = ''
+): Promise<T> => {
   try {
+    if (token) axios.defaults.headers.Authorization = `Bearer ${token}`;
+
     const response = await axios.request(apiConfig);
     return response.data;
   } catch (error) {

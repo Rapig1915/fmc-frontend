@@ -5,8 +5,9 @@ export const ENVIRONMENT = {
 };
 
 export const URL = {
+  LOGIN: '/login',
+
   HOME: '/',
   QUOTE: '/quote',
-  SINGUP: '/singup',
   DASHBOARD: '/dashboard',
 };

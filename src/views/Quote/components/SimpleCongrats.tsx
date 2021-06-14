@@ -74,7 +74,7 @@ const SimpleCongrats = (props: SimpleCongratsProps): ReactElement => {
   const history = useHistory();
 
   const handleDone = () => {
-    history.push(URL.HOME);
+    history.push(URL.DASHBOARD);
   };
 
   return (

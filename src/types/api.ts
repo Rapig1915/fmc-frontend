@@ -1,4 +1,4 @@
-import { IAppointment, ICarMeta, IVehicle } from './model';
+import { IAppointment, ICarMeta, IUser, IVehicle } from './model';
 
 export interface ResponseZipcode {
   zipcode: string;
@@ -65,4 +65,43 @@ export interface ResponseAvailability {
       };
     };
   };
+}
+
+export interface RequestAuth {
+  user: {
+    phone: string;
+  };
+}
+
+export interface ResponseAuth {
+  status: string;
+  code: string;
+}
+
+export interface RequestSignin {
+  user: {
+    code: string;
+  };
+}
+
+export interface ResponseSignin {
+  auth_token: string;
+  user: {
+    id: number;
+    email: string;
+    'all-cars': [
+      {
+        car: string;
+        inspection: string | undefined | null;
+      }
+    ];
+  };
+}
+
+export interface ResponseGetUser {
+  data: IUser;
+}
+
+export interface ResponseGetUserAppointments {
+  data: IAppointment[];
 }

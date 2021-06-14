@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Toolbar,
@@ -8,23 +9,31 @@ import {
   ListItem,
   Typography,
   IconButton,
-  useMediaQuery,
-  useTheme,
+  Container,
 } from '@material-ui/core';
 
 import { ButtonForward, Image } from 'src/components/atoms';
 import { CustomTheme } from 'src/themes';
 
+import ImageServieProvider from 'src/assets/service-provider.png';
 import SvgSecurity from 'src/assets/badges/security.svg';
 import SvgPhone from 'src/assets/badges/phone.svg';
 import SvgUser from 'src/assets/badges/user.svg';
 import SvgMenu from 'src/assets/menu/menu.svg';
 import SvgLogo from 'src/assets/logo.svg';
 import SvgCall from 'src/assets/menu/call.svg';
+import ButtonLogout from 'src/components/atoms/ButtonLogout';
+import { ImageNode } from 'src/components/molecules';
+import { useDispatch, useSelector } from 'react-redux';
+import { IReduxState } from 'src/store/reducers';
+import useDeviseQuery from 'src/hooks/useDeviseQuery';
+import { URL } from 'src/utils/consts';
+import { logout } from 'src/store/actions';
 
 interface ToolbarProps {
   onSidebarOpen?: () => void;
   showMenu?: boolean;
+  showServiceWarranty?: boolean;
 }
 
 const useStyles = makeStyles((theme: CustomTheme) => ({
@@ -35,7 +44,6 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     backgroundColor: '#2A2D3C',
   },
   contactInfoContainer: {
-    maxWidth: theme.layout.contentWidth,
     width: '100%',
     margin: '0 auto',
     padding: theme.spacing(0, 2),
@@ -73,10 +81,8 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     alignItems: 'center',
   },
   toolbar: {
-    maxWidth: theme.layout.contentWidth,
     width: '100%',
     margin: '0 auto',
-    padding: theme.spacing(0, 2),
   },
   listItem: {
     cursor: 'pointer',
@@ -140,71 +146,202 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     marginLeft: '30px',
     marginTop: '-2px',
   },
+  containerPhone: {
+    background: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imgServiceProvider: {
+    width: 30,
+    height: 30,
+    marginRight: theme.spacing(1),
+    borderRadius: 30,
+  },
+  titlePhone: {
+    color: '#302A3C',
+    fontWeight: 400,
+    fontStyle: 'normal',
+    fontSize: 17,
+    lineHeight: '24.57px',
+  },
 }));
 
 const Topbar = (props: ToolbarProps): ReactElement => {
-  const { onSidebarOpen, showMenu, ...rest } = props;
+  const { onSidebarOpen, showMenu, showServiceWarranty, ...rest } = props;
 
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const loggedIn = useSelector((state: IReduxState) => state.auth.loggedIn);
+
+  const { xsOnly } = useDeviseQuery();
   const classes = useStyles();
 
-  const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.up('xs'), {
-    defaultMatches: true,
-  });
+  const handleClickLogin = () => {
+    if (loggedIn) history.push(URL.DASHBOARD);
+    else history.push(URL.LOGIN);
+  };
+
+  const handleClickLogout = () => {
+    dispatch(logout());
+  };
 
   return (
-    <>
-      <Hidden smDown>
-        <div className={classes.contactBar}>
-          <div className={classes.contactInfoContainer}>
-            <Image
-              className={classes.contactImage1}
-              src={SvgSecurity}
-              alt="thefront"
-              lazy={false}
-            />
-            <div>
-              <b>Service waranty:</b> 24 months / 24,000 mi waranty on each job.
+    <Container>
+      {showServiceWarranty && (
+        <Hidden smDown>
+          <div className={classes.contactBar}>
+            <div className={classes.contactInfoContainer}>
+              <Image
+                className={classes.contactImage1}
+                src={SvgSecurity}
+                alt="thefront"
+                lazy={false}
+              />
+              <div>
+                <b>Service waranty:</b> 24 months / 24,000 mi waranty on each
+                job.
+              </div>
+              <div className={classes.flexGrow} />
+              {!loggedIn && (
+                <Image
+                  className={classes.contactImage2}
+                  src={SvgPhone}
+                  alt="thefront"
+                  lazy={false}
+                />
+              )}
+              {!loggedIn && (
+                <button type="button" key="call">
+                  (214) 620-0702
+                </button>
+              )}
+              {!loggedIn && (
+                <Image
+                  className={classes.contactImage2}
+                  src={SvgUser}
+                  alt="thefront"
+                  lazy={false}
+                />
+              )}
+              {!loggedIn && (
+                <button type="button" key="login" onClick={handleClickLogin}>
+                  Login
+                </button>
+              )}
+            </div>
+          </div>
+        </Hidden>
+      )}
+      {showMenu && (
+        <Hidden xsDown>
+          <Toolbar disableGutters className={classes.toolbar} {...rest}>
+            <div className={classes.logoContainer}>
+              <a href="/" title="thefront">
+                <Image
+                  className={clsx(
+                    classes.logoImage,
+                    xsOnly ? classes.imageCenterAlign : ''
+                  )}
+                  src={SvgLogo}
+                  alt="thefront"
+                  lazy={false}
+                />
+              </a>
             </div>
             <div className={classes.flexGrow} />
-            <Image
-              className={classes.contactImage2}
-              src={SvgPhone}
-              alt="thefront"
-              lazy={false}
-            />
-            <button type="button" key="call">
-              (214) 620-0702
-            </button>
-            <Image
-              className={classes.contactImage2}
-              src={SvgUser}
-              alt="thefront"
-              lazy={false}
-            />
-            <button type="button" key="login">
-              Login
-            </button>
-          </div>
-        </div>
-      </Hidden>
-      {showMenu && (
+            <div>
+              {!loggedIn && (
+                <List className={classes.navigationContainer}>
+                  <ListItem className={classes.listItem}>
+                    <Typography
+                      variant="body1"
+                      color="textSecondary"
+                      className={classes.listItemText}
+                      component="a"
+                      href="/home"
+                    >
+                      Services
+                    </Typography>
+                  </ListItem>
+                  <ListItem className={classes.listItem}>
+                    <Typography
+                      variant="body1"
+                      color="textSecondary"
+                      className={classes.listItemText}
+                      component="a"
+                      href="/signup-simple"
+                    >
+                      Advice
+                    </Typography>
+                  </ListItem>
+                  <ListItem className={classes.listItem}>
+                    <Typography
+                      variant="body1"
+                      color="textSecondary"
+                      className={classes.listItemText}
+                      component="a"
+                      href="/not-found"
+                    >
+                      Help
+                    </Typography>
+                  </ListItem>
+                  <ListItem className={classes.listItem}>
+                    <Typography
+                      variant="body1"
+                      color="textSecondary"
+                      className={classes.listItemText}
+                      component="a"
+                      href="/not-found"
+                    >
+                      More
+                    </Typography>
+                  </ListItem>
+                </List>
+              )}
+              {loggedIn && (
+                <ImageNode
+                  title={<>(214) 620-0702</>}
+                  imgUrl={ImageServieProvider}
+                  titleProps={{ className: classes.titlePhone }}
+                  imgProps={{ className: classes.imgServiceProvider }}
+                  className={classes.containerPhone}
+                />
+              )}
+            </div>
+            {!loggedIn && <div className={classes.flexGrow} />}
+            <List className={classes.navigationContainer}>
+              <ListItem className={classes.listItem}>
+                {!loggedIn && (
+                  <ButtonForward
+                    rounded
+                    size="small"
+                    className={classes.buttonQuote}
+                  />
+                )}
+                {loggedIn && (
+                  <ButtonLogout onClickHandler={handleClickLogout} />
+                )}
+              </ListItem>
+            </List>
+          </Toolbar>
+        </Hidden>
+      )}
+      <Hidden smUp>
         <Toolbar disableGutters className={classes.toolbar} {...rest}>
-          <Hidden smUp>
-            <IconButton
-              className={classes.iconButton}
-              onClick={onSidebarOpen}
-              aria-label="Menu"
-            >
-              <Image src={SvgMenu} />
-            </IconButton>
-          </Hidden>
+          <IconButton
+            className={classes.iconButton}
+            onClick={onSidebarOpen}
+            aria-label="Menu"
+          >
+            <Image src={SvgMenu} />
+          </IconButton>
           <div className={classes.logoContainer}>
             <a href="/" title="thefront">
               <Image
                 className={clsx(
                   classes.logoImage,
-                  isXs ? classes.imageCenterAlign : ''
+                  xsOnly ? classes.imageCenterAlign : ''
                 )}
                 src={SvgLogo}
                 alt="thefront"
@@ -213,86 +350,23 @@ const Topbar = (props: ToolbarProps): ReactElement => {
             </a>
           </div>
           <div className={classes.flexGrow} />
-          <div>
-            <Hidden xsDown>
-              <List className={classes.navigationContainer}>
-                <ListItem className={classes.listItem}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    className={classes.listItemText}
-                    component="a"
-                    href="/home"
-                  >
-                    Services
-                  </Typography>
-                </ListItem>
-                <ListItem className={classes.listItem}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    className={classes.listItemText}
-                    component="a"
-                    href="/signup-simple"
-                  >
-                    Advice
-                  </Typography>
-                </ListItem>
-                <ListItem className={classes.listItem}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    className={classes.listItemText}
-                    component="a"
-                    href="/not-found"
-                  >
-                    Help
-                  </Typography>
-                </ListItem>
-                <ListItem className={classes.listItem}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    className={classes.listItemText}
-                    component="a"
-                    href="/not-found"
-                  >
-                    More
-                  </Typography>
-                </ListItem>
-              </List>
-            </Hidden>
-          </div>
-          <div className={classes.flexGrow} />
-          <Hidden xsDown>
-            <List className={classes.navigationContainer}>
-              <ListItem className={classes.listItem}>
-                <ButtonForward
-                  rounded
-                  size="small"
-                  className={classes.buttonQuote}
-                />
-              </ListItem>
-            </List>
-          </Hidden>
-          <Hidden smUp>
-            <IconButton
-              className={classes.iconButton}
-              onClick={onSidebarOpen}
-              aria-label="Menu"
-            >
-              <Image src={SvgCall} />
-            </IconButton>
-          </Hidden>
+          <IconButton
+            className={classes.iconButton}
+            onClick={onSidebarOpen}
+            aria-label="Menu"
+          >
+            <Image src={SvgCall} />
+          </IconButton>
         </Toolbar>
-      )}
-    </>
+      </Hidden>
+    </Container>
   );
 };
 
 Topbar.defaultProps = {
   onSidebarOpen: undefined,
   showMenu: true,
+  showServiceWarranty: true,
 };
 
 export default Topbar;

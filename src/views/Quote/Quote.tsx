@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import React, { ReactElement, useCallback, useState } from 'react';
 import {
@@ -43,6 +44,7 @@ const Quote = (): ReactElement => {
   const dispatch = useDispatch();
 
   const zip = useSelector((state: IReduxState) => state.quote.zip);
+  const location = useLocation();
 
   const appId = useSelector(
     (state: IReduxState) =>
@@ -58,7 +60,9 @@ const Quote = (): ReactElement => {
     []
   );
 
-  const [showModal, setShowModal] = useState(QuoteShowModal.NONE);
+  const [showModal, setShowModal] = useState(
+    (location.state && location.state.modal) || QuoteShowModal.NONE
+  );
   const handleShowModal = useCallback(
     (newShowModal: QuoteShowModal) => setShowModal(newShowModal),
     []

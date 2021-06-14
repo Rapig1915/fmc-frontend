@@ -429,13 +429,15 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
               </AccordionDetails>
             </Accordion>
             <DialogActions className={classes.actionContainer}>
-              <ButtonForward
-                key="schedule-service"
-                title="Schedule service"
-                size="large"
-                rounded
-                onClickHandler={handleSchedule}
-              />
+              {appointment?.attributes.status === 'quote_requsted' && (
+                <ButtonForward
+                  key="schedule-service"
+                  title="Schedule service"
+                  size="large"
+                  rounded
+                  onClickHandler={handleSchedule}
+                />
+              )}
             </DialogActions>
           </Grid>
         </Grid>

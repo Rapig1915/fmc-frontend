@@ -36,12 +36,14 @@ import maybach from './maybach.svg';
 import mazda from './mazda.svg';
 import mercury from './mercury.svg';
 import mini from './mini.svg';
+import bentley from './bentley.png';
 
 export interface Images {
   [key: string]: string;
 }
 
 const brands: Images = {
+  bentley,
   blank,
   acura,
   astonmartin,

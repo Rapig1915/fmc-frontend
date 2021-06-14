@@ -198,14 +198,16 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
           </Box>
         </Box>
         <DialogActions className={classes.actionContainer}>
-          <ButtonForward
-            key="finish-booking"
-            title="Finish booking"
-            size="large"
-            rounded
-            onClickHandler={handleFinishBooking}
-            disabled={!isReadyToFinishBooking}
-          />
+          {appointmentStatus === 'quote_requsted' && (
+            <ButtonForward
+              key="finish-booking"
+              title="Finish booking"
+              size="large"
+              rounded
+              onClickHandler={handleFinishBooking}
+              disabled={!isReadyToFinishBooking}
+            />
+          )}
         </DialogActions>
       </DialogContent>
     </Dialog>

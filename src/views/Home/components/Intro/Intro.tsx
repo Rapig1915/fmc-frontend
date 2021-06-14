@@ -16,11 +16,10 @@ interface IntroProps {
 const useStyles = makeStyles((theme) => ({
   root: {},
   introTitle: {
-    fontFamily: 'Artegra Sans',
     fontSize: '20px',
     fontStyle: 'normal',
     fontWeight: 600,
-    letterSpacing: '2.0999999046325684px',
+    letterSpacing: '2px',
     color: '#24CF93',
     padding: 0,
   },

@@ -74,3 +74,39 @@ export interface IAppointment {
     services_auto_offered: [string];
   };
 }
+
+export interface IInspection {
+  service: string;
+  price: number;
+}
+
+export interface IUser {
+  id: string;
+  type: string;
+  attributes: {
+    name: string;
+    email: string;
+    phone: string;
+    zip_code: string;
+    referral_code: string;
+    car: {
+      id: number;
+      year: string;
+      make: string;
+      model: string;
+      engine_size: string;
+      mileage: string;
+    };
+    receipt_count: number;
+    inspection: IInspection | null;
+    diag_notes: IInspection | null;
+    receipts: string[];
+    last_inspection: IInspection | null;
+    all_cars: [
+      {
+        car: string;
+        inspection: IInspection | null;
+      }
+    ];
+  };
+}
