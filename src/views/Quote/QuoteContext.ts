@@ -4,6 +4,7 @@ import {
   QuoteStep,
   RequestConfirmAppointment,
   RequestUpdateAppointmentTime,
+  RequestUpdateAppointmentContact,
 } from 'src/types';
 
 export interface IQuoteReason {
@@ -55,7 +56,9 @@ export interface IQuoteContext {
   handleSetContact: (newContact: IQuoteContact) => void;
 
   handleCreateAppointment: () => void;
-  handleUpdateAppointmentTime: (data: RequestUpdateAppointmentTime) => void;
+  handleUpdateAppointment: (
+    data: RequestUpdateAppointmentTime | RequestUpdateAppointmentContact
+  ) => void;
   handleConfirmAppointment: (data: RequestConfirmAppointment) => void;
 }
 
@@ -102,6 +105,6 @@ export const QuoteContext = React.createContext<IQuoteContext>({
   handleSetContact: () => {},
 
   handleCreateAppointment: () => {},
-  handleUpdateAppointmentTime: () => {},
+  handleUpdateAppointment: () => {},
   handleConfirmAppointment: () => {},
 });

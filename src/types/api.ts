@@ -34,6 +34,10 @@ export interface RequestCreateAppointment {
   address: string;
   diagnosis_input: string;
   services: string[];
+  category_selected: string;
+}
+
+export interface RequestUpdateAppointmentContact {
   name: string;
   email: string;
   phone: string;

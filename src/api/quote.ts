@@ -1,6 +1,7 @@
 import {
   RequestCreateAppointment,
   RequestUpdateAppointmentTime,
+  RequestUpdateAppointmentContact,
   RequestConfirmAppointment,
   ResponseAppointment,
   ResponseCheckPlateNumber,
@@ -66,9 +67,9 @@ export const createAppointment = async (
   });
 };
 
-export const updateAppointmentTime = async (
+export const updateAppointment = async (
   id: number,
-  data: RequestUpdateAppointmentTime
+  data: RequestUpdateAppointmentTime | RequestUpdateAppointmentContact
 ): Promise<ResponseAppointment> => {
   return callApi<ResponseAppointment>({
     url: `/api/v2/appointments/${id}`,

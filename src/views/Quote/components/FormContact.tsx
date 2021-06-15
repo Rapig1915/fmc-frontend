@@ -79,7 +79,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
 
   const classes = useStyles();
 
-  const { handleCreateAppointment } = useContext(QuoteContext);
+  const { handleUpdateAppointment } = useContext(QuoteContext);
 
   const { contact, handleSetContact } = useContext(QuoteContext);
 
@@ -91,7 +91,12 @@ const FormContact = (props: FormContactProps): ReactElement => {
   };
 
   const handleContinue = () => {
-    if (modalView) handleCreateAppointment();
+    if (modalView)
+      handleUpdateAppointment({
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+      });
   };
 
   const validateEmail = (em: string) => {

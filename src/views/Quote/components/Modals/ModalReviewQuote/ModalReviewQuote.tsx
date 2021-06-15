@@ -402,14 +402,15 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                   <Typography className={classes.inspectTitle} key="title-1">
                     Includes:
                   </Typography>
-                  {appointment?.attributes.services.map((s) => (
-                    <Typography
-                      className={classes.inspectContent}
-                      key={`service-${s}`}
-                    >
-                      <Check /> {s}
-                    </Typography>
-                  ))}
+                  <Typography className={classes.inspectContent} key="sub-1">
+                    <Check /> Complete inspection of the issue
+                  </Typography>
+                  <Typography className={classes.inspectContent} key="sub-2">
+                    <Check /> Complimentary multi-point inspection
+                  </Typography>
+                  <Typography className={classes.inspectContent} key="sub-3">
+                    <Check /> $35 goes forwards the repair price
+                  </Typography>
                 </Box>
                 <ImageNode
                   key="happy-customers"

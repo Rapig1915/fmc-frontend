@@ -196,7 +196,7 @@ const ModalScheduleService = (
   const isSm = useMediaQuery(theme.breakpoints.down('sm'), {
     defaultMatches: true,
   });
-  const { handleUpdateAppointmentTime } = useContext(QuoteContext);
+  const { handleUpdateAppointment } = useContext(QuoteContext);
 
   const appointmentId = useSelector(
     (state: IReduxState) => state.quote.appointment?.id
@@ -247,7 +247,7 @@ const ModalScheduleService = (
 
   const handleSchedule = () => {
     if (isReadyToSchedule) {
-      handleUpdateAppointmentTime({
+      handleUpdateAppointment({
         appointment_day: keyDate,
         appointment_time: timeSlotsToday[selectedTimeSlotIndex],
         type_of_site: location.type_of_site,

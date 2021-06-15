@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import React, { ReactElement, useCallback, useState } from 'react';
 import {
@@ -8,15 +8,18 @@ import {
   RequestConfirmAppointment,
   RequestCreateAppointment,
   RequestUpdateAppointmentTime,
+  RequestUpdateAppointmentContact,
   ResponseAppointment,
 } from 'src/types';
 import {
   confirmAppointment,
   createAppointment,
-  updateAppointmentTime,
+  updateAppointment,
 } from 'src/api/quote';
 import { IReduxState } from 'src/store/reducers';
 import { setAppointment } from 'src/store/actions';
+import { URL } from 'src/utils/consts';
+
 import { FormContact, SearchCar, ServiceDesk } from './components';
 import SimpleCongrats from './components/SimpleCongrats';
 import QuoteContainer from './QuoteContainer';
@@ -42,9 +45,14 @@ const useStyles = makeStyles(() => ({
 const Quote = (): ReactElement => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const zip = useSelector((state: IReduxState) => state.quote.zip);
   const location = useLocation();
+
+  if (!zip) {
+    history.push(URL.HOME);
+  }
 
   const appId = useSelector(
     (state: IReduxState) =>
@@ -129,11 +137,10 @@ const Quote = (): ReactElement => {
         zip,
       },
       address: zip,
-      diagnosis_input: reason.reason,
+      diagnosis_input:
+        reason.subReason === 'Other' ? reason.otherReason : reason.subReason,
       services,
-      name: contact.name,
-      email: contact.email,
-      phone: contact.phone,
+      category_selected: reason.reason,
     };
 
     const resp: ResponseAppointment = await createAppointment(data);
@@ -144,17 +151,18 @@ const Quote = (): ReactElement => {
     }
 
     dispatch(setAppointment(resp.data));
-    handleShowModal(QuoteShowModal.REVIEW_QUOTE);
+    handleShowModal(QuoteShowModal.CONTACT);
   };
-  const handleUpdateAppointmentTime = async (
-    data: RequestUpdateAppointmentTime
+
+  const handleUpdateAppointment = async (
+    data: RequestUpdateAppointmentTime | RequestUpdateAppointmentContact
   ) => {
     if (!appId) {
       // error handling
       return;
     }
 
-    const resp: ResponseAppointment = await updateAppointmentTime(appId, data);
+    const resp: ResponseAppointment = await updateAppointment(appId, data);
 
     if (!resp || !resp.data) {
       // error handling
@@ -162,7 +170,12 @@ const Quote = (): ReactElement => {
     }
 
     dispatch(setAppointment(resp.data));
-    handleShowModal(QuoteShowModal.FINISH_BOOKING);
+
+    if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
+      handleShowModal(QuoteShowModal.FINISH_BOOKING);
+    else if (showModal === QuoteShowModal.REVIEW_QUOTE)
+      handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
+    else handleShowModal(QuoteShowModal.REVIEW_QUOTE);
   };
   const handleConfirmAppointment = async (data: RequestConfirmAppointment) => {
     if (!appId) {
@@ -193,7 +206,7 @@ const Quote = (): ReactElement => {
   };
 
   const handleConfirmCar = () => {
-    handleShowModal(QuoteShowModal.CONTACT);
+    handleCreateAppointment();
   };
 
   /**
@@ -238,7 +251,7 @@ const Quote = (): ReactElement => {
         handleSetContact,
 
         handleCreateAppointment,
-        handleUpdateAppointmentTime,
+        handleUpdateAppointment,
         handleConfirmAppointment,
       }}
     >
