@@ -18,6 +18,6 @@ export enum QuoteShowModal {
 }
 
 export enum CarSelectType {
-  BY_PLATE_NUMBER = 'car-select-by-plate-number',
   BY_YEAR_MAKE_MODEL = 'car-select-by-year-make-model',
+  BY_PLATE_NUMBER = 'car-select-by-plate-number',
 }

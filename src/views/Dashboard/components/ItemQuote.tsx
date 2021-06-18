@@ -290,14 +290,15 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
       <Box className={classes.boxQuoteDetail}>
         <Box key="main" className="main">
           <Box key="services" className="services">
-            {data?.attributes.services.map((s) => (
-              <Typography
-                className={classes.inspectContent}
-                key={`service-${s}`}
-              >
-                <Check /> {s}
-              </Typography>
-            ))}
+            <Typography className={classes.inspectContent} key="service-1">
+              <Check /> Complete inspection of the issue
+            </Typography>
+            <Typography className={classes.inspectContent} key="service-2">
+              <Check /> Complimentary 50-point inspection
+            </Typography>
+            <Typography className={classes.inspectContent} key="service-3">
+              <Check /> $35 goes towards the repair price
+            </Typography>
           </Box>
           <Box key="buttons" className="buttons">
             <ButtonForward
@@ -354,7 +355,8 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
     <Box className={clsx('dashboard-quote-item', classes.root, className)}>
       <Box key="box-title" className={classes.boxTitle}>
         <Typography key="car-name" className={classes.titleCar}>
-          2006 Mazda 3
+          {data?.attributes.car.year} {data?.attributes.car.make}{' '}
+          {data?.attributes.car.model}
         </Typography>
         <Typography key="quote-date" className={classes.titleQuoteDate}>
           March 2, 2021

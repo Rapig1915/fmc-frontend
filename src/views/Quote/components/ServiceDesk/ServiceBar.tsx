@@ -1,10 +1,11 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import { ArrowForwardIos, Help, Search } from '@material-ui/icons';
 import ButtonForward from 'src/components/atoms/ButtonForward';
-import { ModalNotSure } from '../Modals';
+import { ModalNotSure, ModalSelectStaticService } from '../Modals';
+import { QuoteContext } from '../../QuoteContext';
 
 interface ServiceBarProps {
   className?: string;
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '21px',
     fontWeight: 500,
     flexGrow: 1,
+    cursor: 'pointer',
   },
   buttonSearch: {
     height: '100%',
@@ -88,9 +90,17 @@ const ServiceBar = (props: ServiceBarProps): ReactElement => {
 
   const classes = useStyles();
 
-  const handleSearch = () => {};
+  const { staticServices } = useContext(QuoteContext);
 
   const [openModalNotSure, setOpenModalNotSure] = useState(false);
+  const [
+    openModalSelectStaticService,
+    setOpenModalSelectStaticService,
+  ] = useState(false);
+
+  const handleSearch = () => {
+    setOpenModalSelectStaticService(true);
+  };
 
   const handleContinue = () => {
     setOpenModalNotSure(false);
@@ -101,7 +111,11 @@ const ServiceBar = (props: ServiceBarProps): ReactElement => {
     <Box className={clsx('quote-service-bar', classes.root, className)}>
       <Box className={classes.subContainer} key="box-search-service">
         <Search className={classes.iconSearch} />
-        <Typography className={classes.labelSearch}>Search Service</Typography>
+        <Typography className={classes.labelSearch} onClick={handleSearch}>
+          {staticServices.length <= 0
+            ? 'Select Service'
+            : `${staticServices.length} selected`}
+        </Typography>
         <ButtonForward
           className={classes.buttonSearch}
           title="Search"
@@ -121,6 +135,11 @@ const ServiceBar = (props: ServiceBarProps): ReactElement => {
         </Typography>
         <ArrowForwardIos className={classes.iconArrow} />
       </Box>
+      <ModalSelectStaticService
+        selectedServices={staticServices}
+        show={openModalSelectStaticService}
+        onClose={() => setOpenModalSelectStaticService(false)}
+      />
       <ModalNotSure
         show={openModalNotSure}
         onClose={() => setOpenModalNotSure(false)}

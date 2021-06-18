@@ -1,9 +1,13 @@
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, CircularProgress, Grid, Typography } from '@material-ui/core';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CardElement } from '@stripe/react-stripe-js';
 import { Check } from '@material-ui/icons';
-import { QuoteContext } from 'src/views/Quote/QuoteContext';
+
+interface CheckOutFormProps {
+  errors: string | undefined | null;
+  requestInProgress: boolean;
+}
 
 const useStyles = makeStyles((theme) => ({
   cardInput: {
@@ -80,6 +84,12 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  error: {
+    marginTop: theme.spacing(1),
+    fontWeight: 500,
+    fontSize: 16,
+    color: '#a9a35c',
+  },
 }));
 
 const cardStyle = {
@@ -99,46 +109,14 @@ const cardStyle = {
   },
 };
 
-const CheckoutForm = (): ReactElement => {
+const CheckoutForm = ({
+  errors,
+  requestInProgress,
+}: CheckOutFormProps): ReactElement => {
   const classes = useStyles();
-
-  const { handleConfirmAppointment } = useContext(QuoteContext);
-
-  const stripe = useStripe();
-  const elements = useElements();
-  const [errors, setErrors] = useState<string | undefined | null>(null);
-  const [requestInProgress, setRequestInProgress] = useState(false);
-
-  const handlePayment = async () => {
-    setRequestInProgress(true);
-    setErrors(null);
-
-    if (!stripe || !elements) {
-      setRequestInProgress(false);
-      return false;
-    }
-
-    const cardElem = elements.getElement(CardElement);
-
-    if (!cardElem) {
-      setRequestInProgress(false);
-      return false;
-    }
-
-    // const { error, token } = await stripe.createToken(cardElem);
-    const { token } = await stripe.createToken(cardElem);
-
-    if (token) handleConfirmAppointment({ token: token.id });
-
-    setRequestInProgress(false);
-
-    return true;
-  };
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-
-    handlePayment();
   };
 
   return (
@@ -152,7 +130,7 @@ const CheckoutForm = (): ReactElement => {
             alignItems="center"
             justifyContent="flex-start"
             className={classes.buttonPayFull}
-            onClick={() => handlePayment()}
+            // onClick={() => handlePayment()}
           >
             {requestInProgress ? (
               <CircularProgress
@@ -205,9 +183,7 @@ const CheckoutForm = (): ReactElement => {
       </Grid>
       <form onSubmit={handleSubmit} className="w-full text-center">
         <CardElement options={cardStyle} className={classes.cardInput} />
-        <p className="w-full mx-auto text-sm text-center text-fmc-red my-1 sm:my-2">
-          {errors}
-        </p>
+        <p className={classes.error}>{errors}</p>
       </form>
     </>
   );

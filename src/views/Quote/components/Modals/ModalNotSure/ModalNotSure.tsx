@@ -1,6 +1,7 @@
 import React, { ReactElement, useContext, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
+  Box,
   DialogActions,
   DialogTitle,
   IconButton,
@@ -8,7 +9,7 @@ import {
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import { Close } from '@material-ui/icons';
+import { ArrowBackIos, Close } from '@material-ui/icons';
 
 import { ButtonForward } from 'src/components/atoms';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
@@ -40,6 +41,22 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
+  buttonGroupBack: {
+    position: 'absolute',
+    left: theme.spacing(2),
+    top: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    cursor: 'pointer',
+
+    [theme.breakpoints.down('xs')]: {
+      '& .title-button': {
+        display: 'none',
+      },
+    },
+  },
 
   reasonTitle: {
     fontSize: 18,
@@ -68,9 +85,22 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
 
   const [reasonStep, setReasonStep] = useState(ReasonStep.START);
 
+  React.useEffect(() => {
+    const dialogContainer = document.getElementsByClassName(
+      'MuiDialog-container'
+    )[0];
+    if (dialogContainer) {
+      dialogContainer.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+  }, [reasonStep]);
+
   const { reason, handleSetReason } = useContext(QuoteContext);
 
-  const handleMainReasonChange = (id: number, r: string, subR: string) => {
+  const handleMainReasonChange = (id: number, r: string, subR: string[]) => {
     handleSetReason({
       reasonId: id,
       reason: r,
@@ -95,26 +125,29 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
     });
   };
 
+  const handleStepBack = () => {
+    if (reasonStep === ReasonStep.OTHER) setReasonStep(ReasonStep.START);
+    else if (reasonStep === ReasonStep.CHECK)
+      setReasonStep(reason.otherReason ? ReasonStep.OTHER : ReasonStep.START);
+    else onClose();
+  };
+
   const handleContinue = () => {
     if (reasonStep === ReasonStep.START) {
-      if (reason.reasonId && reason.reason && reason.subReason !== 'Other')
+      if (reason.reasonId && reason.reason && reason.subReason[0] !== 'Other')
         setReasonStep(ReasonStep.CHECK);
-      else if (reason.subReason === 'Other') setReasonStep(ReasonStep.OTHER);
+      else if (reason.subReason[0] === 'Other') setReasonStep(ReasonStep.OTHER);
     } else if (reasonStep === ReasonStep.OTHER) {
       if (
         reason.reasonId &&
         reason.reason &&
-        reason.subReason === 'Other' &&
+        reason.subReason[0] === 'Other' &&
         reason.otherReason
       )
         setReasonStep(ReasonStep.CHECK);
     } else if (reasonStep === ReasonStep.CHECK) {
       onContinue();
     }
-  };
-
-  const handleStartOver = () => {
-    setReasonStep(ReasonStep.START);
   };
 
   return (
@@ -125,6 +158,9 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
       scroll="body"
     >
       <DialogTitle className={classes.title}>
+        <Box className={classes.buttonGroupBack}>
+          <ArrowBackIos className="title-icon" onClick={handleStepBack} />
+        </Box>
         <Typography className={classes.titleText}>
           Not sure what&apos;s wrong?
         </Typography>
@@ -160,15 +196,6 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
         )}
       </DialogContent>
       <DialogActions className={classes.actionContainer}>
-        <ButtonForward
-          key="button-start-over"
-          title="Start Over"
-          color="secondary"
-          size="large"
-          rounded
-          noIcon
-          onClickHandler={handleStartOver}
-        />
         <ButtonForward
           key="button-continue"
           title="Continue"

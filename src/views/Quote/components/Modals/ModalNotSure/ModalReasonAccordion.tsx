@@ -1,11 +1,11 @@
-import React, { ChangeEvent, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
+import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
   FormControl,
   FormControlLabel,
   Radio,
-  RadioGroup,
   Typography,
 } from '@material-ui/core';
 import { listNotSureReasons } from 'src/utils/data';
@@ -17,8 +17,8 @@ import {
 
 interface ModalReasonAccordionProps {
   reasonId: number;
-  subReason: string;
-  onChange: (id: number, reason: string, subReason: string) => void;
+  subReason: string[];
+  onChange: (id: number, reason: string, subReason: string[]) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -67,14 +67,31 @@ const ModalReasonAccordion = (
     setExpanded(newExpanded ? panel : false);
   };
 
-  const handleSubReasonSelect = (
-    rId: number,
-    r: string,
-    evt: ChangeEvent<{ value: string }>
-  ) => {
-    const v = evt.target.value as string;
-    onChange(rId, r, v);
-  };
+  // const handleSubReasonSelect = (
+  //   rId: number,
+  //   r: string,
+  //   evt: ChangeEvent<{ value: string }>
+  // ) => {
+  //   const v = evt.target.value as string;
+  //   onChange(rId, r, v);
+  // };
+
+  const handleClickSubreason = _.debounce(
+    (rId: number, r: string, value: string) => {
+      if (value === 'Other') onChange(rId, r, [value]);
+      else {
+        const newSubReason = rId === reasonId ? subReason : [];
+
+        if (newSubReason.includes('Other'))
+          newSubReason.splice(newSubReason.indexOf('Other'));
+
+        if (newSubReason.includes(value))
+          newSubReason.splice(newSubReason.indexOf(value));
+        else newSubReason.push(value);
+        onChange(rId, r, newSubReason);
+      }
+    }
+  );
 
   return (
     <Box>
@@ -94,27 +111,32 @@ const ModalReasonAccordion = (
             </AccordionSummary>
             <AccordionDetails>
               <FormControl component="fieldset">
-                <RadioGroup
+                {/* <RadioGroup
+                  aria-multiselectable
                   aria-label="gender"
                   name={`reason-${x.id}`}
                   value={x.id === reasonId ? subReason : ''}
                   onChange={(evt) => handleSubReasonSelect(x.id, x.title, evt)}
-                >
-                  {x.subReason.map((r) => (
-                    <FormControlLabel
-                      key={r}
-                      value={r}
-                      control={<Radio />}
-                      label={r}
-                    />
-                  ))}
+                > */}
+                {x.subReason.map((r) => (
                   <FormControlLabel
-                    value="Other"
-                    key="Other"
+                    key={r}
+                    value={r}
                     control={<Radio />}
-                    label="Other"
+                    label={r}
+                    checked={x.id === reasonId && subReason.includes(r)}
+                    onClick={() => handleClickSubreason(x.id, x.title, r)}
                   />
-                </RadioGroup>
+                ))}
+                <FormControlLabel
+                  value="Other"
+                  key="Other"
+                  control={<Radio />}
+                  label="Other"
+                  checked={x.id === reasonId && subReason.includes('Other')}
+                  onClick={() => handleClickSubreason(x.id, x.title, 'Other')}
+                />
+                {/* </RadioGroup> */}
               </FormControl>
             </AccordionDetails>
           </Accordion>

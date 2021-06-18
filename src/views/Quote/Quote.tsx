@@ -76,6 +76,12 @@ const Quote = (): ReactElement => {
     []
   );
 
+  const [staticServices, setStaticServices] = useState<string[]>([]);
+  const handleSetStaticServices = useCallback(
+    (newServices: string[]) => setStaticServices(newServices),
+    []
+  );
+
   const [services, setServices] = useState<string[]>([]);
   const handleSetServices = useCallback(
     (newServices: string[]) => setServices(newServices),
@@ -85,7 +91,7 @@ const Quote = (): ReactElement => {
   const [reason, setReason] = useState<IQuoteReason>({
     reasonId: 0,
     reason: '',
-    subReason: '',
+    subReason: [],
     otherReason: '',
     note: '',
   });
@@ -115,13 +121,59 @@ const Quote = (): ReactElement => {
     password: '',
     phone: '',
   });
+
   const handleSetContact = useCallback(
     (newContact: IQuoteContact) => setContact(newContact),
     []
   );
 
-  const handleCreateAppointment = async () => {
-    const data: RequestCreateAppointment = {
+  const clearAll = useCallback(() => {
+    handleSetStep(QuoteStep.QUOTE_SERVICE_DESK);
+    handleShowModal(QuoteShowModal.NONE);
+
+    handleSetStaticServices([]);
+    handleSetServices([]);
+
+    handleSetReason({
+      reasonId: 0,
+      reason: '',
+      subReason: [],
+      otherReason: '',
+      note: '',
+    });
+
+    handleSetCar({
+      search: {
+        plate_number: '',
+        state: '',
+      },
+      attributes: {
+        year: '',
+        make: '',
+        model: '',
+        engine_size: '',
+        mileage: '',
+      },
+    });
+
+    handleSetContact({
+      name: '',
+      email: '',
+      password: '',
+      phone: '',
+    });
+  }, [
+    handleSetStep,
+    handleShowModal,
+    handleSetStaticServices,
+    handleSetServices,
+    handleSetReason,
+    handleSetCar,
+    handleSetContact,
+  ]);
+
+  const grabInputData = (): RequestCreateAppointment => {
+    return {
       car_attributes: {
         ...car.attributes,
       },
@@ -138,12 +190,16 @@ const Quote = (): ReactElement => {
       },
       address: zip,
       diagnosis_input:
-        reason.subReason === 'Other' ? reason.otherReason : reason.subReason,
-      services,
+        reason.subReason[0] === 'Other'
+          ? reason.otherReason
+          : reason.subReason.join(','),
+      services: [...services, ...staticServices],
       category_selected: reason.reason,
     };
+  };
 
-    const resp: ResponseAppointment = await createAppointment(data);
+  const handleCreateAppointment = async () => {
+    const resp: ResponseAppointment = await createAppointment(grabInputData());
 
     if (!resp || !resp.data) {
       // error handling
@@ -155,7 +211,10 @@ const Quote = (): ReactElement => {
   };
 
   const handleUpdateAppointment = async (
-    data: RequestUpdateAppointmentTime | RequestUpdateAppointmentContact
+    data:
+      | RequestUpdateAppointmentTime
+      | RequestUpdateAppointmentContact
+      | RequestCreateAppointment
   ) => {
     if (!appId) {
       // error handling
@@ -171,7 +230,9 @@ const Quote = (): ReactElement => {
 
     dispatch(setAppointment(resp.data));
 
-    if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
+    if (!contact || !contact.name || !contact.email || !contact.phone)
+      handleShowModal(QuoteShowModal.CONTACT);
+    else if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
       handleShowModal(QuoteShowModal.FINISH_BOOKING);
     else if (showModal === QuoteShowModal.REVIEW_QUOTE)
       handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
@@ -206,7 +267,8 @@ const Quote = (): ReactElement => {
   };
 
   const handleConfirmCar = () => {
-    handleCreateAppointment();
+    if (appId) handleUpdateAppointment(grabInputData());
+    else handleCreateAppointment();
   };
 
   /**
@@ -238,6 +300,9 @@ const Quote = (): ReactElement => {
         showModal,
         handleShowModal,
 
+        staticServices,
+        handleSetStaticServices,
+
         services,
         handleSetServices,
 
@@ -253,6 +318,8 @@ const Quote = (): ReactElement => {
         handleCreateAppointment,
         handleUpdateAppointment,
         handleConfirmAppointment,
+
+        clearAll,
       }}
     >
       <Container className={classes.root}>

@@ -88,6 +88,10 @@ export interface RequestSignin {
   };
 }
 
+export interface RequestSignInAppointment {
+  id: string;
+}
+
 export interface ResponseSignin {
   auth_token: string;
   user: {
@@ -108,4 +112,18 @@ export interface ResponseGetUser {
 
 export interface ResponseGetUserAppointments {
   data: IAppointment[];
+}
+
+export interface ResponseAppointmentEstimate {
+  id: string;
+  type: string;
+  attributes: {
+    appointment_id: number;
+    mechanic_id: number;
+    mechanic: {
+      name: string;
+      photo: string;
+      phone: string;
+    };
+  };
 }

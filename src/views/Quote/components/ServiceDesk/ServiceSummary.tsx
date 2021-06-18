@@ -55,10 +55,19 @@ const ServiceSummary = (props: ServiceSummaryProps): ReactElement => {
 
   const classes = useStyles();
 
-  const { services, handleSetServices } = useContext(QuoteContext);
+  const {
+    services,
+    staticServices,
+    handleSetServices,
+    handleSetStaticServices,
+  } = useContext(QuoteContext);
 
   const handleRemoveService = (s: string) => {
     handleSetServices(services.filter((x) => x !== s));
+  };
+
+  const handleRemoveStaticService = (s: string) => {
+    handleSetStaticServices(staticServices.filter((x) => x !== s));
   };
 
   return (
@@ -69,6 +78,15 @@ const ServiceSummary = (props: ServiceSummaryProps): ReactElement => {
           <RemoveCircleRounded
             className={classes.iconService}
             onClick={() => handleRemoveService(x)}
+          />
+          <Typography className={classes.textService}>{x}</Typography>
+        </Box>
+      ))}
+      {staticServices.map((x) => (
+        <Box key={`service-${x}`} className={classes.itemContainerService}>
+          <RemoveCircleRounded
+            className={classes.iconService}
+            onClick={() => handleRemoveStaticService(x)}
           />
           <Typography className={classes.textService}>{x}</Typography>
         </Box>

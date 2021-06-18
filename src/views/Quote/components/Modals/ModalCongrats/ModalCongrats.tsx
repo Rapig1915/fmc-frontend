@@ -1,4 +1,5 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,6 +21,11 @@ import { URL } from 'src/utils/consts';
 import SvgCongratsBg from 'src/assets/congrats-bg.svg';
 import SvgQuestion from 'src/assets/badges/question-primary.svg';
 import SvgInformation from 'src/assets/badges/information-primary.svg';
+import { ResponseSignin } from 'src/types';
+import { signIn } from 'src/api/auth';
+import { IReduxState } from 'src/store/reducers';
+import { setAppointment, setAuthToken } from 'src/store/actions';
+import { QuoteContext } from 'src/views/Quote/QuoteContext';
 
 import HelperQuestions from './HelperQuestions';
 
@@ -152,9 +158,55 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
   const { show, onClose } = props;
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const { clearAll } = useContext(QuoteContext);
+
+  const appointment = useSelector(
+    (state: IReduxState) => state.quote.appointment
+  );
+
+  const [loggingIn, setLoggingIn] = React.useState(false);
 
   const handleDone = () => {
-    history.push(URL.DASHBOARD);
+    setLoggingIn(true);
+
+    clearAll();
+    dispatch(setAppointment(null));
+
+    const timerId = setTimeout(async () => {
+      const response: ResponseSignin = await signIn(
+        {
+          id: `${appointment && appointment.id}`,
+        },
+        true
+      );
+
+      setLoggingIn(false);
+
+      if (
+        response &&
+        response.auth_token &&
+        response.user &&
+        response.user.id
+      ) {
+        dispatch(
+          setAuthToken(
+            response.auth_token,
+            response.user.id,
+            response.user.email
+          )
+        );
+
+        history.push(URL.DASHBOARD);
+      } else {
+        history.push(URL.HOME);
+      }
+    }, 5000);
+
+    return () => {
+      if (timerId) clearTimeout(timerId);
+    };
   };
 
   return (
@@ -228,6 +280,7 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
             size="large"
             rounded
             onClickHandler={handleDone}
+            disabled={loggingIn}
           />
         </DialogActions>
       </DialogContent>

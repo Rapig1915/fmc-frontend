@@ -3,6 +3,7 @@ import {
   ResponseGetUser,
   ResponseSignin,
   RequestSignin,
+  RequestSignInAppointment,
   RequestAuth,
   ResponseAuth,
 } from 'src/types';
@@ -16,9 +17,14 @@ export const getToken = async (data: RequestAuth): Promise<ResponseAuth> => {
   });
 };
 
-export const signIn = async (data: RequestSignin): Promise<ResponseSignin> => {
+export const signIn = async (
+  data: RequestSignin | RequestSignInAppointment,
+  appointmentMode = false
+): Promise<ResponseSignin> => {
   return callApi<ResponseSignin>({
-    url: `/api/v2/user/sign_in`,
+    url: !appointmentMode
+      ? `/api/v2/user/sign_in`
+      : `/api/v2/appointment/sign_in`,
     method: 'POST',
     data,
   });

@@ -6,7 +6,9 @@ export const setZip = (zip: string, customer: number): IReduxAction => ({
   payload: { zip, customer },
 });
 
-export const setAppointment = (appointment: IAppointment): IReduxAction => ({
+export const setAppointment = (
+  appointment: IAppointment | null
+): IReduxAction => ({
   type: QUOTE_SET_APPOINTMENT,
   payload: appointment,
 });

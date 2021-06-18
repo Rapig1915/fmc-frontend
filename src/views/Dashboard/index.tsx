@@ -208,7 +208,7 @@ const Dashboard = (): ReactElement => {
 
   const [tab, setTab] = React.useState('pending');
 
-  const options = { pending: 'pending', completed: 'completed' };
+  const options = { pending: 'Pending quotes', completed: 'Completed service' };
   const onTabSelected = (state: string) => {
     setTab(state);
   };

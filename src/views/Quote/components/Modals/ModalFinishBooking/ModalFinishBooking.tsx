@@ -1,11 +1,14 @@
 import React, { ReactElement, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
   DialogActions,
   DialogTitle,
+  Grid,
+  Hidden,
   IconButton,
   Typography,
 } from '@material-ui/core';
@@ -14,15 +17,21 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { ArrowBackIos, Close, CreditCard } from '@material-ui/icons';
 
 import { ButtonForward, Image } from 'src/components/atoms';
+import { ImageNode } from 'src/components/molecules';
 import { cardTypes } from 'src/utils/data';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
 import { QuoteShowModal } from 'src/types';
 import { IReduxState } from 'src/store/reducers';
 
+import SvgSecurity from 'src/assets/badges/security.svg';
+import SvgAdvantageMoney from 'src/assets/advantage/money.svg';
+import SvgQuestion from 'src/assets/badges/question.svg';
+import ImageBrand from 'src/assets/brands';
 import SvgMechanic from 'src/assets/mechanic.svg';
 
 import CheckoutForm from './CheckoutForm';
 import MechanicInfo from './MechanicInfo';
+import EstimateSummary from './EstimateSummary';
 
 interface ModalFinishBookingProps {
   show: boolean;
@@ -69,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    cursor: 'pointer',
 
     [theme.breakpoints.down('xs')]: {
       '& .title-button': {
@@ -116,22 +126,140 @@ const useStyles = makeStyles((theme) => ({
     color: '#667296',
     marginBottom: theme.spacing(3),
   },
+
+  intro: {
+    display: 'block',
+  },
+
+  containerMazda: {
+    background: '#ebf1fa',
+    padding: theme.spacing(2),
+    borderRadius: '7px',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imgMazda: {
+    maxHeight: 300,
+    objectFit: 'contain',
+    color: theme.palette.common.white,
+    margin: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(3),
+  },
+  titleMazda: {
+    color: '#685364',
+    fontWeight: 300,
+    fontStyle: 'normal',
+    fontSize: '17px',
+    lineHeight: '22px',
+  },
+
+  containerWarranty: {
+    marginTop: theme.spacing(2),
+    background: '#594f91',
+    borderRadius: '7px',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    maxHeight: 100,
+  },
+  imgWarranty: {
+    width: 30,
+    height: 30,
+    objectFit: 'contain',
+    color: theme.palette.common.white,
+    margin: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(3),
+  },
+  titleWarranty: {
+    color: theme.palette.common.white,
+    fontWeight: 300,
+    fontStyle: 'normal',
+    fontSize: '17px',
+    lineHeight: '22px',
+  },
+
+  contentHolder: {
+    minHeight: 650,
+    borderTopRightRadius: 9,
+    borderBottomRightRadius: 9,
+    padding: theme.spacing(4),
+    alignContent: 'flex-start',
+    position: 'relative',
+
+    [theme.breakpoints.down('sm')]: {
+      borderRadius: 9,
+      minHeight: 500,
+      padding: theme.spacing(2),
+    },
+  },
 }));
 
 const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
   const { show, onClose } = props;
   const classes = useStyles();
 
+  const appointment = useSelector(
+    (state: IReduxState) => state.quote.appointment
+  );
+
   const appointmentStatus = useSelector(
     (state: IReduxState) => state.quote.appointment?.attributes.status
   );
 
-  const { handleShowModal } = useContext(QuoteContext);
+  const { handleShowModal, handleConfirmAppointment } = useContext(
+    QuoteContext
+  );
   const handleFinishBooking = () => {
     handleShowModal(QuoteShowModal.CONGRATS);
   };
 
-  const isReadyToFinishBooking = appointmentStatus === 'booked';
+  if (appointmentStatus === 'booked') handleFinishBooking();
+
+  const stripe = useStripe();
+  const elements = useElements();
+  const [errors, setErrors] = React.useState<string | undefined | null>(null);
+  const [requestInProgress, setRequestInProgress] = React.useState(false);
+
+  const handleCheckOut = async () => {
+    setRequestInProgress(true);
+    setErrors(null);
+
+    if (!stripe || !elements) {
+      setRequestInProgress(false);
+      return false;
+    }
+
+    const cardElem = elements.getElement(CardElement);
+
+    if (!cardElem) {
+      setRequestInProgress(false);
+      return false;
+    }
+
+    // const { error, token } = await stripe.createToken(cardElem);
+    const { token } = await stripe.createToken(cardElem);
+
+    setRequestInProgress(false);
+
+    if (token) {
+      await handleConfirmAppointment({ token: token.id });
+    } else {
+      setErrors('Quote confirmation failed');
+    }
+
+    return true;
+  };
+
+  const handleStepBack = () => {
+    handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
+  };
+
+  const keyBrand =
+    appointment?.attributes.car.make.replace(' ', '-').toLocaleLowerCase() ||
+    'blank';
+  const imageBrand = ImageBrand[keyBrand] || ImageBrand.blank;
 
   return (
     <Dialog
@@ -142,7 +270,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
     >
       <DialogTitle className={classes.title}>
         <Box className={classes.buttonGroupBack}>
-          <ArrowBackIos className="title-icon" />
+          <ArrowBackIos className="title-icon" onClick={handleStepBack} />
         </Box>
         <Typography className={classes.titleText}>
           Finish your booking
@@ -156,47 +284,132 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
         </IconButton>
       </DialogTitle>
       <DialogContent className={classes.root}>
-        <Box
-          key="mechanic-title"
-          flexDirection="row"
-          display="flex"
-          alignItems="center"
-        >
-          <Image src={SvgMechanic} />
-          <Typography className={classes.titleDatetime} noWrap>
-            Your mechanic
-          </Typography>
-        </Box>
-        <MechanicInfo key="mechanic" className={clsx(classes.boxInformation)} />
-        <Box key="payment-title" flexDirection="row" display="flex">
-          <CreditCard color="primary" />
-          <Typography className={classes.titleDatetime} noWrap>
-            Payment details
-          </Typography>
-        </Box>
-        <Box key="payment" className={classes.boxInformation}>
-          <Typography key="title-payment-1" className={classes.textPayment1}>
-            You will not be charged now
-          </Typography>
-          <Typography key="title-payment-2" className={classes.textPayment2}>
-            Not until service is completed.
-          </Typography>
-          <Box key="action-payment">
-            <CheckoutForm />
+        <Grid container spacing={2}>
+          <Hidden smDown>
+            <Grid container item md={4} className={classes.intro}>
+              <ImageNode
+                key="mazda"
+                title={
+                  <>
+                    <b>
+                      {appointment?.attributes.car.make}{' '}
+                      {appointment?.attributes.car.year}
+                    </b>
+                  </>
+                }
+                imgUrl={imageBrand}
+                titleProps={{ className: classes.titleMazda }}
+                imgProps={{ className: classes.imgMazda }}
+                className={classes.containerMazda}
+              />
+              <ImageNode
+                key="warranty"
+                title={
+                  <>
+                    <b>Service waranty:</b>
+                    <br />
+                    24 months / 24,000 mi waranty on each job.
+                  </>
+                }
+                imgUrl={SvgSecurity}
+                titleProps={{ className: classes.titleWarranty }}
+                imgProps={{ className: classes.imgWarranty }}
+                className={classes.containerWarranty}
+              />
+              <ImageNode
+                key="price"
+                title={
+                  <>
+                    <b>Fixed price:</b>
+                    <br />
+                    All prices are fixed
+                  </>
+                }
+                imgUrl={SvgAdvantageMoney}
+                titleProps={{ className: classes.titleWarranty }}
+                imgProps={{ className: classes.imgWarranty }}
+                className={classes.containerWarranty}
+              />
+              <ImageNode
+                key="call"
+                title={
+                  <>
+                    <b>Questions?</b>
+                    <br />
+                    Call us (214) 620-0702
+                  </>
+                }
+                imgUrl={SvgQuestion}
+                titleProps={{ className: classes.titleWarranty }}
+                imgProps={{ className: classes.imgWarranty }}
+                className={classes.containerWarranty}
+              />
+            </Grid>
+          </Hidden>
+          <Grid
+            container
+            item
+            md={8}
+            sm={12}
+            xs={12}
+            className={classes.contentHolder}
+          >
             <Box
-              key="image-payments"
-              display="flex"
+              key="mechanic-title"
               flexDirection="row"
+              display="flex"
               alignItems="center"
-              justifyContent="flex-start"
-              marginTop={2}
             >
-              {cardTypes.map((ct) => (
-                <Image key={ct} src={`/assets/payment/${ct}.svg`} />
-              ))}
+              <Image src={SvgMechanic} />
+              <Typography className={classes.titleDatetime} noWrap>
+                Your mechanic
+              </Typography>
             </Box>
-          </Box>
-        </Box>
+            <MechanicInfo
+              key="mechanic"
+              className={clsx(classes.boxInformation)}
+            />
+            <EstimateSummary />
+            <Box key="payment-title" flexDirection="row" display="flex">
+              <CreditCard color="primary" />
+              <Typography className={classes.titleDatetime} noWrap>
+                Payment details
+              </Typography>
+            </Box>
+            <Box key="payment" className={classes.boxInformation}>
+              <Typography
+                key="title-payment-1"
+                className={classes.textPayment1}
+              >
+                You will not be charged now
+              </Typography>
+              <Typography
+                key="title-payment-2"
+                className={classes.textPayment2}
+              >
+                Not until service is completed.
+              </Typography>
+              <Box key="action-payment">
+                <CheckoutForm
+                  errors={errors}
+                  requestInProgress={requestInProgress}
+                />
+                <Box
+                  key="image-payments"
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  marginTop={2}
+                >
+                  {cardTypes.map((ct) => (
+                    <Image key={ct} src={`/assets/payment/${ct}.svg`} />
+                  ))}
+                </Box>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
         <DialogActions className={classes.actionContainer}>
           {appointmentStatus !== 'complete' && (
             <ButtonForward
@@ -204,8 +417,8 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
               title="Finish booking"
               size="large"
               rounded
-              onClickHandler={handleFinishBooking}
-              disabled={!isReadyToFinishBooking}
+              onClickHandler={handleCheckOut}
+              disabled={requestInProgress}
             />
           )}
         </DialogActions>

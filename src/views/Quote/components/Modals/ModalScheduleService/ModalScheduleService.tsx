@@ -32,7 +32,7 @@ import { DatePicker } from '@material-ui/pickers';
 import moment from 'moment';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
-import { ResponseAvailability } from 'src/types';
+import { QuoteShowModal, ResponseAvailability } from 'src/types';
 import { carLocations } from 'src/utils/data';
 import { IReduxState } from 'src/store/reducers';
 import { checkAvailability } from 'src/api/quote';
@@ -90,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    cursor: 'pointer',
 
     [theme.breakpoints.down('xs')]: {
       '& .title-button': {
@@ -196,7 +197,7 @@ const ModalScheduleService = (
   const isSm = useMediaQuery(theme.breakpoints.down('sm'), {
     defaultMatches: true,
   });
-  const { handleUpdateAppointment } = useContext(QuoteContext);
+  const { handleUpdateAppointment, handleShowModal } = useContext(QuoteContext);
 
   const appointmentId = useSelector(
     (state: IReduxState) => state.quote.appointment?.id
@@ -268,6 +269,10 @@ const ModalScheduleService = (
     });
   };
 
+  const handleStepBack = () => {
+    handleShowModal(QuoteShowModal.REVIEW_QUOTE);
+  };
+
   const optionCarLocations = carLocations.reduce((obj, x) => {
     return {
       ...obj,
@@ -284,7 +289,7 @@ const ModalScheduleService = (
     >
       <DialogTitle className={classes.title}>
         <Box className={classes.buttonGroupBack}>
-          <ArrowBackIos className="title-icon" />
+          <ArrowBackIos className="title-icon" onClick={handleStepBack} />
         </Box>
         <Typography className={classes.titleText}>Schedule service</Typography>
         <IconButton

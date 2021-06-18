@@ -184,6 +184,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
 
   const handleClickLogout = () => {
     dispatch(logout());
+    history.push(URL.HOME);
   };
 
   return (

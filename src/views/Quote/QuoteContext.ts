@@ -10,7 +10,7 @@ import {
 export interface IQuoteReason {
   reasonId: number;
   reason: string;
-  subReason: string;
+  subReason: string[];
   otherReason: string;
   note: string;
 }
@@ -43,6 +43,9 @@ export interface IQuoteContext {
   showModal: QuoteShowModal;
   handleShowModal: (newStep: QuoteShowModal) => void;
 
+  staticServices: string[];
+  handleSetStaticServices: (services: string[]) => void;
+
   services: string[];
   handleSetServices: (services: string[]) => void;
 
@@ -60,6 +63,8 @@ export interface IQuoteContext {
     data: RequestUpdateAppointmentTime | RequestUpdateAppointmentContact
   ) => void;
   handleConfirmAppointment: (data: RequestConfirmAppointment) => void;
+
+  clearAll: () => void;
 }
 
 export const QuoteContext = React.createContext<IQuoteContext>({
@@ -69,13 +74,16 @@ export const QuoteContext = React.createContext<IQuoteContext>({
   showModal: QuoteShowModal.NONE,
   handleShowModal: () => {},
 
+  staticServices: [],
+  handleSetStaticServices: () => {},
+
   services: [],
   handleSetServices: () => {},
 
   reason: {
     reasonId: 0,
     reason: '',
-    subReason: '',
+    subReason: [],
     otherReason: '',
     note: '',
   },
@@ -107,4 +115,6 @@ export const QuoteContext = React.createContext<IQuoteContext>({
   handleCreateAppointment: () => {},
   handleUpdateAppointment: () => {},
   handleConfirmAppointment: () => {},
+
+  clearAll: () => {},
 });

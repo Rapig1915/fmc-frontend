@@ -17,6 +17,7 @@ interface SelectWithStatusProps {
   className?: string;
   value?: string;
   start?: React.ReactNode;
+  extraOptions?: { [val: string]: string };
   valueChanged?: (v: string) => void;
 }
 
@@ -65,6 +66,7 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
     valueChanged,
     value,
     items,
+    extraOptions,
     start,
     disabled,
   } = props;
@@ -90,7 +92,12 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
     >
       <InputLabel>{label}</InputLabel>
       <Select
-        value={value && items && items[value] ? value : ''}
+        value={
+          value &&
+          ((items && items[value]) || (extraOptions && extraOptions[value]))
+            ? value
+            : ''
+        }
         onChange={handleChange}
         className={clsx({ [classes.inputChecked]: !!value })}
         disabled={disabled}
@@ -104,6 +111,12 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
               {x}
             </MenuItem>
           ))}
+        {extraOptions &&
+          Object.keys(extraOptions).map((x) => (
+            <MenuItem value={x} key={`item-${x}`}>
+              {x}
+            </MenuItem>
+          ))}
       </Select>
       {start && <Box className={classes.start}>{start}</Box>}
       {!!value && <CheckCircle className={classes.checked} />}
@@ -113,6 +126,7 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
 
 SelectWithStatus.defaultProps = {
   items: {},
+  extraOptions: {},
   label: '',
   className: '',
   value: '',

@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
     '& .title-icon': {
       color: '#C5C9DE',
+      cursor: 'pointer',
     },
   },
   titleText: {
@@ -75,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    cursor: 'pointer',
 
     [theme.breakpoints.down('xs')]: {
       '& .title-button': {
@@ -271,7 +273,9 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
   };
 
-  const handleStartOver = () => {};
+  const handleStepBack = () => {
+    handleShowModal(QuoteShowModal.CONTACT);
+  };
 
   if ((!appointment || !appointment.id) && show) {
     // error no active appointment
@@ -292,17 +296,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     >
       <DialogTitle className={classes.title}>
         <Box className={classes.buttonGroupBack}>
-          <ArrowBackIos className="title-icon" />
-          <ButtonForward
-            key="button-start-over"
-            className="title-button"
-            title="Start Over"
-            color="secondary"
-            size="large"
-            rounded
-            noIcon
-            onClickHandler={handleStartOver}
-          />
+          <ArrowBackIos className="title-icon" onClick={handleStepBack} />
         </Box>
         <Typography className={classes.titleText}>
           Quote <Help className="title-icon" />

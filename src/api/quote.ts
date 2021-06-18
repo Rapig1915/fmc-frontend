@@ -8,6 +8,7 @@ import {
   ResponseVehicle,
   ResponseZipcode,
   ResponseAvailability,
+  ResponseAppointmentEstimate,
 } from 'src/types';
 import { callApi } from './request';
 
@@ -69,7 +70,10 @@ export const createAppointment = async (
 
 export const updateAppointment = async (
   id: number,
-  data: RequestUpdateAppointmentTime | RequestUpdateAppointmentContact
+  data:
+    | RequestUpdateAppointmentTime
+    | RequestUpdateAppointmentContact
+    | RequestCreateAppointment
 ): Promise<ResponseAppointment> => {
   return callApi<ResponseAppointment>({
     url: `/api/v2/appointments/${id}`,
@@ -86,5 +90,14 @@ export const confirmAppointment = async (
     url: `/api/v2/appointments/confirm/${id}`,
     method: 'POST',
     data,
+  });
+};
+
+export const getEstimate = async (
+  id: number | null
+): Promise<ResponseAppointmentEstimate> => {
+  return callApi<ResponseAppointmentEstimate>({
+    url: `/api/v2/estimates/${id}`,
+    method: 'GET',
   });
 };
