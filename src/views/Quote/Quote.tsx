@@ -1,5 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import {
+  // useHistory,
+  useLocation,
+} from 'react-router-dom';
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import React, { ReactElement, useCallback, useState } from 'react';
 import {
@@ -18,7 +21,7 @@ import {
 } from 'src/api/quote';
 import { IReduxState } from 'src/store/reducers';
 import { setAppointment } from 'src/store/actions';
-import { URL } from 'src/utils/consts';
+// import { URL } from 'src/utils/consts';
 
 import { FormContact, SearchCar, ServiceDesk } from './components';
 import SimpleCongrats from './components/SimpleCongrats';
@@ -45,14 +48,14 @@ const useStyles = makeStyles(() => ({
 const Quote = (): ReactElement => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const history = useHistory();
+  // const history = useHistory();
 
   const zip = useSelector((state: IReduxState) => state.quote.zip);
   const location = useLocation();
 
-  if (!zip) {
-    history.push(URL.HOME);
-  }
+  // if (!zip) {
+  //   history.push(URL.HOME);
+  // }
 
   const appId = useSelector(
     (state: IReduxState) =>

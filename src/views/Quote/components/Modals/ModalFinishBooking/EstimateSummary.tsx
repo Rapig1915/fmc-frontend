@@ -9,7 +9,7 @@ import {
   RemoveCircle,
 } from '@material-ui/icons';
 import { IReduxState } from 'src/store/reducers';
-import { getEstimate } from 'src/api/quote';
+// import { getEstimate } from 'src/api/quote';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: theme.spacing(2),
-    marginBottom: theme.spacing(1),
     '& ul, & li': {
       margin: 2,
       padding: 0,
@@ -86,9 +85,8 @@ const useStyles = makeStyles((theme) => ({
     color: '#7E7A92',
     paddingLeft: theme.spacing(2),
     flexGrow: 1,
-    paddingBottom: theme.spacing(0.5),
 
-    borderBottom: '1px dashed #D8D8D8',
+    // borderBottom: '1px dashed #D8D8D8',
   },
 
   boxPrice: {
@@ -98,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'flex-end',
     paddingRight: theme.spacing(1),
+    borderTop: '1px dashed #D8D8D8',
 
     '& p': {
       fontWeight: 500,
@@ -124,24 +123,31 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
 
   const classes = useStyles();
 
-  const appId = useSelector(
+  // const appId = useSelector(
+  //   (state: IReduxState) =>
+  //     state.quote.appointment && state.quote.appointment.id
+  // );
+
+  const estimate = useSelector(
     (state: IReduxState) =>
-      state.quote.appointment && state.quote.appointment.id
+      state.quote.appointment && state.quote.appointment.attributes.estimate
   );
 
-  React.useEffect(() => {
-    const timerId = setTimeout(async () => {
-      await getEstimate(appId);
-    }, 0);
+  // React.useEffect(() => {
+  //   const timerId = setTimeout(async () => {
+  //     await getEstimate(appId);
+  //   }, 0);
 
-    return () => {
-      if (timerId) clearTimeout(timerId);
-    };
-  }, [appId]);
+  //   return () => {
+  //     if (timerId) clearTimeout(timerId);
+  //   };
+  // }, [appId]);
+
+  if (!estimate) return <></>;
 
   return (
     <Box className={clsx(classes.root, className)}>
-      <Box key="service-1" className={classes.boxService}>
+      <Box key="service-summary" className={classes.boxService}>
         <Box
           key="title"
           flexDirection="row"
@@ -155,35 +161,103 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
           </Typography>
           <Box flexGrow={1} />
           <Typography className={classes.titleService} noWrap>
-            <b>$</b> 849.24 <KeyboardArrowDown />
+            <b>$</b>{' '}
+            {Object.keys(estimate.services).reduce(
+              (sum, s) => sum + estimate.services[s].total_price,
+              0
+            )}{' '}
+            <KeyboardArrowDown />
           </Typography>
         </Box>
-        <Box
-          key="item"
-          flexDirection="row"
-          display="flex"
-          alignItems="center"
-          className={classes.itemService}
-        >
-          <RemoveCircle className={classes.iconServiceItem} />
-          <Box key="content" className={classes.itemContent}>
-            <Typography className={classes.itemTitle}>
-              Replace both front struts with Quick_struts
-            </Typography>
-            <List>
-              <ListItem>• Monroe Quick-Strut and Coil Spring Assembly</ListItem>
-            </List>
+        {Object.keys(estimate.services).map((s) => (
+          <Box
+            key="item"
+            flexDirection="row"
+            display="flex"
+            alignItems="center"
+            className={classes.itemService}
+          >
+            <RemoveCircle className={classes.iconServiceItem} />
+            <Box key="content" className={classes.itemContent}>
+              <Typography className={classes.itemTitle}>{s}</Typography>
+              <List>
+                {estimate.services[s].parts.map((part) => (
+                  <ListItem>• {part.name}</ListItem>
+                ))}
+              </List>
+            </Box>
           </Box>
-        </Box>
+        ))}
         <Box key="price" className={classes.boxPrice}>
           <Typography>
-            <b>Total Parts: $</b> <span>480.24</span>
+            <b>Total Parts: $</b>{' '}
+            <span>
+              {Object.keys(estimate.services).reduce(
+                (sum, s) => sum + estimate.services[s].parts_price,
+                0
+              )}
+            </span>
           </Typography>
           <Typography>
-            <b>Labor: $</b> <span>369.00</span>
+            <b>Labor: $</b>{' '}
+            <span>
+              {Object.keys(estimate.services).reduce(
+                (sum, s) => sum + estimate.services[s].labor_price,
+                0
+              )}
+            </span>
           </Typography>
         </Box>
       </Box>
+      {Object.keys(estimate.services).map((s) => (
+        <Box
+          key={`service-${estimate.services[s].id}`}
+          className={classes.boxService}
+        >
+          <Box
+            key="title"
+            flexDirection="row"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <AttachMoney className={classes.iconService} />
+            <Typography key="title" className={classes.titleService} noWrap>
+              {s}:
+            </Typography>
+            <Box flexGrow={1} />
+            <Typography className={classes.titleService} noWrap>
+              <b>$</b> {estimate.services[s].total_price} <KeyboardArrowDown />
+            </Typography>
+          </Box>
+          <Box
+            key="item"
+            flexDirection="row"
+            display="flex"
+            alignItems="center"
+            className={classes.itemService}
+          >
+            <RemoveCircle className={classes.iconServiceItem} />
+            <Box key="content" className={classes.itemContent}>
+              <Typography className={classes.itemTitle}>{s}</Typography>
+              <List>
+                {estimate.services[s].parts.map((part) => (
+                  <ListItem>• {part.name}</ListItem>
+                ))}
+              </List>
+            </Box>
+          </Box>
+          <Box key="price" className={classes.boxPrice}>
+            <Typography>
+              <b>Total Parts: $</b>{' '}
+              <span>{estimate.services[s].parts_price}</span>
+            </Typography>
+            <Typography>
+              <b>Labor: $</b> <span>{estimate.services[s].labor_price}</span>
+            </Typography>
+          </Box>
+        </Box>
+      ))}
       <Box key="total" className={classes.boxTotal}>
         <Box key="title" flexDirection="row" display="flex" alignItems="center">
           <AttachMoney className={classes.iconService} />
@@ -192,23 +266,33 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
           </Typography>
           <Box flexGrow={1} />
           <Typography className={classes.titleService} noWrap>
-            <b>$</b> 849.24 <KeyboardArrowDown />
+            <b>$</b> {estimate.total_price} <KeyboardArrowDown />
           </Typography>
         </Box>
         <Box key="price" className={classes.boxPrice}>
           <Typography>
-            <b>Services: $</b> <span>480.24</span>
+            <b>Services: $</b>{' '}
+            <span>
+              {Object.keys(estimate.services).reduce(
+                (sum, s) => sum + estimate.services[s].total_price,
+                0
+              )}
+            </span>
           </Typography>
           <Typography>
-            <b>Tax: $</b> <span>369.00</span>
+            <b>Tax: $</b>{' '}
+            <span>
+              {((estimate.tax * estimate.total_price) / 100).toFixed(2)}
+            </span>
           </Typography>
           <Typography>
-            <b>Total Price (15% savings): $</b> <span>1104.55</span>
+            <b>Total Price (15% savings): $</b>{' '}
+            <span>{estimate.total_price}</span>
           </Typography>
           <Typography>
             <b>Shop price: $</b>{' '}
             <span>
-              <del>1303.43</del>
+              <del>{estimate.shop_price}</del>
             </span>
           </Typography>
         </Box>

@@ -359,7 +359,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
           {data?.attributes.car.model}
         </Typography>
         <Typography key="quote-date" className={classes.titleQuoteDate}>
-          March 2, 2021
+          {data?.attributes.appointment_day}
         </Typography>
       </Box>
       <Box className={classes.contentBox}>

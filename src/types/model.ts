@@ -19,6 +19,71 @@ export interface ICarMeta {
   license_plate: string;
 }
 
+export interface IEstimate {
+  id: number;
+
+  address: {
+    zipcode: string;
+    description: string;
+  };
+
+  appointment_id: number;
+  comments: string;
+  created_by: string;
+
+  customer_name: string | null;
+  customer: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+
+  customer_car: string;
+  vin: string | null;
+  mileage: string | null;
+
+  services: {
+    [s: string]: {
+      id: number;
+      labor_hours: string;
+      labor_price: number;
+      parts: [
+        {
+          id: number;
+          name: string;
+          price: number;
+          unit_price: 40.1;
+          part_number: string;
+        }
+      ];
+      parts_price: number;
+      status: string;
+      total_price: number;
+    };
+  };
+
+  mechanic_id: number;
+  mechanic: {
+    name: string;
+    phone: string;
+    photo: string;
+  };
+
+  note_to_management: string | null;
+  recommendations: string | null;
+
+  subject_to_change: boolean;
+
+  tax: number;
+  approved_price: number;
+  discount: number;
+  discount_total: number;
+  percentage_saved: number;
+  total_price: number;
+  version_count: number;
+  shop_price: number;
+}
+
 export interface IAppointment {
   id: number;
   type: string;
@@ -53,6 +118,7 @@ export interface IAppointment {
       reviews: number;
       mechanic_reviews: [string];
     };
+    estimate: IEstimate | null;
     customer_name: string;
     customer_phone: string;
     payment_type: string;
