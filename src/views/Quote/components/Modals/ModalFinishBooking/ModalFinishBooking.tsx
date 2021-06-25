@@ -22,6 +22,8 @@ import { cardTypes } from 'src/utils/data';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
 import { QuoteShowModal } from 'src/types';
 import { IReduxState } from 'src/store/reducers';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK } from 'src/utils/consts';
 
 import SvgSecurity from 'src/assets/badges/security.svg';
 import SvgAdvantageMoney from 'src/assets/advantage/money.svg';
@@ -248,6 +250,8 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
     } else {
       setErrors('Quote confirmation failed');
     }
+
+    mixPanel(MIXPANEL_TRACK.CARD_INFO);
 
     return true;
   };

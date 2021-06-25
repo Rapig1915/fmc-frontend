@@ -301,12 +301,14 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
             </Typography>
           </Box>
           <Box key="buttons" className="buttons">
-            <ButtonForward
-              title="Book now"
-              className="button-book"
-              rounded
-              onClickHandler={handleBookNow}
-            />
+            {data?.attributes.estimate && (
+              <ButtonForward
+                title="Book now"
+                className="button-book"
+                rounded
+                onClickHandler={handleBookNow}
+              />
+            )}
             <Button
               color="primary"
               className={classes.buttonViewDetail}

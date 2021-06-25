@@ -1,9 +1,17 @@
 import React, { ReactElement, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Grid, Typography } from '@material-ui/core';
 import ButtonForward from 'src/components/atoms/ButtonForward';
 import { InputWithStatus } from 'src/components/atoms';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK } from 'src/utils/consts';
+import { QuoteStep, ResponseSignin } from 'src/types';
+import { signIn } from 'src/api/auth';
+import { setAuthToken } from 'src/store/actions';
+import { IReduxState } from 'src/store/reducers';
+
 import { Email, Lock, Person, Phone } from '@material-ui/icons';
 import { QuoteContext } from '../QuoteContext';
 
@@ -72,16 +80,29 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'center',
     },
   },
+  buttonBack: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 const FormContact = (props: FormContactProps): ReactElement => {
   const { className, modalView } = props;
 
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const { handleUpdateAppointment } = useContext(QuoteContext);
+  const {
+    handleSetStep,
+    handleUpdateAppointment,
+    loggingIn,
+    handleSetLoggingIn,
+  } = useContext(QuoteContext);
 
   const { contact, handleSetContact } = useContext(QuoteContext);
+
+  const appointment = useSelector(
+    (state: IReduxState) => state.quote.appointment
+  );
 
   const handleInputChange = (key: string, value: string) => {
     handleSetContact({
@@ -90,13 +111,52 @@ const FormContact = (props: FormContactProps): ReactElement => {
     });
   };
 
+  const handleBack = () => {
+    handleSetStep(QuoteStep.QUOTE_SERVICE_DESK);
+  };
+
   const handleContinue = () => {
-    if (modalView)
+    mixPanel(MIXPANEL_TRACK.CONTACT_INFO);
+
+    if (modalView) {
       handleUpdateAppointment({
         name: contact.name,
         email: contact.email,
         phone: contact.phone,
       });
+    } else {
+      handleSetLoggingIn(true);
+
+      const timerId = setTimeout(async () => {
+        const response: ResponseSignin = await signIn(
+          {
+            id: `${appointment && appointment.id}`,
+          },
+          true
+        );
+
+        handleSetLoggingIn(false);
+
+        if (
+          response &&
+          response.auth_token &&
+          response.user &&
+          response.user.id
+        ) {
+          dispatch(
+            setAuthToken(
+              response.auth_token,
+              response.user.id,
+              response.user.email
+            )
+          );
+
+          handleSetStep(QuoteStep.QUOTE_CONGRATS);
+        }
+
+        if (timerId) clearTimeout(timerId);
+      }, 3000);
+    }
   };
 
   const validateEmail = (em: string) => {
@@ -179,11 +239,23 @@ const FormContact = (props: FormContactProps): ReactElement => {
           className={classes.actionContainer}
         >
           <ButtonForward
+            title="Back"
+            key="Back"
+            color="default"
+            rounded
+            noIcon
+            transparent
+            size="large"
+            onClickHandler={handleBack}
+            className={classes.buttonBack}
+          />
+          <ButtonForward
             title="Continue"
+            key="Continue"
             rounded
             size="large"
             onClickHandler={handleContinue}
-            disabled={!isReadyToContinue}
+            disabled={!isReadyToContinue || loggingIn}
           />
         </Grid>
       </Grid>

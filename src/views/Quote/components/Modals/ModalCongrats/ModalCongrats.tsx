@@ -21,7 +21,7 @@ import { URL } from 'src/utils/consts';
 import SvgCongratsBg from 'src/assets/congrats-bg.svg';
 import SvgQuestion from 'src/assets/badges/question-primary.svg';
 import SvgInformation from 'src/assets/badges/information-primary.svg';
-import { ResponseSignin } from 'src/types';
+import { QuoteShowModal, ResponseSignin } from 'src/types';
 import { signIn } from 'src/api/auth';
 import { IReduxState } from 'src/store/reducers';
 import { setAppointment, setAuthToken } from 'src/store/actions';
@@ -160,19 +160,20 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const { clearAll } = useContext(QuoteContext);
+  const {
+    clearAll,
+    handleSetLoggingIn,
+    handleShowModal,
+    loggingIn,
+  } = useContext(QuoteContext);
 
   const appointment = useSelector(
     (state: IReduxState) => state.quote.appointment
   );
 
-  const [loggingIn, setLoggingIn] = React.useState(false);
-
   const handleDone = () => {
-    setLoggingIn(true);
-
-    clearAll();
-    dispatch(setAppointment(null));
+    handleShowModal(QuoteShowModal.NONE);
+    handleSetLoggingIn(true);
 
     const timerId = setTimeout(async () => {
       const response: ResponseSignin = await signIn(
@@ -182,7 +183,9 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
         true
       );
 
-      setLoggingIn(false);
+      clearAll();
+      dispatch(setAppointment(null));
+      handleSetLoggingIn(false);
 
       if (
         response &&
@@ -202,11 +205,9 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
       } else {
         history.push(URL.HOME);
       }
-    }, 5000);
 
-    return () => {
       if (timerId) clearTimeout(timerId);
-    };
+    }, 3000);
   };
 
   return (

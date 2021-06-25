@@ -79,7 +79,9 @@ const ZipcodeQuote = ({
   };
 
   const handleGetQuote = () => {
-    if (zip && onGetQuote) onGetQuote({ zip, customer });
+    if (zip && onGetQuote) {
+      onGetQuote({ zip, customer });
+    }
   };
 
   return (

@@ -13,6 +13,9 @@ import { ArrowBackIos, Close } from '@material-ui/icons';
 
 import { ButtonForward } from 'src/components/atoms';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK } from 'src/utils/consts';
+
 import ModalReasonAccordion from './ModalReasonAccordion';
 import ModalReasonOther from './ModalReasonOther';
 import ModalReasonCheck from './ModalReasonCheck';
@@ -86,6 +89,12 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
   const [reasonStep, setReasonStep] = useState(ReasonStep.START);
 
   React.useEffect(() => {
+    if (show) {
+      mixPanel(MIXPANEL_TRACK.NOT_SURE_WHATS_WRONG);
+    }
+  }, [show]);
+
+  React.useEffect(() => {
     const dialogContainer = document.getElementsByClassName(
       'MuiDialog-container'
     )[0];
@@ -109,6 +118,24 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
       note: '',
     });
   };
+
+  const canContinue = React.useMemo(() => {
+    if (reasonStep === ReasonStep.START)
+      return (
+        reason && reason.reasonId && reason.reason && reason.subReason.length
+      );
+    if (reasonStep === ReasonStep.OTHER)
+      return (
+        reason &&
+        reason.reasonId &&
+        reason.reason &&
+        reason.subReason.length &&
+        reason.otherReason
+      );
+    if (reasonStep === ReasonStep.CHECK) return true;
+
+    return false;
+  }, [reasonStep, reason]);
 
   const handleOtherReasonChange = (s: string) => {
     handleSetReason({
@@ -158,9 +185,11 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
       scroll="body"
     >
       <DialogTitle className={classes.title}>
-        <Box className={classes.buttonGroupBack}>
-          <ArrowBackIos className="title-icon" onClick={handleStepBack} />
-        </Box>
+        {reasonStep !== ReasonStep.START && (
+          <Box className={classes.buttonGroupBack}>
+            <ArrowBackIos className="title-icon" onClick={handleStepBack} />
+          </Box>
+        )}
         <Typography className={classes.titleText}>
           Not sure what&apos;s wrong?
         </Typography>
@@ -196,13 +225,15 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
         )}
       </DialogContent>
       <DialogActions className={classes.actionContainer}>
-        <ButtonForward
-          key="button-continue"
-          title="Continue"
-          size="large"
-          rounded
-          onClickHandler={handleContinue}
-        />
+        {!!canContinue && (
+          <ButtonForward
+            key="button-continue"
+            title="Continue"
+            size="large"
+            rounded
+            onClickHandler={handleContinue}
+          />
+        )}
       </DialogActions>
     </Dialog>
   );

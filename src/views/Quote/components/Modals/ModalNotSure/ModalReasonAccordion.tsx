@@ -14,6 +14,8 @@ import {
   AccordionDetails,
   AccordionSummary,
 } from 'src/components/organisms';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK } from 'src/utils/consts';
 
 interface ModalReasonAccordionProps {
   reasonId: number;
@@ -92,6 +94,10 @@ const ModalReasonAccordion = (
       }
     }
   );
+
+  React.useEffect(() => {
+    mixPanel(MIXPANEL_TRACK.NOT_SURE_WHATS_WRONG_CATEGORY);
+  });
 
   return (
     <Box>

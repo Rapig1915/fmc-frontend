@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import { Image, InputWithStatus } from 'src/components/atoms';
+import { CarSelectType } from 'src/types';
 
 import ImageBrand from 'src/assets/brands';
 
@@ -11,6 +12,7 @@ import { QuoteContext } from '../../QuoteContext';
 interface FormConfirmCarProps {
   className?: string;
   show: boolean;
+  type: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -63,9 +65,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FormConfirmCar = (props: FormConfirmCarProps): ReactElement => {
-  const { className, show } = props;
+  const { className, show, type } = props;
 
-  const classes = useStyles({ show });
+  const classes = useStyles({ show, type });
 
   const { car } = useContext(QuoteContext);
 
@@ -74,7 +76,11 @@ const FormConfirmCar = (props: FormConfirmCarProps): ReactElement => {
 
   return (
     <Box className={clsx('quote-confirm-car', classes.root, className)}>
-      <Typography className={classes.title}>Is this your car?</Typography>
+      <Typography className={classes.title}>
+        {type === CarSelectType.BY_PLATE_NUMBER
+          ? 'Is this your car?'
+          : "Confirm your car's details"}
+      </Typography>
       <Image src={imageBrand} className={classes.myCar} />
 
       <Box className={classes.lineContainer}>

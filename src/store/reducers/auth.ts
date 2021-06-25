@@ -1,11 +1,10 @@
-import { IAppointment, IUser } from 'src/types';
+import { IUser } from 'src/types';
 import { IReduxAction, IAuthSetCodePayload } from '../types';
 import {
   AUTH_LOGOUT,
   AUTH_SET_CODE,
   AUTH_SET_TOKEN,
   AUTH_SET_USER,
-  AUTH_SET_USER_APPOINTMENTS,
   IAuthSetTokenPayload,
 } from '../types/auth';
 
@@ -15,7 +14,6 @@ const initialState = {
   user: null as IUser | null,
   code: '',
   token: '',
-  appointments: [] as IAppointment[],
   loggedIn: false,
 };
 
@@ -43,11 +41,6 @@ export default (
       return {
         ...state,
         user: action.payload as IUser,
-      };
-    case AUTH_SET_USER_APPOINTMENTS:
-      return {
-        ...state,
-        appointments: action.payload as IAppointment[],
       };
     default:
       return state;

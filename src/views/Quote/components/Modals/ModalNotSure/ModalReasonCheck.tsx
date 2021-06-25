@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     color: '#7157FF',
     float: 'right',
+    cursor: 'pointer',
   },
   inputNoteContainer: {
     margin: 0,
@@ -110,6 +111,8 @@ const ModalReasonCheck = (props: ModalReasonCheckProps): ReactElement => {
   const { reason, note, onNoteChange } = props;
   const classes = useStyles();
 
+  const [showNote, setShowNote] = React.useState(false);
+
   const handleChange = (evt: ChangeEvent<{ value: string }>) => {
     const v = evt.target.value as string;
     onNoteChange(v);
@@ -121,17 +124,24 @@ const ModalReasonCheck = (props: ModalReasonCheckProps): ReactElement => {
         <Typography className={classes.textSelectedServices}>
           Selected Services
         </Typography>
-        <Typography className={classes.textLeaveNote}>Leave a note</Typography>
+        <Typography
+          className={classes.textLeaveNote}
+          onClick={() => setShowNote(true)}
+        >
+          Leave a note
+        </Typography>
       </Box>
-      <Box className={classes.inputNoteContainer}>
-        <TextField
-          className={classes.inputNote}
-          onChange={handleChange}
-          value={note}
-          multiline
-          placeholder="Type something here"
-        />
-      </Box>
+      {showNote && (
+        <Box className={classes.inputNoteContainer}>
+          <TextField
+            className={classes.inputNote}
+            onChange={handleChange}
+            value={note}
+            multiline
+            placeholder="Type something here"
+          />
+        </Box>
+      )}
       <Accordion square expanded>
         <AccordionSummary>
           <Typography className={classes.reasonTitle}>

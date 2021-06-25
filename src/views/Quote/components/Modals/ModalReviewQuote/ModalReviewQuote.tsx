@@ -13,7 +13,13 @@ import {
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { ButtonForward, Image } from 'src/components/atoms';
-import { ArrowBackIos, Check, Close, Help } from '@material-ui/icons';
+import {
+  ArrowBackIos,
+  ArrowForwardIos,
+  Check,
+  Close,
+  Help,
+} from '@material-ui/icons';
 import { ImageNode } from 'src/components/molecules';
 import { IReduxState } from 'src/store/reducers';
 import {
@@ -23,7 +29,10 @@ import {
 } from 'src/components/organisms';
 import { QuoteContext } from 'src/views/Quote/QuoteContext';
 import { IAppointment, QuoteShowModal } from 'src/types';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK } from 'src/utils/consts';
 
+import SvgPDF from 'src/assets/pdf.svg';
 import SvgSecurity from 'src/assets/badges/security.svg';
 import SvgAdvantageMoney from 'src/assets/advantage/money.svg';
 import SvgQuestion from 'src/assets/badges/question.svg';
@@ -226,6 +235,44 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
+  containerReceipt: {
+    background: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    position: 'relative',
+    margin: 0,
+    padding: 0,
+    cursor: 'pointer',
+  },
+  imgReceipt: {
+    margin: 0,
+    padding: 0,
+    marginRight: theme.spacing(3),
+    width: 40,
+    height: 40,
+    objectFit: 'contain',
+  },
+  titleReceipt: {
+    color: '#000000',
+    fontWeight: 400,
+    fontStyle: 'normal',
+    fontSize: 18,
+    lineHeight: '28px',
+    '& .arrow': {
+      position: 'absolute',
+      top: 0,
+      right: theme.spacing(3),
+      height: '100%',
+      width: 25,
+      color: '#BDC1DA',
+      cursor: 'pointer',
+
+      '&.shown': {
+        width: 40,
+      },
+    },
+  },
+
   accordion: {
     width: '100%',
 
@@ -267,9 +314,23 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     (state: IReduxState) => state.quote.appointment
   );
 
+  const appointmentStatus = useSelector(
+    (state: IReduxState) => state.quote.appointment?.attributes.status
+  );
+
+  const appointmentCompleted =
+    appointmentStatus === 'completed' ||
+    appointmentStatus === 'diagnosis_complete';
+
   const { handleShowModal } = useContext(QuoteContext);
 
+  if ((!appointment || !appointment.id) && show) {
+    // error no active appointment
+    handleShowModal(QuoteShowModal.NONE);
+  }
+
   const handleSchedule = () => {
+    mixPanel(MIXPANEL_TRACK.DIAGNOSIS_ESTIMATE);
     handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
   };
 
@@ -277,10 +338,14 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     handleShowModal(QuoteShowModal.CONTACT);
   };
 
-  if ((!appointment || !appointment.id) && show) {
-    // error no active appointment
-    handleShowModal(QuoteShowModal.NONE);
-  }
+  const handleClickDocument = (name: string, url: string) => {
+    const a = document.createElement('a');
+
+    a.target = '_blank';
+    a.href = url;
+    a.setAttribute('download', `${name.replace(' ', '-')}.pdf`);
+    a.click();
+  };
 
   const keyBrand =
     appointment?.attributes.car.make.replace(' ', '-').toLocaleLowerCase() ||
@@ -298,9 +363,13 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
         <Box className={classes.buttonGroupBack}>
           <ArrowBackIos className="title-icon" onClick={handleStepBack} />
         </Box>
-        <Typography className={classes.titleText}>
-          Quote <Help className="title-icon" />
-        </Typography>
+        {appointmentCompleted ? (
+          <Typography className={classes.titleText}>Work performed:</Typography>
+        ) : (
+          <Typography className={classes.titleText}>
+            Quote <Help className="title-icon" />
+          </Typography>
+        )}
         <IconButton
           aria-label="close"
           className={classes.closeButton}
@@ -380,7 +449,12 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
             xs={12}
             className={classes.contentHolder}
           >
-            <Accordion square expanded className={classes.accordion}>
+            <Accordion
+              key="inspection"
+              square
+              expanded
+              className={classes.accordion}
+            >
               <AccordionSummary>
                 <Image src={SvgDiagnosis} className={classes.imageAccordion} />
                 <Typography className={classes.titleAccordion}>
@@ -406,25 +480,58 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                     <Check /> $35 goes forwards the repair price
                   </Typography>
                 </Box>
-                <ImageNode
-                  key="happy-customers"
-                  title={
-                    <>
-                      <b>{cntHappyCustomers} happy customers</b>
-                      <br />
-                      Booked the same service in your area
-                    </>
-                  }
-                  imgUrl={ImageHappyCustomer}
-                  titleProps={{ className: classes.titleHappyCustomer }}
-                  imgProps={{ className: classes.imgHappyCustomer }}
-                  className={classes.containerHappyCustomer}
-                />
-                <BoxFAQ />
+                {!appointmentCompleted && (
+                  <ImageNode
+                    key="happy-customers"
+                    title={
+                      <>
+                        <b>{cntHappyCustomers} happy customers</b>
+                        <br />
+                        Booked the same service in your area
+                      </>
+                    }
+                    imgUrl={ImageHappyCustomer}
+                    titleProps={{ className: classes.titleHappyCustomer }}
+                    imgProps={{ className: classes.imgHappyCustomer }}
+                    className={classes.containerHappyCustomer}
+                  />
+                )}
+                {!appointmentCompleted && <BoxFAQ />}
               </AccordionDetails>
             </Accordion>
+            {appointmentCompleted &&
+              appointment?.attributes.documents &&
+              appointment?.attributes.documents.map(
+                (d) =>
+                  d.url && (
+                    <Accordion
+                      key={`download-${d.name}`}
+                      square
+                      expanded
+                      className={classes.accordion}
+                    >
+                      <AccordionDetails className={classes.accordionDetail}>
+                        <ImageNode
+                          onClickHandler={() =>
+                            handleClickDocument(d.name, d.url)
+                          }
+                          title={
+                            <>
+                              Download {d.name}
+                              <ArrowForwardIos className="arrow" />
+                            </>
+                          }
+                          imgUrl={SvgPDF}
+                          titleProps={{ className: classes.titleReceipt }}
+                          imgProps={{ className: classes.imgReceipt }}
+                          className={classes.containerReceipt}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                  )
+              )}
             <DialogActions className={classes.actionContainer}>
-              {appointment?.attributes.status !== 'complete' && (
+              {!appointmentCompleted && (
                 <ButtonForward
                   key="schedule-service"
                   title="Schedule service"

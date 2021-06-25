@@ -16,7 +16,8 @@ import { Image, ButtonForward } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
 import { Section } from 'src/components/organisms';
 import { Splash } from 'src/layouts/components';
-import { URL } from 'src/utils/consts';
+import { MIXPANEL_TRACK, URL } from 'src/utils/consts';
+import mixPanel from 'src/utils/mixpanel';
 
 import SvgSecurity from 'src/assets/badges/security.svg';
 import ImageWorkStepLogo from 'src/assets/work-step-logo.png';
@@ -126,6 +127,7 @@ const Home = (): ReactElement => {
           behavior: 'smooth',
         });
     } else {
+      mixPanel(MIXPANEL_TRACK.ZIP);
       dispatch(setZip(payload.zip || '', payload.customer || 0));
 
       setOpenSplash(true);

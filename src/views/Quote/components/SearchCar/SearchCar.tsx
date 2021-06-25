@@ -6,8 +6,10 @@ import { TabSelector } from 'src/components/molecules';
 import ButtonForward from 'src/components/atoms/ButtonForward';
 import { Image } from 'src/components/atoms';
 import { arrCarSelectTypes } from 'src/utils/data';
-import { ICarMeta, CarSelectType, QuoteShowModal } from 'src/types';
+import { ICarMeta, CarSelectType, QuoteShowModal, QuoteStep } from 'src/types';
 import { checkPlateNumber } from 'src/api/quote';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK } from 'src/utils/consts';
 
 import SvgToggleInformation from 'src/assets/menu/toggle-information.svg';
 
@@ -55,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
       height: 45,
     },
   },
+  buttonBack: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 const SearchCar = (props: SearchCarProps): ReactElement => {
@@ -66,7 +71,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     Object.keys(arrCarSelectTypes)[0]
   );
 
-  const { car, handleSetCar } = useContext(QuoteContext);
+  const { car, handleSetCar, handleSetStep } = useContext(QuoteContext);
 
   const isReadyToSearch =
     (carSelectType === CarSelectType.BY_PLATE_NUMBER &&
@@ -94,6 +99,11 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
           mileage: '',
         },
       });
+  };
+
+  const handleBack = () => {
+    if (isReadyToConfirm) setIsReadyToConfirm(false);
+    else handleSetStep(QuoteStep.QUOTE_SERVICE_DESK);
   };
 
   const handleSearch = async () => {
@@ -146,6 +156,10 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     handleShowModal(QuoteShowModal.SERVICE_INTRO);
   };
 
+  React.useEffect(() => {
+    mixPanel(MIXPANEL_TRACK.CAR);
+  });
+
   return (
     <Box className={clsx('quote-search-car', classes.root, className)}>
       <Typography className={classes.title}>Tell us about your car?</Typography>
@@ -168,7 +182,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
               carSelectType === CarSelectType.BY_YEAR_MAKE_MODEL
             }
           />
-          <FormConfirmCar show={isReadyToConfirm} />
+          <FormConfirmCar show={isReadyToConfirm} type={carSelectType} />
         </Grid>
         <Grid item md={4} sm={12} xs={12} className={classes.actionContainer}>
           <Hidden smUp>
@@ -180,9 +194,21 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
               />
             </Box>
           </Hidden>
+          <ButtonForward
+            title="Back"
+            key="Back"
+            color="default"
+            rounded
+            noIcon
+            transparent
+            size="large"
+            onClickHandler={handleBack}
+            className={classes.buttonBack}
+          />
           {!isReadyToConfirm ? (
             <ButtonForward
               title="Search"
+              key="Search"
               rounded
               size="large"
               disabled={!isReadyToSearch}

@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     '& h3': {
       marginTop: theme.spacing(2),
       color: '#D5C3F2',
-      fontFamily: 'Lato Regular',
+      fontFamily: 'Lato',
       fontSize: 19,
       fontStyle: 'normal',
       fontWeight: 500,

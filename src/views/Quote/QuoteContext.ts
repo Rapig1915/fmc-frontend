@@ -65,6 +65,9 @@ export interface IQuoteContext {
   handleConfirmAppointment: (data: RequestConfirmAppointment) => void;
 
   clearAll: () => void;
+
+  loggingIn: boolean;
+  handleSetLoggingIn: (state: boolean) => void;
 }
 
 export const QuoteContext = React.createContext<IQuoteContext>({
@@ -117,4 +120,7 @@ export const QuoteContext = React.createContext<IQuoteContext>({
   handleConfirmAppointment: () => {},
 
   clearAll: () => {},
+
+  loggingIn: false,
+  handleSetLoggingIn: () => {},
 });

@@ -3,11 +3,12 @@ import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import { IReduxState } from 'src/store/reducers';
+import { IAppointment, ResponseGetUserAppointments } from 'src/types';
+import { getUserAppointments } from 'src/api/auth';
 import ItemQuote from './ItemQuote';
 
 interface PendingQuotesProps {
   className?: string;
-  waiting?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: (props: PendingQuotesProps) =>
+    justifyContent: (props: { waiting: boolean }) =>
       props.waiting ? 'center' : undefined,
     alignItems: 'center',
     minHeight: 300,
@@ -80,9 +81,38 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PendingQuotes = (props: PendingQuotesProps): ReactElement => {
-  const { className, waiting } = props;
+  const { className } = props;
+
+  const [appointments, setAppointments] = React.useState<IAppointment[]>([]);
+
+  const authToken = useSelector((state: IReduxState) => state.auth.token);
+
+  React.useEffect(() => {
+    const timerId = setTimeout(async () => {
+      const appointmentsResp: ResponseGetUserAppointments = await getUserAppointments(
+        authToken,
+        'pending'
+      );
+      setAppointments(appointmentsResp.data);
+    });
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [authToken]);
+
+  const waiting = appointments.reduce(
+    (flag, a) =>
+      flag ||
+      (a.attributes.appointment_type === 'repair' && !!a.attributes.estimate),
+    false
+  );
 
   const classes = useStyles({ waiting });
+
+  const min = React.useMemo(
+    () => (Math.random() * 40 + 10 + appointments.length).toFixed(0),
+    [appointments]
+  );
 
   const renderWaitingBox = () => {
     return (
@@ -94,20 +124,16 @@ const PendingQuotes = (props: PendingQuotesProps): ReactElement => {
           Check back in:
         </Typography>
         <Typography key="hours" className={classes.hoursWaiting}>
-          <b>02</b> h &nbsp;
-          <b>30</b> m &nbsp;
-          <b>45</b> s
+          {/* <b>02</b> h &nbsp; */}
+          <b>{min}</b> m &nbsp;
+          {/* <b>45</b> s */}
         </Typography>
       </Box>
     );
   };
 
-  const quotes = useSelector(
-    (state: IReduxState) => state.auth.appointments
-  ).filter((x) => x.attributes.status === 'quote_requested');
-
   const renderQuotes = () => {
-    return quotes.map((q) => (
+    return appointments.map((q) => (
       <ItemQuote key={q.id} data={q} miniMode={false} />
     ));
   };
@@ -124,7 +150,6 @@ const PendingQuotes = (props: PendingQuotesProps): ReactElement => {
 
 PendingQuotes.defaultProps = {
   className: undefined,
-  waiting: false,
 };
 
 export default PendingQuotes;

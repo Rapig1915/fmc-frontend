@@ -12,6 +12,7 @@ interface ButtonForwardProps {
   color?: PropTypes.Color | undefined;
   size?: 'medium' | 'large' | 'small';
   noIcon?: boolean;
+  transparent?: boolean;
 
   className?: string;
   onClickHandler?: () => void;
@@ -26,6 +27,10 @@ const useStyles = makeStyles({
     fontFamily: 'Artegra Sans',
     fontStyle: 'normal',
     fontWeight: 500,
+    backgroundColor: (props: ButtonForwardProps) =>
+      props.transparent ? 'transparent' : undefined,
+    boxShadow: (props: ButtonForwardProps) =>
+      props.transparent ? 'none' : undefined,
   },
 });
 
@@ -36,11 +41,12 @@ export default function ButtonForward(props: ButtonForwardProps): ReactElement {
     disabled,
     color,
     size,
+    transparent,
     className,
     onClickHandler,
     noIcon,
   } = props;
-  const classes = useStyles({ rounded });
+  const classes = useStyles({ rounded, transparent });
 
   return (
     <Button
@@ -62,6 +68,7 @@ ButtonForward.defaultProps = {
   rounded: false,
   disabled: false,
   noIcon: false,
+  transparent: false,
   color: 'primary',
   size: 'medium',
   className: undefined,

@@ -55,10 +55,11 @@ const useStyles = makeStyles((theme) => ({
 
 interface SplashProps {
   show: boolean;
+  text?: string;
 }
 
 const Splash = (props: SplashProps): ReactElement => {
-  const { show } = props;
+  const { show, text } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const classes = useStyles();
@@ -81,15 +82,23 @@ const Splash = (props: SplashProps): ReactElement => {
           alt="certified"
           lazy={false}
         />
-        <Typography className={classes.title}>
-          <b>{stateCustomer} happy customers</b>
-          <br />
-          had their car fixed in your area with Fixmycar!
-        </Typography>
+        {text ? (
+          <Typography className={classes.title}>{text}</Typography>
+        ) : (
+          <Typography className={classes.title}>
+            <b>{stateCustomer} happy customers</b>
+            <br />
+            had their car fixed in your area with Fixmycar!
+          </Typography>
+        )}
         <CircularProgress />
       </DialogContent>
     </Dialog>
   );
+};
+
+Splash.defaultProps = {
+  text: '',
 };
 
 export default Splash;

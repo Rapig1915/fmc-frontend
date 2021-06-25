@@ -2,6 +2,8 @@ import React, { ChangeEvent, ReactElement } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, TextField, Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK } from 'src/utils/consts';
 
 interface ModalReasonOtherProps {
   reason: string;
@@ -56,6 +58,10 @@ const useStyles = makeStyles((theme) => ({
 const ModalReasonOther = (props: ModalReasonOtherProps): ReactElement => {
   const { reason, otherReason, onOtherReasonChange } = props;
   const classes = useStyles();
+
+  React.useEffect(() => {
+    mixPanel(MIXPANEL_TRACK.NOT_SURE_WHATS_WRONG_TEXTBOX);
+  });
 
   const handleChange = (evt: ChangeEvent<{ value: string }>) => {
     const v = evt.target.value as string;

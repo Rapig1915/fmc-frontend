@@ -1,10 +1,10 @@
+import React, { ReactElement, useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  // useHistory,
-  useLocation,
-} from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { Container, makeStyles, Typography } from '@material-ui/core';
-import React, { ReactElement, useCallback, useState } from 'react';
+import { ElfsightWidget } from 'react-elfsight-widget';
+
 import {
   QuoteShowModal,
   QuoteStep,
@@ -17,11 +17,14 @@ import {
 import {
   confirmAppointment,
   createAppointment,
+  getHappyCustomer,
   updateAppointment,
 } from 'src/api/quote';
 import { IReduxState } from 'src/store/reducers';
-import { setAppointment } from 'src/store/actions';
-// import { URL } from 'src/utils/consts';
+import { setAppointment, setZip } from 'src/store/actions';
+import { Splash } from 'src/layouts/components';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK, URL } from 'src/utils/consts';
 
 import { FormContact, SearchCar, ServiceDesk } from './components';
 import SimpleCongrats from './components/SimpleCongrats';
@@ -48,14 +51,36 @@ const useStyles = makeStyles(() => ({
 const Quote = (): ReactElement => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  // const history = useHistory();
+  const history = useHistory();
 
   const zip = useSelector((state: IReduxState) => state.quote.zip);
   const location = useLocation();
 
-  // if (!zip) {
-  //   history.push(URL.HOME);
-  // }
+  const params = queryString.parse(location.search);
+  const zipQuery = Array.isArray(params.zip) ? params.zip[0] || '' : params.zip;
+
+  useEffect(() => {
+    const timerId = setTimeout(async () => {
+      if (zipQuery && zipQuery !== zip) {
+        if (zipQuery.length === 5) {
+          const happyCustomer = await getHappyCustomer(zipQuery);
+          const newHappyCustomer =
+            (happyCustomer && happyCustomer['times-used']) || 0;
+
+          dispatch(setZip(zipQuery, newHappyCustomer));
+          mixPanel(MIXPANEL_TRACK.ZIP);
+        }
+      }
+    }, 0);
+
+    return () => {
+      if (timerId) clearTimeout(timerId);
+    };
+  }, [zipQuery, dispatch, zip]);
+
+  if (!zip && !zipQuery) {
+    history.push(URL.HOME);
+  }
 
   const appId = useSelector(
     (state: IReduxState) =>
@@ -98,6 +123,10 @@ const Quote = (): ReactElement => {
     otherReason: '',
     note: '',
   });
+
+  const isNotSureFunnel =
+    reason && reason.reasonId && reason.reason && reason.subReason.length;
+
   const handleSetReason = useCallback(
     (newReason: IQuoteReason) => setReason(newReason),
     []
@@ -175,6 +204,18 @@ const Quote = (): ReactElement => {
     handleSetContact,
   ]);
 
+  const handleStepChange = (newStep: QuoteStep, bForce?: boolean): void => {
+    if (
+      bForce ||
+      parseInt(newStep as string, 10) <= parseInt(step as string, 10)
+    )
+      handleSetStep(newStep);
+  };
+
+  const handleContinueOnService = () => {
+    handleStepChange(QuoteStep.QUOTE_SEARCH_CAR, true);
+  };
+
   const grabInputData = (): RequestCreateAppointment => {
     return {
       car_attributes: {
@@ -210,7 +251,12 @@ const Quote = (): ReactElement => {
     }
 
     dispatch(setAppointment(resp.data));
-    handleShowModal(QuoteShowModal.CONTACT);
+
+    if (isNotSureFunnel) {
+      handleShowModal(QuoteShowModal.CONTACT);
+    } else {
+      handleStepChange(QuoteStep.QUOTE_CONTACT, true);
+    }
   };
 
   const handleUpdateAppointment = async (
@@ -233,13 +279,17 @@ const Quote = (): ReactElement => {
 
     dispatch(setAppointment(resp.data));
 
-    if (!contact || !contact.name || !contact.email || !contact.phone)
-      handleShowModal(QuoteShowModal.CONTACT);
-    else if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
-      handleShowModal(QuoteShowModal.FINISH_BOOKING);
-    else if (showModal === QuoteShowModal.REVIEW_QUOTE)
-      handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
-    else handleShowModal(QuoteShowModal.REVIEW_QUOTE);
+    if (isNotSureFunnel) {
+      if (!contact || !contact.name || !contact.email || !contact.phone)
+        handleShowModal(QuoteShowModal.CONTACT);
+      else if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
+        handleShowModal(QuoteShowModal.FINISH_BOOKING);
+      else if (showModal === QuoteShowModal.REVIEW_QUOTE)
+        handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
+      else handleShowModal(QuoteShowModal.REVIEW_QUOTE);
+    } else {
+      handleStepChange(QuoteStep.QUOTE_CONTACT, true);
+    }
   };
   const handleConfirmAppointment = async (data: RequestConfirmAppointment) => {
     if (!appId) {
@@ -258,18 +308,14 @@ const Quote = (): ReactElement => {
     // handleShowModal(QuoteShowModal.CONGRATS);
   };
 
-  /**
-   * Event Handlers
-   */
-  const handleStepChange = (newStep: QuoteStep, bForce?: boolean): void => {
-    if (
-      bForce ||
-      parseInt(newStep as string, 10) <= parseInt(step as string, 10)
-    )
-      handleSetStep(newStep);
+  const [loggingIn, setLoggingIn] = useState(false);
+  const handleSetLoggingIn = (state: boolean): void => {
+    setLoggingIn(state);
   };
 
   const handleConfirmCar = () => {
+    mixPanel(MIXPANEL_TRACK.CONFIRM_CAR);
+
     if (appId) handleUpdateAppointment(grabInputData());
     else handleCreateAppointment();
   };
@@ -279,19 +325,21 @@ const Quote = (): ReactElement => {
    */
   const renderStepComponent = () => {
     return (
+      (step === QuoteStep.QUOTE_SERVICE_DESK && (
+        <ServiceDesk onContinue={() => handleContinueOnService()} />
+      )) ||
       (step === QuoteStep.QUOTE_SEARCH_CAR && (
         <SearchCar onConfirm={handleConfirmCar} />
-      )) ||
-      (step === QuoteStep.QUOTE_SERVICE_DESK && (
-        <ServiceDesk
-          onContinue={() => handleStepChange(QuoteStep.QUOTE_SEARCH_CAR, true)}
-        />
       )) ||
       (step === QuoteStep.QUOTE_CONTACT && <FormContact />) ||
       (step === QuoteStep.QUOTE_CONGRATS && <SimpleCongrats />) || (
         <Typography>Finish my booking here</Typography>
       )
     );
+  };
+
+  const renderElfSight = () => {
+    return <ElfsightWidget widgetID="7c3d64f1-8c57-4795-a97e-3d46b32096b4" />;
   };
 
   return (
@@ -323,6 +371,9 @@ const Quote = (): ReactElement => {
         handleConfirmAppointment,
 
         clearAll,
+
+        loggingIn,
+        handleSetLoggingIn,
       }}
     >
       <Container className={classes.root}>
@@ -354,6 +405,8 @@ const Quote = (): ReactElement => {
           show={showModal === QuoteShowModal.SERVICE_INTRO}
           onClose={() => handleShowModal(QuoteShowModal.NONE)}
         />
+        <Splash show={loggingIn} text="Logging you in" />
+        {renderElfSight()}
       </Container>
     </QuoteContext.Provider>
   );

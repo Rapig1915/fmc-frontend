@@ -17,9 +17,9 @@ import { URL } from 'src/utils/consts';
 import useDeviseQuery from 'src/hooks/useDeviseQuery';
 import { TabSelector } from 'src/components/molecules';
 import { IReduxState } from 'src/store/reducers';
-import { getUser, getUserAppointments } from 'src/api/auth';
-import { ResponseGetUser, ResponseGetUserAppointments } from 'src/types';
-import { setUser, setUserAppintments } from 'src/store/actions';
+import { getUser } from 'src/api/auth';
+import { ResponseGetUser } from 'src/types';
+import { logout, setUser } from 'src/store/actions';
 
 import ImageMechanic from 'src/assets/candidates/steven.png';
 import SvgGift from 'src/assets/badges/gift.svg';
@@ -187,14 +187,8 @@ const Dashboard = (): ReactElement => {
       const userResp: ResponseGetUser = await getUser(authToken);
       if (userResp && userResp.data) {
         dispatch(setUser(userResp.data));
-      }
-
-      const appointmentsResp: ResponseGetUserAppointments = await getUserAppointments(
-        authToken,
-        'past'
-      );
-      if (appointmentsResp && appointmentsResp.data) {
-        dispatch(setUserAppintments(appointmentsResp.data));
+      } else {
+        dispatch(logout());
       }
     });
     return () => {

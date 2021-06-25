@@ -36,6 +36,8 @@ import { QuoteShowModal, ResponseAvailability } from 'src/types';
 import { carLocations } from 'src/utils/data';
 import { IReduxState } from 'src/store/reducers';
 import { checkAvailability } from 'src/api/quote';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK } from 'src/utils/consts';
 
 interface ModalScheduleServiceProps {
   show: boolean;
@@ -248,6 +250,8 @@ const ModalScheduleService = (
 
   const handleSchedule = () => {
     if (isReadyToSchedule) {
+      mixPanel(MIXPANEL_TRACK.SCHEDULE_APPOINTMENT);
+
       handleUpdateAppointment({
         appointment_day: keyDate,
         appointment_time: timeSlotsToday[selectedTimeSlotIndex],

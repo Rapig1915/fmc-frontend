@@ -1,10 +1,9 @@
-import { IAppointment, IUser } from 'src/types';
+import { IUser } from 'src/types';
 import {
   IReduxAction,
   AUTH_SET_CODE,
   AUTH_SET_TOKEN,
   AUTH_SET_USER,
-  AUTH_SET_USER_APPOINTMENTS,
   AUTH_LOGOUT,
 } from '../types';
 
@@ -25,13 +24,6 @@ export const setAuthToken = (
 export const setUser = (user: IUser): IReduxAction => ({
   type: AUTH_SET_USER,
   payload: user,
-});
-
-export const setUserAppintments = (
-  appointments: IAppointment[]
-): IReduxAction => ({
-  type: AUTH_SET_USER_APPOINTMENTS,
-  payload: appointments,
 });
 
 export const logout = (): IReduxAction => ({

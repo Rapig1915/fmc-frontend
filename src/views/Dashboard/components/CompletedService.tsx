@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import { IReduxState } from 'src/store/reducers';
+import { IAppointment, ResponseGetUserAppointments } from 'src/types';
+import { getUserAppointments } from 'src/api/auth';
 import ItemQuote from './ItemQuote';
 
 interface CompletedServiceProps {
@@ -42,12 +44,25 @@ const CompletedService = (props: CompletedServiceProps): ReactElement => {
 
   const classes = useStyles();
 
-  const quotes = useSelector(
-    (state: IReduxState) => state.auth.appointments
-  ).filter((x) => x.attributes.status === 'complete');
+  const [appointments, setAppointments] = React.useState<IAppointment[]>([]);
+
+  const authToken = useSelector((state: IReduxState) => state.auth.token);
+
+  React.useEffect(() => {
+    const timerId = setTimeout(async () => {
+      const appointmentsResp: ResponseGetUserAppointments = await getUserAppointments(
+        authToken,
+        'completed'
+      );
+      setAppointments(appointmentsResp.data);
+    });
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [authToken]);
 
   const renderQuotes = () => {
-    return quotes.map((q) => <ItemQuote key={q.id} data={q} miniMode />);
+    return appointments.map((q) => <ItemQuote key={q.id} data={q} miniMode />);
   };
 
   return (
