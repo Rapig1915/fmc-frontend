@@ -28,7 +28,7 @@ import { MIXPANEL_TRACK } from 'src/utils/consts';
 import SvgSecurity from 'src/assets/badges/security.svg';
 import SvgAdvantageMoney from 'src/assets/advantage/money.svg';
 import SvgQuestion from 'src/assets/badges/question.svg';
-import ImageBrand from 'src/assets/brands';
+import { brandOf } from 'src/assets/brands';
 import SvgMechanic from 'src/assets/mechanic.svg';
 
 import CheckoutForm from './CheckoutForm';
@@ -260,11 +260,6 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
     handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
   };
 
-  const keyBrand =
-    appointment?.attributes.car.make.replace(' ', '-').toLocaleLowerCase() ||
-    'blank';
-  const imageBrand = ImageBrand[keyBrand] || ImageBrand.blank;
-
   return (
     <Dialog
       open={show}
@@ -301,7 +296,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
                     </b>
                   </>
                 }
-                imgUrl={imageBrand}
+                imgUrl={brandOf(appointment?.attributes.car.make)}
                 titleProps={{ className: classes.titleMazda }}
                 imgProps={{ className: classes.imgMazda }}
                 className={classes.containerMazda}

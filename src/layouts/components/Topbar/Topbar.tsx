@@ -15,12 +15,12 @@ import {
 import { ButtonForward, Image } from 'src/components/atoms';
 import { CustomTheme } from 'src/themes';
 
+import SvgLogo from 'src/assets/logo/FMC-logoFMC-Color-horizontal@2x.png';
 import ImageServieProvider from 'src/assets/service-provider.png';
 import SvgSecurity from 'src/assets/badges/security.svg';
 import SvgPhone from 'src/assets/badges/phone.svg';
 import SvgUser from 'src/assets/badges/user.svg';
 import SvgMenu from 'src/assets/menu/menu.svg';
-import SvgLogo from 'src/assets/logo.svg';
 import SvgCall from 'src/assets/menu/call.svg';
 import ButtonLogout from 'src/components/atoms/ButtonLogout';
 import { ImageNode } from 'src/components/molecules';
@@ -125,6 +125,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   logoImage: {
     width: '100%',
     height: '100%',
+    objectFit: 'contain',
   },
   imageCenterAlign: {
     flexGrow: 1,

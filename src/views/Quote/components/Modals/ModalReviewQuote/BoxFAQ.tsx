@@ -6,7 +6,7 @@ import { Add, ArrowForwardIos, ExpandMore, Remove } from '@material-ui/icons';
 import { ImageNode } from 'src/components/molecules';
 import { faq } from 'src/utils/data';
 
-import ImageFaq from 'src/assets/faq.png';
+import ImageFaq from 'src/assets/faq.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {

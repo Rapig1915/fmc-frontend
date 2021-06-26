@@ -32,6 +32,11 @@ export const createFMCTheme = (): CustomTheme => {
       },
       overrides: {
         MuiButton: {
+          containedPrimary: {
+            '&:hover': {
+              // backgroundColor: '#36D9A0'
+            },
+          },
           containedSecondary: {
             color: '#7157FF',
           },

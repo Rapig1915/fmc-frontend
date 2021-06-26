@@ -13,6 +13,7 @@ import {
   RequestUpdateAppointmentTime,
   RequestUpdateAppointmentContact,
   ResponseAppointment,
+  ResponseSignin,
 } from 'src/types';
 import {
   confirmAppointment,
@@ -21,10 +22,11 @@ import {
   updateAppointment,
 } from 'src/api/quote';
 import { IReduxState } from 'src/store/reducers';
-import { setAppointment, setZip } from 'src/store/actions';
+import { setAppointment, setAuthToken, setZip } from 'src/store/actions';
 import { Splash } from 'src/layouts/components';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK, URL } from 'src/utils/consts';
+import { signIn } from 'src/api/auth';
 
 import { FormContact, SearchCar, ServiceDesk } from './components';
 import SimpleCongrats from './components/SimpleCongrats';
@@ -87,6 +89,8 @@ const Quote = (): ReactElement => {
       state.quote.appointment && state.quote.appointment.id
   );
 
+  const [display, setDisplay] = React.useState(0);
+
   /**
    * Quote Context
    */
@@ -106,8 +110,11 @@ const Quote = (): ReactElement => {
 
   const [staticServices, setStaticServices] = useState<string[]>([]);
   const handleSetStaticServices = useCallback(
-    (newServices: string[]) => setStaticServices(newServices),
-    []
+    (newServices: string[]) => {
+      setDisplay(display + 1);
+      setStaticServices(newServices);
+    },
+    [display]
   );
 
   const [services, setServices] = useState<string[]>([]);
@@ -158,6 +165,11 @@ const Quote = (): ReactElement => {
     (newContact: IQuoteContact) => setContact(newContact),
     []
   );
+
+  const [loggingIn, setLoggingIn] = useState(false);
+  const handleSetLoggingIn = (state: boolean): void => {
+    setLoggingIn(state);
+  };
 
   const clearAll = useCallback(() => {
     handleSetStep(QuoteStep.QUOTE_SERVICE_DESK);
@@ -287,6 +299,40 @@ const Quote = (): ReactElement => {
       else if (showModal === QuoteShowModal.REVIEW_QUOTE)
         handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
       else handleShowModal(QuoteShowModal.REVIEW_QUOTE);
+    } else if (step === QuoteStep.QUOTE_CONTACT) {
+      handleSetLoggingIn(true);
+
+      const timerId = setTimeout(async () => {
+        const response: ResponseSignin = await signIn(
+          {
+            id: `${resp.data && resp.data.id}`,
+          },
+          true
+        );
+
+        handleSetLoggingIn(false);
+
+        if (
+          response &&
+          response.auth_token &&
+          response.user &&
+          response.user.id
+        ) {
+          dispatch(
+            setAuthToken(
+              response.auth_token,
+              response.user.id,
+              response.user.email
+            )
+          );
+
+          handleSetStep(QuoteStep.QUOTE_CONGRATS);
+        } else {
+          handleStepChange(QuoteStep.QUOTE_CONTACT, true);
+        }
+
+        if (timerId) clearTimeout(timerId);
+      }, 3000);
     } else {
       handleStepChange(QuoteStep.QUOTE_CONTACT, true);
     }
@@ -306,11 +352,6 @@ const Quote = (): ReactElement => {
 
     dispatch(setAppointment(resp.data));
     // handleShowModal(QuoteShowModal.CONGRATS);
-  };
-
-  const [loggingIn, setLoggingIn] = useState(false);
-  const handleSetLoggingIn = (state: boolean): void => {
-    setLoggingIn(state);
   };
 
   const handleConfirmCar = () => {
@@ -380,6 +421,8 @@ const Quote = (): ReactElement => {
         <QuoteContainer currentStep={step} onStepChanged={handleStepChange}>
           {renderStepComponent()}
         </QuoteContainer>
+
+        <Typography className="hidden">{display}</Typography>
 
         <ModalReviewQuote
           show={showModal === QuoteShowModal.REVIEW_QUOTE}

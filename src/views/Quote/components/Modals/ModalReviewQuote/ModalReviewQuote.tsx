@@ -18,7 +18,7 @@ import {
   ArrowForwardIos,
   Check,
   Close,
-  Help,
+  Info,
 } from '@material-ui/icons';
 import { ImageNode } from 'src/components/molecules';
 import { IReduxState } from 'src/store/reducers';
@@ -37,10 +37,11 @@ import SvgSecurity from 'src/assets/badges/security.svg';
 import SvgAdvantageMoney from 'src/assets/advantage/money.svg';
 import SvgQuestion from 'src/assets/badges/question.svg';
 import SvgDiagnosis from 'src/assets/badges/diagnosis.svg';
-import ImageHappyCustomer from 'src/assets/happy-customer.png';
-import ImageBrand from 'src/assets/brands';
+import ImageHappyCustomer from 'src/assets/happy-customer.svg';
+import { brandOf } from 'src/assets/brands';
 
 import BoxFAQ from './BoxFAQ';
+import TitleTip from './TitleTip';
 
 interface ModalReviewQuoteProps {
   show: boolean;
@@ -67,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   titleText: {
+    position: 'relative',
     color: '#2A2D3C',
     fontSize: 23,
     lineHeight: '24px',
@@ -347,10 +349,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     a.click();
   };
 
-  const keyBrand =
-    appointment?.attributes.car.make.replace(' ', '-').toLocaleLowerCase() ||
-    'blank';
-  const imageBrand = ImageBrand[keyBrand] || ImageBrand.blank;
+  const [showTip, setShowTip] = React.useState(false);
 
   return (
     <Dialog
@@ -367,7 +366,15 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
           <Typography className={classes.titleText}>Work performed:</Typography>
         ) : (
           <Typography className={classes.titleText}>
-            Quote <Help className="title-icon" />
+            Quote{' '}
+            <Hidden xsDown>
+              <Info
+                className="title-icon"
+                onMouseOver={() => setShowTip(true)}
+                onMouseOut={() => setShowTip(false)}
+              />
+            </Hidden>
+            {showTip && <TitleTip />}
           </Typography>
         )}
         <IconButton
@@ -392,7 +399,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                     </b>
                   </>
                 }
-                imgUrl={imageBrand}
+                imgUrl={brandOf(appointment?.attributes.car.make)}
                 titleProps={{ className: classes.titleMazda }}
                 imgProps={{ className: classes.imgMazda }}
                 className={classes.containerMazda}

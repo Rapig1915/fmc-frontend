@@ -68,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ModalSelectStaticServiceProps {
-  selectedServices: string[];
   show: boolean;
   onClose: () => void;
 }
@@ -76,19 +75,19 @@ interface ModalSelectStaticServiceProps {
 const ModalSelectStaticService = (
   props: ModalSelectStaticServiceProps
 ): ReactElement => {
-  const { show, onClose, selectedServices } = props;
+  const { show, onClose } = props;
 
   const classes = useStyles();
 
-  const { handleSetStaticServices } = useContext(QuoteContext);
+  const { staticServices, handleSetStaticServices } = useContext(QuoteContext);
 
   const [filter, setFilter] = React.useState('');
   const [display, setDisplay] = React.useState(0);
 
   const handleClickService = _.debounce((value: string) => {
-    const newServices = selectedServices;
-    if (selectedServices.includes(value))
-      newServices.splice(selectedServices.indexOf(value));
+    const newServices = staticServices;
+    if (staticServices.includes(value))
+      newServices.splice(staticServices.indexOf(value));
     else newServices.push(value);
     handleSetStaticServices(newServices);
     setDisplay(display + 1);
@@ -129,7 +128,7 @@ const ModalSelectStaticService = (
                 value={r}
                 control={<Radio />}
                 label={r}
-                checked={selectedServices.includes(r)}
+                checked={staticServices.includes(r)}
                 onClick={() => handleClickService(r)}
               />
             ))}

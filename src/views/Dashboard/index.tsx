@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
 
     '&:hover': {
-      background: 'rgba(0, 0, 0, 0.5)',
+      background: '#7157FF',
     },
 
     '& .MuiButton-label': {
@@ -96,10 +96,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   imageMechanic: {
-    width: 40,
-    height: 40,
-    borderRadius: 40,
+    width: 42,
+    height: 42,
+    borderRadius: 42,
     marginRight: theme.spacing(1),
+    border: '2px solid #FFFFFF',
   },
   iconAdd: {
     color: '#302A3C',
@@ -136,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
       height: 154,
       borderRadius: 154,
       color: theme.palette.common.white,
-      background: '#57FFC4',
+      background: 'linear-gradient(183.79deg, #57FFC4 -7.87%, #36D9A0 105.88%)',
       padding: theme.spacing(5),
       boxShadow: '0px 0px 0px 10px #d4f9f1',
       cursor: 'pointer',

@@ -9,7 +9,7 @@ import apiActionCreator from './middleware/apiActionCreator';
 const persistConfig = {
   key: 'fmc',
   storage,
-  blacklist: [],
+  blacklist: ['quote'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

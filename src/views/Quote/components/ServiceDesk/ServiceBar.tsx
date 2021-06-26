@@ -136,7 +136,6 @@ const ServiceBar = (props: ServiceBarProps): ReactElement => {
         <ArrowForwardIos className={classes.iconArrow} />
       </Box>
       <ModalSelectStaticService
-        selectedServices={staticServices}
         show={openModalSelectStaticService}
         onClose={() => setOpenModalSelectStaticService(false)}
       />

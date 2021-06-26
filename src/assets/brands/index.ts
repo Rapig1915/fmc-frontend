@@ -85,3 +85,9 @@ const brands: Images = {
 };
 
 export default brands;
+
+export const brandOf = (make: string | undefined): string => {
+  const keyBrand =
+    (make || '').replace(' ', '-').toLocaleLowerCase() || 'blank';
+  return brands[keyBrand] || brands.blank;
+};

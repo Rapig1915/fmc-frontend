@@ -4,9 +4,15 @@ export const ENVIRONMENT = {
   PRODUCTION: 'production',
 };
 
+export const processURL = (
+  basePath: string,
+  params: { [key: string]: string }
+): string => {
+  return `${basePath}?${new URLSearchParams(params).toString()}`;
+};
+
 export const URL = {
   LOGIN: '/login',
-
   HOME: '/',
   QUOTE: '/quote',
   DASHBOARD: '/dashboard',

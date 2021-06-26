@@ -8,13 +8,13 @@ import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import { ButtonForward, Image } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
 
-import ImageBrand from 'src/assets/brands';
-import ImageBadge from 'src/assets/badges';
-import SvgSecurity from 'src/assets/badges/security.svg';
-import SvgQuestion from 'src/assets/badges/question-secondary.svg';
+import { brandOf } from 'src/assets/brands';
+import SvgDiagnosis from 'src/assets/services/diagnosis.svg';
+import SvgSecurity from 'src/assets/badges/security-black.svg';
+import SvgQuestion from 'src/assets/badges/question-black.svg';
 import { IAppointment, QuoteShowModal } from 'src/types';
 import { setAppointment } from 'src/store/actions';
-import { URL } from 'src/utils/consts';
+import { processURL, URL } from 'src/utils/consts';
 
 interface ItemQuoteProps {
   className?: string;
@@ -70,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    padding: theme.spacing(1),
   },
   infoService: {
     display: 'flex',
@@ -81,6 +82,7 @@ const useStyles = makeStyles((theme) => ({
   imageService: {
     width: 40,
     padding: theme.spacing(1),
+    marginRight: theme.spacing(1),
     height: 'auto',
     objectFit: 'cover',
   },
@@ -97,15 +99,15 @@ const useStyles = makeStyles((theme) => ({
   textServiceName: {
     fontWeight: 700,
     fontStyle: 'normal',
-    fontSize: 23,
-    lineHeight: '24px',
+    fontSize: 18,
+    lineHeight: '28px',
     color: '#2A2D3C',
   },
   textPrice: {
     fontWeight: 800,
     fontStyle: 'normal',
-    fontSize: 18,
-    lineHeight: '28px',
+    fontSize: 23,
+    lineHeight: '24px',
     color: theme.palette.common.black,
   },
 
@@ -179,13 +181,13 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     fontSize: 16,
-    lineHeight: '28px',
+    lineHeight: '20px',
     color: '#7E7A92',
     fontWeight: 400,
     textAlign: 'left',
     '& .MuiSvgIcon-root': {
       color: '#36D9A0',
-      margin: theme.spacing(1),
+      margin: theme.spacing(0.5),
     },
   },
 
@@ -226,37 +228,31 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
 
   const handleViewDetail = () => {
     dispatch(setAppointment(data));
-    history.push(URL.QUOTE, {
+    history.push(processURL(URL.QUOTE, { zip: data.attributes.address }), {
       modal: QuoteShowModal.REVIEW_QUOTE,
     });
   };
 
   const handleBookNow = () => {
     dispatch(setAppointment(data));
-    history.push(URL.QUOTE, {
+    history.push(processURL(URL.QUOTE, { zip: data.attributes.address }), {
       modal: QuoteShowModal.FINISH_BOOKING,
     });
   };
 
   const renderCarLogo = () => {
-    const keyBrand =
-      data?.attributes.car.make.replace(' ', '-').toLocaleLowerCase() ||
-      'blank';
-    const imageBrand = ImageBrand[keyBrand] || ImageBrand.blank;
     return (
-      <Image lazy={false} className={classes.imageBrand} src={imageBrand} />
+      <Image
+        lazy={false}
+        className={classes.imageBrand}
+        src={brandOf(data?.attributes.car.make)}
+      />
     );
   };
 
   const renderImageService = () => {
-    // appointment?.attributes.car.make.replace(' ', '-').toLocaleLowerCase() ||
-    // 'blank';
     return (
-      <Image
-        lazy={false}
-        className={classes.imageService}
-        src={ImageBadge.diagnosis}
-      />
+      <Image lazy={false} className={classes.imageService} src={SvgDiagnosis} />
     );
   };
 

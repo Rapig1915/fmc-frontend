@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: (props: { waiting: boolean }) =>
-      props.waiting ? 'center' : undefined,
+      props.waiting ? 'center' : 'flex-start',
     alignItems: 'center',
     minHeight: 300,
     maxHeight: 400,
