@@ -449,7 +449,6 @@ const Quote = (): ReactElement => {
           onClose={() => handleShowModal(QuoteShowModal.NONE)}
         />
         <Splash show={loggingIn} text="Logging you in" />
-        {renderElfSight()}
       </Container>
     </QuoteContext.Provider>
   );
