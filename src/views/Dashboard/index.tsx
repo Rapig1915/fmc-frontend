@@ -12,7 +12,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Add, ArrowForward } from '@material-ui/icons';
-import { ButtonForward, Image } from 'src/components/atoms';
+import {
+  // ButtonForward,
+  Image,
+} from 'src/components/atoms';
 import { URL } from 'src/utils/consts';
 import useDeviseQuery from 'src/hooks/useDeviseQuery';
 import { TabSelector } from 'src/components/molecules';
@@ -23,7 +26,7 @@ import { logout, setUser } from 'src/store/actions';
 
 import ImageMechanic from 'src/assets/candidates/steven.png';
 import SvgGift from 'src/assets/badges/gift.svg';
-import logger from 'src/utils/logger';
+// import logger from 'src/utils/logger';
 
 import { ServiceIntro } from '../Quote/components';
 import HighFive from './components/HighFive';
@@ -214,9 +217,9 @@ const Dashboard = (): ReactElement => {
     setShowIntro(true);
   };
 
-  const handleScheduleService = () => {
-    logger.log('schedule service');
-  };
+  // const handleScheduleService = () => {
+  //   logger.log('schedule service');
+  // };
 
   const handleNewServiceRequest = () => {
     history.push(URL.QUOTE);
@@ -292,7 +295,7 @@ const Dashboard = (): ReactElement => {
           <Box onClick={handleShowIntro}>
             <Image src={SvgGift} lazy={false} className="button-mobile-info" />
           </Box>
-          {tab === 'pending' && (
+          {/* {tab === 'pending' && (
             <ButtonForward
               title="Schedule Service"
               rounded
@@ -300,7 +303,7 @@ const Dashboard = (): ReactElement => {
               onClickHandler={handleScheduleService}
               className={classes.buttonSchedleService}
             />
-          )}
+          )} */}
         </Box>
       </Hidden>
       <ModalServiceIntro show={showIntro} onClose={() => setShowIntro(false)} />

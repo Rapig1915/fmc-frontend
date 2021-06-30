@@ -75,7 +75,9 @@ const useStyles = makeStyles((theme) => ({
   infoService: {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingBottom: theme.spacing(1),
     borderBottom: '1px solid #EFF1F7',
   },
@@ -109,6 +111,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 23,
     lineHeight: '24px',
     color: theme.palette.common.black,
+    marginRight: theme.spacing(1),
   },
 
   boxMechanic: {
@@ -161,11 +164,6 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
         display: 'flex',
         flexDirection: 'column',
-        [theme.breakpoints.down('xs')]: {
-          '& .button-book': {
-            display: 'none',
-          },
-        },
       },
     },
     '& .warranty': {
@@ -188,6 +186,43 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiSvgIcon-root': {
       color: '#36D9A0',
       margin: theme.spacing(0.5),
+    },
+  },
+
+  containerWaiting: {
+    width: '100%',
+    marginTop: theme.spacing(1),
+    background: theme.palette.common.white,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  titleWaiting: {
+    color: '#667296',
+    fontSize: 25,
+    lineHeight: '30px',
+    fontWeight: 800,
+  },
+  checkWaiting: {
+    color: '#667296',
+    fontSize: 20,
+    lineHeight: '24px',
+    fontWeight: 400,
+  },
+  hoursWaiting: {
+    color: '#36d9a0',
+    fontSize: 45,
+    lineHeight: '59.24px',
+    fontWeight: 265,
+    '& b': {
+      color: '#4A37B1',
+      fontSize: 50,
+      lineHeight: '75.93px',
+      fontWeight: 700,
     },
   },
 
@@ -224,20 +259,44 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const min = React.useMemo(
+    () => (Math.random() * 40 + 10 + (!data ? 1 : 0)).toFixed(0),
+    [data]
+  );
+
   if (!data || !data?.attributes.car.make) return <></>;
+
+  const { attributes } = data;
+
+  const {
+    appointment_type: appointmentType,
+    address,
+    car,
+    mechanic,
+    estimate,
+    services,
+  } = attributes;
+
+  const isServiceQuote = appointmentType === 'repair';
 
   const handleViewDetail = () => {
     dispatch(setAppointment(data));
-    history.push(processURL(URL.QUOTE, { zip: data.attributes.address }), {
-      modal: QuoteShowModal.REVIEW_QUOTE,
-    });
+    history.push(
+      processURL(URL.QUOTE, { zip: address, referer: URL.DASHBOARD }),
+      {
+        modal: QuoteShowModal.REVIEW_QUOTE,
+      }
+    );
   };
 
-  const handleBookNow = () => {
+  const handleSchedule = () => {
     dispatch(setAppointment(data));
-    history.push(processURL(URL.QUOTE, { zip: data.attributes.address }), {
-      modal: QuoteShowModal.FINISH_BOOKING,
-    });
+    history.push(
+      processURL(URL.QUOTE, { zip: address, referer: URL.DASHBOARD }),
+      {
+        modal: QuoteShowModal.REVIEW_QUOTE,
+      }
+    );
   };
 
   const renderCarLogo = () => {
@@ -245,7 +304,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
       <Image
         lazy={false}
         className={classes.imageBrand}
-        src={brandOf(data?.attributes.car.make)}
+        src={brandOf(car.make)}
       />
     );
   };
@@ -262,12 +321,12 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
         <Image
           lazy={false}
           className={classes.imageMechanic}
-          src={data?.attributes.mechanic && data?.attributes.mechanic.photo}
+          src={mechanic && mechanic.photo}
         />
         <span className={classes.titleMechanic}>
           <b>Your mechanic:</b>
           <br />
-          {data?.attributes.mechanic && data?.attributes.mechanic.name}
+          {mechanic && mechanic.name}
         </span>
         <Box className={classes.flexGrow} />
         <Button
@@ -282,6 +341,60 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
   };
 
   const renderQuoteDetail = () => {
+    if (isServiceQuote) {
+      return (
+        <Box className={classes.boxQuoteDetail}>
+          {!estimate ? (
+            <Box className={classes.containerWaiting}>
+              <Typography key="title" className={classes.titleWaiting}>
+                We&apos;re working on your quote
+              </Typography>
+              <Typography key="notify" className={classes.checkWaiting}>
+                Check back in:
+              </Typography>
+              <Typography key="hours" className={classes.hoursWaiting}>
+                {/* <b>02</b> h &nbsp; */}
+                <b>{min}</b> m &nbsp;
+                {/* <b>45</b> s */}
+              </Typography>
+            </Box>
+          ) : (
+            <Box key="warranty" className="warranty">
+              <ImageNode
+                key="warranty"
+                title={
+                  <>
+                    <b>Service waranty:</b>
+                    <br />
+                    24 months / 24,000 mi
+                    <br /> waranty on each job.
+                  </>
+                }
+                imgUrl={SvgSecurity}
+                titleProps={{ className: classes.titleWarranty }}
+                imgProps={{ className: classes.imgWarranty }}
+                className={classes.containerWarranty}
+              />
+              <ImageNode
+                key="advisor"
+                title={
+                  <>
+                    <b>Talk to a service advisor:</b>
+                    <br />
+                    Call us (214) 620-0702
+                  </>
+                }
+                imgUrl={SvgQuestion}
+                titleProps={{ className: classes.titleWarranty }}
+                imgProps={{ className: classes.imgWarranty }}
+                className={classes.containerWarranty}
+              />
+            </Box>
+          )}
+        </Box>
+      );
+    }
+
     return (
       <Box className={classes.boxQuoteDetail}>
         <Box key="main" className="main">
@@ -297,14 +410,6 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
             </Typography>
           </Box>
           <Box key="buttons" className="buttons">
-            {data?.attributes.estimate && (
-              <ButtonForward
-                title="Book now"
-                className="button-book"
-                rounded
-                onClickHandler={handleBookNow}
-              />
-            )}
             <Button
               color="primary"
               className={classes.buttonViewDetail}
@@ -349,15 +454,26 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
     );
   };
 
+  const getTitle = () => {
+    if (!isServiceQuote) return 'Diagnose my car';
+
+    return services.join(', ');
+  };
+
+  const getPrice = () => {
+    if (isServiceQuote) return estimate ? estimate.total_price : 0;
+
+    return attributes.diagnosis_fee;
+  };
+
   return (
     <Box className={clsx('dashboard-quote-item', classes.root, className)}>
       <Box key="box-title" className={classes.boxTitle}>
         <Typography key="car-name" className={classes.titleCar}>
-          {data?.attributes.car.year} {data?.attributes.car.make}{' '}
-          {data?.attributes.car.model}
+          {car.year} {car.make} {car.model}
         </Typography>
         <Typography key="quote-date" className={classes.titleQuoteDate}>
-          {data?.attributes.appointment_day}
+          {attributes.appointment_day}
         </Typography>
       </Box>
       <Box className={classes.contentBox}>
@@ -367,12 +483,22 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
             {miniMode && renderCarLogo()}
             {renderImageService()}
             <Typography key="service-name" className={classes.textServiceName}>
-              {data?.attributes.services[0] || ''}
+              {getTitle()}
             </Typography>
             <Box className={classes.flexGrow} />
-            <Typography key="price" className={classes.textPrice}>
-              $ {data?.attributes.diagnosis_fee}
-            </Typography>
+            {!!getPrice() && (
+              <Typography key="price" className={classes.textPrice}>
+                $ {getPrice()}
+              </Typography>
+            )}
+
+            {isServiceQuote && estimate && (
+              <ButtonForward
+                title="Schedule Service"
+                rounded
+                onClickHandler={handleSchedule}
+              />
+            )}
           </Box>
           {miniMode ? renderMechanic() : renderQuoteDetail()}
         </Box>

@@ -56,6 +56,8 @@ const MechanicInfo = (props: { className: string }): ReactElement => {
     (state: IReduxState) => state.quote.appointment?.attributes.mechanic
   );
 
+  if (!mechanic || !mechanic.name) return <></>;
+
   return (
     <Box className={className}>
       <Box

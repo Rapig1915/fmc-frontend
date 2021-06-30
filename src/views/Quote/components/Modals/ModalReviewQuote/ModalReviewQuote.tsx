@@ -42,6 +42,7 @@ import { brandOf } from 'src/assets/brands';
 
 import BoxFAQ from './BoxFAQ';
 import TitleTip from './TitleTip';
+import EstimateSummary from './EstimateSummary';
 
 interface ModalReviewQuoteProps {
   show: boolean;
@@ -316,20 +317,30 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     (state: IReduxState) => state.quote.appointment
   );
 
-  const appointmentStatus = useSelector(
-    (state: IReduxState) => state.quote.appointment?.attributes.status
-  );
+  const [showTip, setShowTip] = React.useState(false);
+
+  const { handleShowModal, urlReferer } = useContext(QuoteContext);
+
+  if (!appointment || !appointment?.attributes || !appointment?.id) {
+    return <></>;
+  }
+
+  const { attributes } = appointment;
+
+  const {
+    appointment_type: appointmentType,
+    status: appointmentStatus,
+    documents,
+    car,
+    estimate,
+    services,
+  } = attributes;
+
+  const isServiceQuote = appointmentType === 'repair';
 
   const appointmentCompleted =
     appointmentStatus === 'completed' ||
     appointmentStatus === 'diagnosis_complete';
-
-  const { handleShowModal } = useContext(QuoteContext);
-
-  if ((!appointment || !appointment.id) && show) {
-    // error no active appointment
-    handleShowModal(QuoteShowModal.NONE);
-  }
 
   const handleSchedule = () => {
     mixPanel(MIXPANEL_TRACK.DIAGNOSIS_ESTIMATE);
@@ -349,7 +360,20 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     a.click();
   };
 
-  const [showTip, setShowTip] = React.useState(false);
+  const getTitle = () => {
+    if (!isServiceQuote) return 'Diagnose my car';
+
+    return services.join(', ');
+  };
+
+  const getPrice = () => {
+    if (isServiceQuote) return estimate ? estimate.total_price : 0;
+
+    return attributes.diagnosis_fee;
+  };
+
+  const canSchedule =
+    !appointmentCompleted && (!urlReferer || (isServiceQuote && estimate));
 
   return (
     <Dialog
@@ -360,7 +384,9 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     >
       <DialogTitle className={classes.title}>
         <Box className={classes.buttonGroupBack}>
-          <ArrowBackIos className="title-icon" onClick={handleStepBack} />
+          {!urlReferer && (
+            <ArrowBackIos className="title-icon" onClick={handleStepBack} />
+          )}
         </Box>
         {appointmentCompleted ? (
           <Typography className={classes.titleText}>Work performed:</Typography>
@@ -394,12 +420,11 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                 title={
                   <>
                     <b>
-                      {appointment?.attributes.car.make}{' '}
-                      {appointment?.attributes.car.year}
+                      {car.make} {car.year}
                     </b>
                   </>
                 }
-                imgUrl={brandOf(appointment?.attributes.car.make)}
+                imgUrl={brandOf(car.make)}
                 titleProps={{ className: classes.titleMazda }}
                 imgProps={{ className: classes.imgMazda }}
                 className={classes.containerMazda}
@@ -465,28 +490,30 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
               <AccordionSummary>
                 <Image src={SvgDiagnosis} className={classes.imageAccordion} />
                 <Typography className={classes.titleAccordion}>
-                  Inspection:
+                  {getTitle()}
                 </Typography>
                 <Box className={classes.flexGrow} />
                 <Typography className={classes.titleAccordion}>
-                  ${appointment?.attributes.diagnosis_fee}
+                  ${getPrice()}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.accordionDetail}>
-                <Box className={classes.inspectContainer}>
-                  <Typography className={classes.inspectTitle} key="title-1">
-                    Includes:
-                  </Typography>
-                  <Typography className={classes.inspectContent} key="sub-1">
-                    <Check /> Complete inspection of the issue
-                  </Typography>
-                  <Typography className={classes.inspectContent} key="sub-2">
-                    <Check /> Complimentary multi-point inspection
-                  </Typography>
-                  <Typography className={classes.inspectContent} key="sub-3">
-                    <Check /> $35 goes forwards the repair price
-                  </Typography>
-                </Box>
+                {!isServiceQuote && (
+                  <Box className={classes.inspectContainer}>
+                    <Typography className={classes.inspectTitle} key="title-1">
+                      Includes:
+                    </Typography>
+                    <Typography className={classes.inspectContent} key="sub-1">
+                      <Check /> Complete inspection of the issue
+                    </Typography>
+                    <Typography className={classes.inspectContent} key="sub-2">
+                      <Check /> Complimentary multi-point inspection
+                    </Typography>
+                    <Typography className={classes.inspectContent} key="sub-3">
+                      <Check /> $35 goes forwards the repair price
+                    </Typography>
+                  </Box>
+                )}
                 {!appointmentCompleted && (
                   <ImageNode
                     key="happy-customers"
@@ -506,9 +533,10 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                 {!appointmentCompleted && <BoxFAQ />}
               </AccordionDetails>
             </Accordion>
+            <EstimateSummary />
             {appointmentCompleted &&
-              appointment?.attributes.documents &&
-              appointment?.attributes.documents.map(
+              documents &&
+              documents.map(
                 (d) =>
                   d.url && (
                     <Accordion
@@ -538,7 +566,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                   )
               )}
             <DialogActions className={classes.actionContainer}>
-              {!appointmentCompleted && (
+              {canSchedule && (
                 <ButtonForward
                   key="schedule-service"
                   title="Schedule service"

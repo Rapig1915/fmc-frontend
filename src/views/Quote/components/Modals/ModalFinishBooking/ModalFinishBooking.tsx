@@ -33,7 +33,6 @@ import SvgMechanic from 'src/assets/mechanic.svg';
 
 import CheckoutForm from './CheckoutForm';
 import MechanicInfo from './MechanicInfo';
-import EstimateSummary from './EstimateSummary';
 
 interface ModalFinishBookingProps {
   show: boolean;
@@ -213,11 +212,6 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
   const { handleShowModal, handleConfirmAppointment } = useContext(
     QuoteContext
   );
-  const handleFinishBooking = () => {
-    handleShowModal(QuoteShowModal.CONGRATS);
-  };
-
-  if (appointmentStatus === 'booked') handleFinishBooking();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -368,7 +362,6 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
               key="mechanic"
               className={clsx(classes.boxInformation)}
             />
-            <EstimateSummary />
             <Box key="payment-title" flexDirection="row" display="flex">
               <CreditCard color="primary" />
               <Typography className={classes.titleDatetime} noWrap>

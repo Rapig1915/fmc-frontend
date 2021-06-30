@@ -14,6 +14,7 @@ export interface ResponseCheckPlateNumber {
 }
 
 export interface RequestCreateAppointment {
+  appointment_type?: string;
   car_attributes: {
     year: string;
     make: string;

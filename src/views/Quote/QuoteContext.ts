@@ -68,6 +68,8 @@ export interface IQuoteContext {
 
   loggingIn: boolean;
   handleSetLoggingIn: (state: boolean) => void;
+
+  urlReferer: string;
 }
 
 export const QuoteContext = React.createContext<IQuoteContext>({
@@ -123,4 +125,6 @@ export const QuoteContext = React.createContext<IQuoteContext>({
 
   loggingIn: false,
   handleSetLoggingIn: () => {},
+
+  urlReferer: '',
 });

@@ -106,34 +106,43 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     else handleSetStep(QuoteStep.QUOTE_SERVICE_DESK);
   };
 
+  const [searching, setSearching] = React.useState(false);
+
   const handleSearch = async () => {
     if (carSelectType === CarSelectType.BY_PLATE_NUMBER) {
       if (!car.search.plate_number || !car.search.state) return;
 
-      const resp = await checkPlateNumber(
-        car.search.plate_number,
-        car.search.state
-      );
+      setSearching(true);
 
-      if (!resp || !resp.specifications) {
-        return;
+      try {
+        const resp = await checkPlateNumber(
+          car.search.plate_number,
+          car.search.state
+        );
+
+        if (!resp || !resp.specifications) {
+          return;
+        }
+
+        const carMeta: ICarMeta = resp.specifications;
+
+        if (!carMeta) return;
+
+        handleSetCar({
+          ...car,
+          attributes: {
+            year: carMeta.year,
+            make: carMeta.make,
+            model: carMeta.model,
+            engine_size: carMeta.engine,
+            mileage: '',
+          },
+        });
+
+        setIsReadyToConfirm(true);
+      } finally {
+        setSearching(false);
       }
-
-      const carMeta: ICarMeta = resp.specifications;
-
-      if (!carMeta) return;
-      handleSetCar({
-        ...car,
-        attributes: {
-          year: carMeta.year,
-          make: carMeta.make,
-          model: carMeta.model,
-          engine_size: carMeta.engine,
-          mileage: '',
-        },
-      });
-
-      setIsReadyToConfirm(true);
     } else {
       if (
         !car.attributes.year ||
@@ -213,6 +222,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
               size="large"
               disabled={!isReadyToSearch}
               onClickHandler={handleSearch}
+              processing={searching}
             />
           ) : (
             <ButtonForward

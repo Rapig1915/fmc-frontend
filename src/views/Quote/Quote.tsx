@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { Container, makeStyles, Typography } from '@material-ui/core';
-import { ElfsightWidget } from 'react-elfsight-widget';
+// import { ElfsightWidget } from 'react-elfsight-widget';
 
 import {
   QuoteShowModal,
@@ -47,7 +47,11 @@ import {
 } from './QuoteContext';
 
 const useStyles = makeStyles(() => ({
-  root: {},
+  root: {
+    '& .hidden': {
+      display: 'none',
+    },
+  },
 }));
 
 const Quote = (): ReactElement => {
@@ -56,29 +60,54 @@ const Quote = (): ReactElement => {
   const history = useHistory();
 
   const zip = useSelector((state: IReduxState) => state.quote.zip);
+  const user = useSelector((state: IReduxState) => state.auth.user);
   const location = useLocation();
 
   const params = queryString.parse(location.search);
   const zipQuery = Array.isArray(params.zip) ? params.zip[0] || '' : params.zip;
+  const urlReferer = Array.isArray(params.referer)
+    ? params.referer[0] || ''
+    : params.referer || '';
+
+  const [openSplash, setOpenSplash] = React.useState(false);
 
   useEffect(() => {
     const timerId = setTimeout(async () => {
-      if (zipQuery && zipQuery !== zip) {
-        if (zipQuery.length === 5) {
-          const happyCustomer = await getHappyCustomer(zipQuery);
-          const newHappyCustomer =
-            (happyCustomer && happyCustomer['times-used']) || 0;
+      let success = false;
 
-          dispatch(setZip(zipQuery, newHappyCustomer));
-          mixPanel(MIXPANEL_TRACK.ZIP);
+      if (zipQuery && zipQuery !== zip) {
+        if (!urlReferer) setOpenSplash(true);
+
+        if (zipQuery.length === 5) {
+          try {
+            const happyCustomer = await getHappyCustomer(zipQuery);
+            const newHappyCustomer =
+              (happyCustomer && happyCustomer['times-used']) || 0;
+
+            dispatch(setZip(zipQuery, newHappyCustomer));
+
+            if (zipQuery && newHappyCustomer) {
+              success = true;
+              mixPanel(MIXPANEL_TRACK.ZIP);
+            }
+          } catch (err) {
+            success = false;
+          }
         }
       }
+
+      success = success || !!zip;
+
+      if (!success) history.push(URL.HOME);
     }, 0);
+
+    const timerSplashId = setTimeout(() => setOpenSplash(false), 3000);
 
     return () => {
       if (timerId) clearTimeout(timerId);
+      if (timerSplashId) clearTimeout(timerSplashId);
     };
-  }, [zipQuery, dispatch, zip]);
+  }, [zipQuery, urlReferer, dispatch, history, zip]);
 
   if (!zip && !zipQuery) {
     history.push(URL.HOME);
@@ -107,6 +136,11 @@ const Quote = (): ReactElement => {
     (newShowModal: QuoteShowModal) => setShowModal(newShowModal),
     []
   );
+
+  React.useEffect(() => {
+    if (urlReferer && showModal === QuoteShowModal.NONE)
+      history.push(urlReferer);
+  }, [showModal, urlReferer, history]);
 
   const [staticServices, setStaticServices] = useState<string[]>([]);
   const handleSetStaticServices = useCallback(
@@ -155,10 +189,10 @@ const Quote = (): ReactElement => {
   const handleSetCar = useCallback((newCar: IQuoteCar) => setCar(newCar), []);
 
   const [contact, setContact] = useState<IQuoteContact>({
-    name: '',
-    email: '',
+    name: (user && user.attributes.name) || '',
+    email: (user && user.attributes.email) || '',
     password: '',
-    phone: '',
+    phone: (user && user.attributes.phone) || '',
   });
 
   const handleSetContact = useCallback(
@@ -230,6 +264,7 @@ const Quote = (): ReactElement => {
 
   const grabInputData = (): RequestCreateAppointment => {
     return {
+      appointment_type: isNotSureFunnel ? undefined : 'repair',
       car_attributes: {
         ...car.attributes,
       },
@@ -379,9 +414,9 @@ const Quote = (): ReactElement => {
     );
   };
 
-  const renderElfSight = () => {
-    return <ElfsightWidget widgetID="7c3d64f1-8c57-4795-a97e-3d46b32096b4" />;
-  };
+  // const renderElfSight = () => {
+  //   return <ElfsightWidget widgetID="7c3d64f1-8c57-4795-a97e-3d46b32096b4" />;
+  // };
 
   return (
     <QuoteContext.Provider
@@ -415,6 +450,8 @@ const Quote = (): ReactElement => {
 
         loggingIn,
         handleSetLoggingIn,
+
+        urlReferer,
       }}
     >
       <Container className={classes.root}>
@@ -448,7 +485,11 @@ const Quote = (): ReactElement => {
           show={showModal === QuoteShowModal.SERVICE_INTRO}
           onClose={() => handleShowModal(QuoteShowModal.NONE)}
         />
-        <Splash show={loggingIn} text="Logging you in" />
+        <Splash
+          show={loggingIn || openSplash}
+          text={openSplash ? '' : 'Logging you in'}
+        />
+        {/* {renderElfSight()} */}
       </Container>
     </QuoteContext.Provider>
   );

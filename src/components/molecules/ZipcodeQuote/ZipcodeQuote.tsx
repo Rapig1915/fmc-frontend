@@ -64,18 +64,26 @@ const ZipcodeQuote = ({
   const [customer, setCustomer] = useState(0);
   const [zip, setZip] = useState('');
 
+  const [processing, setProcessing] = useState(false);
+
   const isReadyToQuote = !!zip && !!customer;
 
   const handleChange = async (evt: ChangeEvent<{ value: string }>) => {
     const v = evt.target.value as string;
     setZip(v);
 
+    setProcessing(true);
     if (v.length === 5) {
-      const happyCustomer = await getHappyCustomer(v);
-      setCustomer((happyCustomer && happyCustomer['times-used']) || 0);
+      try {
+        const happyCustomer = await getHappyCustomer(v);
+        setCustomer((happyCustomer && happyCustomer['times-used']) || 0);
+      } catch (err) {
+        setCustomer(0);
+      }
     } else {
       setCustomer(0);
     }
+    setProcessing(false);
   };
 
   const handleGetQuote = () => {
@@ -98,6 +106,7 @@ const ZipcodeQuote = ({
         className={classes.ButtonForward}
         onClickHandler={handleGetQuote}
         disabled={!isReadyToQuote}
+        processing={processing}
       />
       {!!zip && !!customer && (
         <Typography className={classes.customer}>

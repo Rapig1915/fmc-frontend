@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { PropTypes } from '@material-ui/core';
+import { CircularProgress, PropTypes } from '@material-ui/core';
 import { ArrowForward } from '@material-ui/icons';
 
 interface ButtonForwardProps {
@@ -12,6 +12,7 @@ interface ButtonForwardProps {
   color?: PropTypes.Color | undefined;
   size?: 'medium' | 'large' | 'small';
   noIcon?: boolean;
+  processing?: boolean;
   transparent?: boolean;
 
   className?: string;
@@ -32,6 +33,10 @@ const useStyles = makeStyles({
     boxShadow: (props: ButtonForwardProps) =>
       props.transparent ? 'none' : undefined,
   },
+  spin: {
+    width: 10,
+    height: 10,
+  },
 });
 
 export default function ButtonForward(props: ButtonForwardProps): ReactElement {
@@ -42,6 +47,7 @@ export default function ButtonForward(props: ButtonForwardProps): ReactElement {
     color,
     size,
     transparent,
+    processing,
     className,
     onClickHandler,
     noIcon,
@@ -54,8 +60,14 @@ export default function ButtonForward(props: ButtonForwardProps): ReactElement {
       color={color}
       size={size}
       className={clsx(classes.root, className)}
-      endIcon={!noIcon && <ArrowForward />}
-      onClick={onClickHandler}
+      endIcon={
+        processing ? (
+          <CircularProgress color="secondary" size={20} />
+        ) : (
+          !noIcon && <ArrowForward />
+        )
+      }
+      onClick={processing ? undefined : onClickHandler}
       disabled={disabled}
     >
       {title}
@@ -69,6 +81,7 @@ ButtonForward.defaultProps = {
   disabled: false,
   noIcon: false,
   transparent: false,
+  processing: false,
   color: 'primary',
   size: 'medium',
   className: undefined,

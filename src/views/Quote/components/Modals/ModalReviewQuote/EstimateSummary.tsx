@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '24px',
     marginLeft: theme.spacing(1),
     color: theme.palette.common.black,
+    minWidth: 60,
 
     '& b': {
       color: '#24CA90',
@@ -108,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
       },
       '& span': {
         display: 'inline-block',
-        minWidth: 80,
+        minWidth: 60,
       },
     },
   },
@@ -147,7 +148,7 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
 
   return (
     <Box className={clsx(classes.root, className)}>
-      <Box key="service-summary" className={classes.boxService}>
+      {/* <Box key="service-summary" className={classes.boxService}>
         <Box
           key="title"
           flexDirection="row"
@@ -166,8 +167,8 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
               (sum, s) => sum + estimate.services[s].total_price,
               0
             )}{' '}
-            <KeyboardArrowDown />
           </Typography>
+          <KeyboardArrowDown />
         </Box>
         {Object.keys(estimate.services).map((s) => (
           <Box
@@ -208,7 +209,7 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
             </span>
           </Typography>
         </Box>
-      </Box>
+      </Box> */}
       {Object.keys(estimate.services).map((s) => (
         <Box
           key={`service-${estimate.services[s].id}`}
@@ -227,8 +228,9 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
             </Typography>
             <Box flexGrow={1} />
             <Typography className={classes.titleService} noWrap>
-              <b>$</b> {estimate.services[s].total_price} <KeyboardArrowDown />
+              <b>$</b> {estimate.services[s].total_price}
             </Typography>
+            <KeyboardArrowDown />
           </Box>
           <Box
             key="item"
@@ -266,8 +268,9 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
           </Typography>
           <Box flexGrow={1} />
           <Typography className={classes.titleService} noWrap>
-            <b>$</b> {estimate.total_price} <KeyboardArrowDown />
+            <b>$</b> {estimate.total_price}
           </Typography>
+          <KeyboardArrowDown />
         </Box>
         <Box key="price" className={classes.boxPrice}>
           <Typography>

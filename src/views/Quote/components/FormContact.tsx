@@ -1,4 +1,5 @@
 import React, { ReactElement, useContext } from 'react';
+import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Grid, Typography } from '@material-ui/core';
@@ -7,6 +8,7 @@ import { InputWithStatus } from 'src/components/atoms';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
 import { QuoteStep } from 'src/types';
+import { IReduxState } from 'src/store/reducers';
 
 import { Email, Lock, Person, Phone } from '@material-ui/icons';
 import { QuoteContext } from '../QuoteContext';
@@ -86,11 +88,14 @@ const FormContact = (props: FormContactProps): ReactElement => {
 
   const classes = useStyles();
 
-  const { handleSetStep, handleUpdateAppointment, loggingIn } = useContext(
-    QuoteContext
-  );
-
-  const { contact, handleSetContact } = useContext(QuoteContext);
+  const loggedIn = useSelector((state: IReduxState) => state.auth.loggedIn);
+  const {
+    handleSetStep,
+    handleUpdateAppointment,
+    contact,
+    handleSetContact,
+    loggingIn,
+  } = useContext(QuoteContext);
 
   const handleInputChange = (key: string, value: string) => {
     handleSetContact({
@@ -122,7 +127,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
   const isReadyToContinue =
     !!contact.name &&
     !!contact.email &&
-    !!contact.password &&
+    (loggedIn || !!contact.password) &&
     !!contact.phone &&
     validateEmail(contact.email) &&
     contact.phone.length === PHONE_NUMBER_LENGTH;
@@ -165,16 +170,20 @@ const FormContact = (props: FormContactProps): ReactElement => {
               start={<Email color="secondary" />}
             />
           </Box>
-          <Box key="input-password" className={classes.lineContainer}>
-            <InputWithStatus
-              className={classes.flexGrow}
-              placeholder="Password"
-              value={contact.password}
-              valueChanged={(val: string) => handleInputChange('password', val)}
-              start={<Lock color="secondary" />}
-              password
-            />
-          </Box>
+          {!loggedIn && (
+            <Box key="input-password" className={classes.lineContainer}>
+              <InputWithStatus
+                className={classes.flexGrow}
+                placeholder="Password"
+                value={contact.password}
+                valueChanged={(val: string) =>
+                  handleInputChange('password', val)
+                }
+                start={<Lock color="secondary" />}
+                password
+              />
+            </Box>
+          )}
           <Box key="input-phone" className={classes.lineContainer}>
             <InputWithStatus
               className={classes.flexGrow}
