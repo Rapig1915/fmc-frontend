@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
+import clsx from 'clsx';
+import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import clsx from 'clsx';
 import { Check } from '@material-ui/icons';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 
@@ -270,11 +271,14 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
 
   const {
     appointment_type: appointmentType,
+    appointment_day: appointmentDay,
+    appointment_time: appointmentTime,
     address,
     car,
     mechanic,
     estimate,
     services,
+    status,
   } = attributes;
 
   const isServiceQuote = appointmentType === 'repair';
@@ -454,6 +458,17 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
     );
   };
 
+  const scheduledTime = () => {
+    if (!appointmentDay || !appointmentTime) return '';
+
+    return `Service Booked for: ${moment(appointmentDay).format(
+      'MMM DD, YYYY'
+    )} ${appointmentTime}`;
+  };
+
+  const canSchedule =
+    isServiceQuote && estimate && status !== 'pending' && status !== 'booked';
+
   const getTitle = () => {
     if (!isServiceQuote) return 'Diagnose my car';
 
@@ -473,7 +488,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
           {car.year} {car.make} {car.model}
         </Typography>
         <Typography key="quote-date" className={classes.titleQuoteDate}>
-          {attributes.appointment_day}
+          {scheduledTime()}
         </Typography>
       </Box>
       <Box className={classes.contentBox}>
@@ -492,7 +507,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
               </Typography>
             )}
 
-            {isServiceQuote && estimate && (
+            {canSchedule && (
               <ButtonForward
                 title="Schedule Service"
                 rounded
