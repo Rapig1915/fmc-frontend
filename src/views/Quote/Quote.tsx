@@ -264,7 +264,7 @@ const Quote = (): ReactElement => {
 
   const grabInputData = (): RequestCreateAppointment => {
     return {
-      appointment_type: isNotSureFunnel ? undefined : 'repair',
+      appointment_type: isNotSureFunnel ? 'diagnosis' : 'repair',
       car_attributes: {
         ...car.attributes,
       },
