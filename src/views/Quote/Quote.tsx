@@ -326,7 +326,7 @@ const Quote = (): ReactElement => {
 
     dispatch(setAppointment(resp.data));
 
-    if (isNotSureFunnel) {
+    if (isNotSureFunnel || urlReferer === URL.DASHBOARD) {
       if (!contact || !contact.name || !contact.email || !contact.phone)
         handleShowModal(QuoteShowModal.CONTACT);
       else if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
@@ -386,7 +386,7 @@ const Quote = (): ReactElement => {
     }
 
     dispatch(setAppointment(resp.data));
-    // handleShowModal(QuoteShowModal.CONGRATS);
+    handleShowModal(QuoteShowModal.CONGRATS);
   };
 
   const handleConfirmCar = () => {
