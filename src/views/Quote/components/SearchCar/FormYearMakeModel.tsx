@@ -66,7 +66,7 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
 
   React.useEffect(() => {
     setTimeout(async () => {
-      const resp = await getVehicles(car.attributes.year, '', '');
+      const resp = await getVehicles(car.attributes.year, undefined, undefined);
       if (resp && resp.data) setVehicleList(resp.data);
     });
   }, [car.attributes.year]);

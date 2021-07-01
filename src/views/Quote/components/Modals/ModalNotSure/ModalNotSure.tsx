@@ -109,11 +109,15 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
 
   const { reason, handleSetReason } = useContext(QuoteContext);
 
-  const handleMainReasonChange = (id: number, r: string, subR: string[]) => {
+  const handleMainReasonChange = (
+    newReasonId: number,
+    newReason: string,
+    newSubReason: string[]
+  ) => {
     handleSetReason({
-      reasonId: id,
-      reason: r,
-      subReason: subR,
+      reasonId: newReasonId,
+      reason: newReason,
+      subReason: newSubReason,
       otherReason: '',
       note: '',
     });
@@ -137,18 +141,18 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
     return false;
   }, [reasonStep, reason]);
 
-  const handleOtherReasonChange = (s: string) => {
+  const handleOtherReasonChange = (newOtherReason: string) => {
     handleSetReason({
       ...reason,
-      otherReason: s,
+      otherReason: newOtherReason,
       note: '',
     });
   };
 
-  const handleNoteChange = (n: string) => {
+  const handleNoteChange = (newNote: string) => {
     handleSetReason({
       ...reason,
-      note: n,
+      note: newNote,
     });
   };
 

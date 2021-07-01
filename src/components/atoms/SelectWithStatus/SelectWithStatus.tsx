@@ -106,15 +106,15 @@ const SelectWithStatus = (props: SelectWithStatusProps): ReactElement => {
           <em>-</em>
         </MenuItem>
         {items &&
-          Object.keys(items).map((x) => (
-            <MenuItem value={x} key={`item-${x}`}>
-              {x}
+          Object.keys(items).map((item) => (
+            <MenuItem value={item} key={`item-${item}`}>
+              {item}
             </MenuItem>
           ))}
         {extraOptions &&
-          Object.keys(extraOptions).map((x) => (
-            <MenuItem value={x} key={`item-${x}`}>
-              {x}
+          Object.keys(extraOptions).map((option) => (
+            <MenuItem value={option} key={`item-${option}`}>
+              {option}
             </MenuItem>
           ))}
       </Select>

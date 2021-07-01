@@ -35,17 +35,6 @@ import CompletedService from './components/CompletedService';
 import { ModalServiceIntro } from '../Quote/components/Modals';
 
 const useStyles = makeStyles((theme) => ({
-  '@global': {
-    '*::-webkit-scrollbar': {
-      width: 8,
-    },
-    '*::-webkit-scrollbar-track': {},
-    '*::-webkit-scrollbar-thumb': {
-      backgroundColor: '#A2A1A8',
-      outline: 0,
-      borderRadius: 8,
-    },
-  },
   root: {
     '& .grid': {
       '& .content-1': {
@@ -177,7 +166,6 @@ const Dashboard = (): ReactElement => {
   const dispatch = useDispatch();
 
   const loggedIn = useSelector((state: IReduxState) => state.auth.loggedIn);
-  const authToken = useSelector((state: IReduxState) => state.auth.token);
 
   if (!loggedIn) {
     history.push(URL.LOGIN);
@@ -188,7 +176,7 @@ const Dashboard = (): ReactElement => {
 
   useEffect(() => {
     const timerId = setTimeout(async () => {
-      const userResp: ResponseGetUser = await getUser(authToken);
+      const userResp: ResponseGetUser = await getUser();
       if (userResp && userResp.data) {
         dispatch(setUser(userResp.data));
       } else {
@@ -198,7 +186,7 @@ const Dashboard = (): ReactElement => {
     return () => {
       clearTimeout(timerId);
     };
-  }, [authToken, dispatch]);
+  }, [dispatch]);
 
   const handleHealthClick = () => {
     history.push(URL.HOME);

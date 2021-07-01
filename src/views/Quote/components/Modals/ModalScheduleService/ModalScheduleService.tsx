@@ -45,17 +45,6 @@ interface ModalScheduleServiceProps {
 }
 
 const useStyles = makeStyles((theme) => ({
-  '@global': {
-    '*::-webkit-scrollbar': {
-      width: '0.4em',
-    },
-    '*::-webkit-scrollbar-track': {},
-    '*::-webkit-scrollbar-thumb': {
-      backgroundColor: '#79739C',
-      outline: 0,
-      borderRadius: 3.5,
-    },
-  },
   root: {
     minWidth: 700,
     [theme.breakpoints.down('sm')]: {

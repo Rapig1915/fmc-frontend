@@ -31,6 +31,22 @@ export const createFMCTheme = (): CustomTheme => {
         drawer: 1100,
       },
       overrides: {
+        MuiCssBaseline: {
+          '@global': {
+            html: {
+              WebkitFontSmoothing: 'auto',
+            },
+            '*::-webkit-scrollbar': {
+              width: 8,
+            },
+            '*::-webkit-scrollbar-track': {},
+            '*::-webkit-scrollbar-thumb': {
+              backgroundColor: '#A2A1A8',
+              outline: 0,
+              borderRadius: 8,
+            },
+          },
+        },
         MuiButton: {
           containedPrimary: {
             '&:hover': {

@@ -265,7 +265,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
     [data]
   );
 
-  if (!data || !data?.attributes.car.make) return <></>;
+  if (!data?.attributes.car.make) return <></>;
 
   const { attributes } = data;
 

@@ -72,7 +72,7 @@ const Quote = (): ReactElement => {
   const [openSplash, setOpenSplash] = React.useState(false);
 
   useEffect(() => {
-    const timerId = setTimeout(async () => {
+    const asyncReadZip = async () => {
       let success = false;
 
       if (zipQuery && zipQuery !== zip) {
@@ -99,12 +99,13 @@ const Quote = (): ReactElement => {
       success = success || !!zip;
 
       if (!success) history.push(URL.HOME);
-    }, 0);
+    };
+
+    asyncReadZip();
 
     const timerSplashId = setTimeout(() => setOpenSplash(false), 3000);
 
     return () => {
-      if (timerId) clearTimeout(timerId);
       if (timerSplashId) clearTimeout(timerSplashId);
     };
   }, [zipQuery, urlReferer, dispatch, history, zip]);

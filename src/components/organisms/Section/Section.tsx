@@ -55,9 +55,9 @@ const Section = (props: SectionProps): ReactElement => {
         className={clsx(
           'section',
           classes.root,
-          fullWidth ? classes.fullWidth : {},
-          narrow ? classes.narrow : {},
-          disablePadding ? classes.disablePadding : {},
+          fullWidth && classes.fullWidth,
+          narrow && classes.narrow,
+          disablePadding && classes.disablePadding,
           className
         )}
         {...rest}

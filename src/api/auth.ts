@@ -30,25 +30,19 @@ export const signIn = async (
   });
 };
 
-export const getUser = async (token: string): Promise<ResponseGetUser> => {
-  return callApi<ResponseGetUser>(
-    {
-      url: `/api/v2/user`,
-      method: 'GET',
-    },
-    token
-  );
+export const getUser = async (): Promise<ResponseGetUser> => {
+  return callApi<ResponseGetUser>({
+    url: `/api/v2/user`,
+    method: 'GET',
+  });
 };
 
 export const getUserAppointments = async (
-  token: string,
   status: string
 ): Promise<ResponseGetUserAppointments> => {
-  return callApi<ResponseGetUserAppointments>(
-    {
-      url: `/api/v2/user/appointments?status=${status}`,
-      method: 'GET',
-    },
-    token
-  );
+  return callApi<ResponseGetUserAppointments>({
+    url: `/api/v2/user/appointments`,
+    params: { status },
+    method: 'GET',
+  });
 };

@@ -347,17 +347,20 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
             xs={12}
             className={classes.contentHolder}
           >
-            <Box
-              key="mechanic-title"
-              flexDirection="row"
-              display="flex"
-              alignItems="center"
-            >
-              <Image src={SvgMechanic} />
-              <Typography className={classes.titleDatetime} noWrap>
-                Your mechanic
-              </Typography>
-            </Box>
+            {appointment?.attributes.mechanic &&
+              appointment?.attributes.mechanic.name && (
+                <Box
+                  key="mechanic-title"
+                  flexDirection="row"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <Image src={SvgMechanic} />
+                  <Typography className={classes.titleDatetime} noWrap>
+                    Your mechanic
+                  </Typography>
+                </Box>
+              )}
             <MechanicInfo
               key="mechanic"
               className={clsx(classes.boxInformation)}

@@ -1,8 +1,6 @@
 import React, { ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { Box, makeStyles, Typography } from '@material-ui/core';
-import { IReduxState } from 'src/store/reducers';
 import { IAppointment, ResponseGetUserAppointments } from 'src/types';
 import { getUserAppointments } from 'src/api/auth';
 import ItemQuote from './ItemQuote';
@@ -45,12 +43,9 @@ const PendingQuotes = (props: PendingQuotesProps): ReactElement => {
 
   const [appointments, setAppointments] = React.useState<IAppointment[]>([]);
 
-  const authToken = useSelector((state: IReduxState) => state.auth.token);
-
   React.useEffect(() => {
     const timerId = setTimeout(async () => {
       const appointmentsResp: ResponseGetUserAppointments = await getUserAppointments(
-        authToken,
         'pending'
       );
       setAppointments(appointmentsResp.data);
@@ -58,7 +53,7 @@ const PendingQuotes = (props: PendingQuotesProps): ReactElement => {
     return () => {
       clearTimeout(timerId);
     };
-  }, [authToken]);
+  }, []);
 
   const classes = useStyles();
 

@@ -181,7 +181,7 @@ const CheckoutForm = ({
           </Box>
         </Grid>
       </Grid>
-      <form onSubmit={handleSubmit} className="w-full text-center">
+      <form onSubmit={handleSubmit}>
         <CardElement options={cardStyle} className={classes.cardInput} />
         <p className={classes.error}>{errors}</p>
       </form>

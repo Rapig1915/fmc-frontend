@@ -69,13 +69,13 @@ const ZipcodeQuote = ({
   const isReadyToQuote = !!zip && !!customer;
 
   const handleChange = async (evt: ChangeEvent<{ value: string }>) => {
-    const v = evt.target.value as string;
-    setZip(v);
+    const code = evt.target.value as string;
+    setZip(code);
 
     setProcessing(true);
-    if (v.length === 5) {
+    if (code.length === 5) {
       try {
-        const happyCustomer = await getHappyCustomer(v);
+        const happyCustomer = await getHappyCustomer(code);
         setCustomer((happyCustomer && happyCustomer['times-used']) || 0);
       } catch (err) {
         setCustomer(0);

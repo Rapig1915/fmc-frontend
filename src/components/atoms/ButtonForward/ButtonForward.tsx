@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   root: {
     border: 0,
     borderRadius: (props: ButtonForwardProps) =>
-      props.rounded ? '31px' : undefined,
+      props.rounded ? 31 : undefined,
     textTransform: 'none',
     fontFamily: 'Artegra Sans',
     fontStyle: 'normal',
@@ -54,6 +54,10 @@ export default function ButtonForward(props: ButtonForwardProps): ReactElement {
   } = props;
   const classes = useStyles({ rounded, transparent });
 
+  const handleClick = React.useCallback(() => {
+    if (!processing && onClickHandler) onClickHandler();
+  }, [processing, onClickHandler]);
+
   return (
     <Button
       variant="contained"
@@ -67,7 +71,7 @@ export default function ButtonForward(props: ButtonForwardProps): ReactElement {
           !noIcon && <ArrowForward />
         )
       }
-      onClick={processing ? undefined : onClickHandler}
+      onClick={handleClick}
       disabled={disabled}
     >
       {title}
