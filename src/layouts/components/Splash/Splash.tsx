@@ -1,23 +1,20 @@
 import React, { ReactElement } from 'react';
+import { useSelector } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useMediaQuery } from '@material-ui/core';
-// import Button from '@material-ui/core/Button';
+import { Typography, useMediaQuery } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
-// import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
-// import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Image } from 'src/components/atoms';
+import { IReduxState } from 'src/store/reducers';
 
-interface SplashProps {
-  show: boolean;
-}
+import ImageSplash from 'src/assets/splash.png';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     textAlign: 'center',
     padding: theme.spacing(5),
+    maxWidth: 600,
   },
   title: {
     paddingTop: theme.spacing(0),
@@ -56,58 +53,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+interface SplashProps {
+  show: boolean;
+  text?: string;
+}
+
 const Splash = (props: SplashProps): ReactElement => {
-  const { show } = props;
+  const { show, text } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const classes = useStyles();
 
-  // const [open, setOpen] = React.useState(true);
-
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
-
-  // const handleClose = () => {
-  //   //   setOpen(false);
-  // };
-
-  const cntHappyCustomers = 245;
+  const stateCustomer = useSelector<IReduxState, number>(
+    (state: IReduxState) => state.quote.customer
+  );
 
   return (
     <Dialog
       fullScreen={fullScreen}
       open={show}
-      // onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
       scroll="body"
     >
       <DialogContent className={classes.container}>
         <Image
           className={classes.imageSplash}
-          src="/assets/splash.png"
+          src={ImageSplash}
           alt="certified"
           lazy={false}
         />
-        <h3 className={classes.title}>
-          <b>{cntHappyCustomers} happy customers</b>
-          <br />
-          had their car fixed in your area with Fixmycar!
-        </h3>
+        {text ? (
+          <Typography className={classes.title}>{text}</Typography>
+        ) : (
+          <Typography className={classes.title}>
+            <b>{stateCustomer} happy customers</b>
+            <br />
+            had their car fixed in your area with Fixmycar!
+          </Typography>
+        )}
         <CircularProgress />
       </DialogContent>
-      {/* <DialogActions>
-        <Button autoFocus onClick={handleClose} color="primary">
-          Disagree
-        </Button>
-        <Button onClick={handleClose} color="primary" autoFocus>
-          Agree
-        </Button>
-      </DialogActions> */}
     </Dialog>
   );
 };
 
-Splash.defaultProps = {};
+Splash.defaultProps = {
+  text: '',
+};
 
 export default Splash;

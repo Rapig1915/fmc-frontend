@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -10,6 +10,9 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import { SnackbarProvider } from 'notistack';
 import AOS from 'aos';
+
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 
 import { createFMCTheme, CustomTheme } from 'src/themes';
 import Routes from './routes';
@@ -37,6 +40,8 @@ browserHistory.listen((location: { action: string }) => {
   });
 });
 
+const promise = loadStripe(process.env.REACT_APP_STRIPE_API_KEY || '');
+
 const myTheme = createFMCTheme();
 const App = () => {
   AOS.init({
@@ -49,16 +54,18 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <MuiThemeProvider<CustomTheme> theme={myTheme}>
-          <MuiPickersUtilsProvider utils={MomentUtils}>
-            <SnackbarProvider maxSnack={3}>
-              <CssBaseline />
-              <Router history={browserHistory}>
-                <Routes />
-              </Router>
-            </SnackbarProvider>
-          </MuiPickersUtilsProvider>
-        </MuiThemeProvider>
+        <Elements stripe={promise}>
+          <MuiThemeProvider<CustomTheme> theme={myTheme}>
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+              <SnackbarProvider maxSnack={3}>
+                <CssBaseline />
+                <BrowserRouter>
+                  <Routes />
+                </BrowserRouter>
+              </SnackbarProvider>
+            </MuiPickersUtilsProvider>
+          </MuiThemeProvider>
+        </Elements>
       </PersistGate>
     </Provider>
   );

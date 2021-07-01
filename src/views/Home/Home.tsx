@@ -1,12 +1,28 @@
 import React, { ReactElement } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { colors, Hidden, useMediaQuery, useTheme } from '@material-ui/core';
-import { Section } from 'src/components/organisms';
-
+import {
+  Box,
+  colors,
+  Hidden,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
+import { setZip } from 'src/store/actions';
 import { CustomTheme } from 'src/themes';
-import { Image, ButtonGetQuote } from 'src/components/atoms';
+import { Image, ButtonForward } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
+import { Section } from 'src/components/organisms';
+import { Splash } from 'src/layouts/components';
+import { MIXPANEL_TRACK, URL } from 'src/utils/consts';
+import mixPanel from 'src/utils/mixpanel';
+
+import SvgSecurity from 'src/assets/badges/security.svg';
+import ImageWorkStepLogo from 'src/assets/work-step-logo.png';
+import SvgLove from 'src/assets/badges/love.svg';
+
 import {
   Intro,
   Advantage,
@@ -87,6 +103,9 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
 }));
 
 const Home = (): ReactElement => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const classes = useStyles();
 
   const theme = useTheme();
@@ -94,11 +113,35 @@ const Home = (): ReactElement => {
     defaultMatches: true,
   });
 
+  const refFollowUpZip = React.useRef<HTMLDivElement>(null);
+
+  const [openSplash, setOpenSplash] = React.useState(false);
+
+  const handleClickGetQuote = (payload: {
+    zip?: string;
+    customer?: number;
+  }) => {
+    if (!payload.zip) {
+      if (refFollowUpZip)
+        refFollowUpZip.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+    } else {
+      mixPanel(MIXPANEL_TRACK.ZIP);
+      dispatch(setZip(payload.zip || '', payload.customer || 0));
+
+      setOpenSplash(true);
+      setTimeout(() => {
+        history.push(URL.QUOTE);
+      }, 3000);
+    }
+  };
+
   return (
-    <div className={classes.root}>
-      <div className={classes.shape}>
+    <Box className={classes.root}>
+      <Box className={classes.shape}>
         <Section className={classes.pagePaddingTop}>
-          <Intro />
+          <Intro onGetQuote={handleClickGetQuote} />
         </Section>
         <Hidden mdUp>
           <Section
@@ -112,7 +155,7 @@ const Home = (): ReactElement => {
                   24 months / 24,000 mi waranty on each job.
                 </>
               }
-              imgUrl="/assets/badges/security.svg"
+              imgUrl={SvgSecurity}
               titleProps={{ className: classes.titleWarranty }}
               imgProps={{ className: classes.imgWarranty }}
               className={classes.containerWarranty}
@@ -129,7 +172,7 @@ const Home = (): ReactElement => {
           />
         </Section>
         <Section className={classes.sectionNoPaddingTop}>
-          <Advantage />
+          <Advantage onGetQuote={handleClickGetQuote} />
         </Section>
         <Section className={classes.pagePaddingTop}>
           <FollowUp title="How it works" comment="It's simpler than 1,2,3" />
@@ -142,17 +185,18 @@ const Home = (): ReactElement => {
         >
           <Image
             className={classes.imgWorkStepLogo}
-            src="/assets/work-step-logo.png"
+            src={ImageWorkStepLogo}
             lazy
           />
         </Section>
         <Section
           className={clsx(classes.sectionNoPaddingTop, classes.alignCenter)}
         >
-          <ButtonGetQuote
+          <ButtonForward
             rounded
             size="large"
             className={classes.buttonGetQuote}
+            onClickHandler={() => handleClickGetQuote({})}
           />
         </Section>
         <Section className={classes.pagePaddingTop}>
@@ -162,7 +206,7 @@ const Home = (): ReactElement => {
                 People
                 <Image
                   className={classes.imgLove}
-                  src="/assets/badges/love.svg"
+                  src={SvgLove}
                   alt="love"
                   lazy={false}
                 />
@@ -178,25 +222,29 @@ const Home = (): ReactElement => {
           />
         </Section>
         <Section className={classes.sectionNoPaddingTop}>
-          <Feedbacks />
+          <Feedbacks onGetQuote={handleClickGetQuote} />
         </Section>
         <Section className={classes.pagePaddingTop}>
-          <Candidates />
+          <Candidates onGetQuote={handleClickGetQuote} />
         </Section>
         <Section
           className={clsx(classes.pagePaddingTop, classes.positionRelative)}
         >
-          <FollowUp
-            title="Find your mechanic"
-            comment="In 120+ cities and growing"
-            toGetQuote
-          />
+          <div ref={refFollowUpZip}>
+            <FollowUp
+              title="Find your mechanic"
+              comment="In 120+ cities and growing"
+              toGetQuote
+              onGetQuote={handleClickGetQuote}
+            />
+          </div>
         </Section>
         <Section className={classes.sectionNoPaddingTop}>
           <Location />
         </Section>
-      </div>
-    </div>
+      </Box>
+      <Splash show={openSplash} />
+    </Box>
   );
 };
 

@@ -133,17 +133,24 @@ const Location = (props: LocationProps): ReactElement => {
     defaultMatches: true,
   });
 
-  const onTabSelected = (index: number, text: string) => {
-    logger.log(index, text);
+  const onTabSelected = (state: string) => {
+    logger.log(state);
   };
+
+  const optionStates = itemsLocation.reduce((obj, x) => {
+    return {
+      ...obj,
+      [x.state]: x.state,
+    };
+  }, {});
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Hidden mdUp>
         <TabSelector
-          items={itemsLocation.map((x) => x.state)}
-          selectedIndex={0}
+          items={optionStates}
           onTabSelected={onTabSelected}
+          selectedValue={itemsLocation[0].state}
         />
       </Hidden>
       <Grid

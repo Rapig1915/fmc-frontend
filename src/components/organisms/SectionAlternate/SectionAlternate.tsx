@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     background: theme.palette.background.default,
   },
   inner: {
-    maxWidth: theme.layout.contentWidth,
     width: '100%',
     margin: '0 auto',
     padding: theme.spacing(6, 2),

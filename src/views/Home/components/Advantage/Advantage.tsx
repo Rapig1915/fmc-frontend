@@ -2,14 +2,21 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid, Typography, Hidden } from '@material-ui/core';
-import { Image, ButtonGetQuote } from 'src/components/atoms';
+import { Image, ButtonForward } from 'src/components/atoms';
 import { ImageNode, TabSelector } from 'src/components/molecules';
 import { CustomTheme } from 'src/themes';
-import { itemsAdvantage, itemsShop } from 'src/utils/data';
+import {
+  advantageCompareList,
+  itemsAdvantage,
+  itemsShop,
+} from 'src/utils/data';
 import logger from 'src/utils/logger';
+
+import SvgLogoWhite from 'src/assets/logo-white.svg';
 
 interface AdvantageProps {
   className?: undefined;
+  onGetQuote?: (payload: { zip?: string; customer?: number }) => void;
 }
 
 const useStyles = makeStyles((theme: CustomTheme) => ({
@@ -140,7 +147,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     color: '#FFFFFF',
   },
 
-  buttonQuote: {
+  ButtonForward: {
     minWidth: '250px',
     height: '50px',
     borderRadius: '31px',
@@ -163,7 +170,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
 }));
 
 const Advantage = (props: AdvantageProps): ReactElement => {
-  const { className, ...rest } = props;
+  const { className, onGetQuote, ...rest } = props;
   const classes = useStyles();
 
   const theme = useTheme();
@@ -171,17 +178,21 @@ const Advantage = (props: AdvantageProps): ReactElement => {
     defaultMatches: true,
   });
 
-  const onTabSelected = (index: number, text: string) => {
-    logger.log(index, text);
+  const onTabSelected = (key: string) => {
+    logger.log(key);
+  };
+
+  const handleForward = () => {
+    if (onGetQuote) onGetQuote({});
   };
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Hidden mdUp>
         <TabSelector
-          items={['Fixmycar', 'Repair Shops']}
-          selectedIndex={0}
+          items={advantageCompareList}
           onTabSelected={onTabSelected}
+          selectedValue={Object.keys(advantageCompareList)[0]}
         />
       </Hidden>
       <Grid
@@ -209,7 +220,7 @@ const Advantage = (props: AdvantageProps): ReactElement => {
           />
           <Image
             className={classes.logoImage}
-            src="/assets/logo-white.svg"
+            src={SvgLogoWhite}
             alt="certified"
             lazy={false}
           />
@@ -223,16 +234,17 @@ const Advantage = (props: AdvantageProps): ReactElement => {
                     <p>{x.subtitle}</p>
                   </>
                 }
-                imgUrl={`/assets/${x.img}`}
+                imgUrl={x.img}
                 titleProps={{ className: classes.titleAdvantage }}
                 imgProps={{ className: classes.imgAdvantage }}
                 className={classes.badgeAdvantage}
               />
             ))}
-          <ButtonGetQuote
+          <ButtonForward
             size="large"
             color="default"
-            className={classes.buttonQuote}
+            className={classes.ButtonForward}
+            onClickHandler={handleForward}
           />
         </Grid>
         <Hidden smDown>
@@ -261,7 +273,7 @@ const Advantage = (props: AdvantageProps): ReactElement => {
                       <p>{x.subtitle}</p>
                     </>
                   }
-                  imgUrl={`/assets/${x.img}`}
+                  imgUrl={x.img}
                   titleProps={{ className: classes.titleShop }}
                   imgProps={{ className: classes.imgShop }}
                   className={classes.badgeShop}
@@ -276,6 +288,7 @@ const Advantage = (props: AdvantageProps): ReactElement => {
 
 Advantage.defaultProps = {
   className: undefined,
+  onGetQuote: undefined,
 };
 
 export default Advantage;

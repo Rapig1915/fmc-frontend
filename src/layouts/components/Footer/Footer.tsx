@@ -1,7 +1,14 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Hidden, IconButton, List, ListItem } from '@material-ui/core';
+import {
+  Container,
+  Grid,
+  Hidden,
+  IconButton,
+  List,
+  ListItem,
+} from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -9,8 +16,11 @@ import PinterestIcon from '@material-ui/icons/Pinterest';
 
 import { CustomTheme } from 'src/themes';
 import { Image } from 'src/components/atoms';
-
 import { itemFooter } from 'src/utils/data';
+
+import ImageFootBack from 'src/assets/footer-back.png';
+import SvgLogoWhite from 'src/assets/logo-white.svg';
+import SvgTrustPilot from 'src/assets/trust-pilot.svg';
 
 interface FooterProps {
   className?: string;
@@ -39,14 +49,12 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     color: '#636078',
   },
   footerContainer: {
-    maxWidth: theme.layout.contentWidth,
     width: '100%',
     margin: '0 auto',
     padding: theme.spacing(0, 2),
   },
   logoContainerItem: {
     paddingTop: 0,
-    maxWidth: theme.layout.contentWidth,
   },
   logoContainer: {
     height: 32,
@@ -145,11 +153,11 @@ const Footer = (props: FooterProps): ReactElement => {
   const classes = useStyles();
 
   return (
-    <>
+    <Container>
       <div {...rest} className={clsx(classes.root, className)}>
         <Image
           className={classes.imgBack}
-          src="/assets/footer-back.png"
+          src={ImageFootBack}
           alt="thefront"
           lazy={false}
         />
@@ -161,7 +169,7 @@ const Footer = (props: FooterProps): ReactElement => {
                 <a href="/" title="thefront">
                   <Image
                     className={classes.logoImage}
-                    src="/assets/logo-white.svg"
+                    src={SvgLogoWhite}
                     alt="thefront"
                     lazy={false}
                   />
@@ -170,7 +178,7 @@ const Footer = (props: FooterProps): ReactElement => {
                   <a href="/" title="thefront">
                     <Image
                       className={classes.logoImage}
-                      src="/assets/trust-pilot.svg"
+                      src={SvgTrustPilot}
                       alt="thefront"
                       lazy={false}
                     />
@@ -228,7 +236,7 @@ const Footer = (props: FooterProps): ReactElement => {
       <div className={classes.copyrightBar}>
         © FixMyCar.io - 2021 | Privacy Policy | Terms of Service
       </div>
-    </>
+    </Container>
   );
 };
 

@@ -4,6 +4,10 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid } from '@material-ui/core';
 import { ImageNode } from 'src/components/molecules';
 
+import ImageWorkStep1 from 'src/assets/work-step-1.png';
+import ImageWorkStep2 from 'src/assets/work-step-2.png';
+import ImageWorkStep3 from 'src/assets/work-step-3.png';
+
 interface WorkStepsProps {
   className?: undefined;
 }
@@ -55,7 +59,7 @@ const WorkSteps = (props: WorkStepsProps): ReactElement => {
         >
           <ImageNode
             title="Get instant quote"
-            imgUrl="/assets/work-step-1.png"
+            imgUrl={ImageWorkStep1}
             className={classes.item}
             titleProps={{ className: classes.title }}
             imgProps={{ className: classes.img }}
@@ -71,7 +75,7 @@ const WorkSteps = (props: WorkStepsProps): ReactElement => {
         >
           <ImageNode
             title="Book appointment"
-            imgUrl="/assets/work-step-2.png"
+            imgUrl={ImageWorkStep2}
             className={classes.item}
             titleProps={{ className: classes.title }}
             imgProps={{ className: classes.img }}
@@ -87,7 +91,7 @@ const WorkSteps = (props: WorkStepsProps): ReactElement => {
         >
           <ImageNode
             title="Pay after service"
-            imgUrl="/assets/work-step-3.png"
+            imgUrl={ImageWorkStep3}
             className={classes.item}
             titleProps={{ className: classes.title }}
             imgProps={{ className: classes.img }}

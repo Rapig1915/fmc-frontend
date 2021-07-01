@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { Image } from 'src/components/atoms';
 
 interface ImageNodeProps {
@@ -17,6 +17,8 @@ interface ImageNodeProps {
   imgProps?: {
     className: string;
   };
+
+  onClickHandler?: () => void;
 }
 
 const useStyles = makeStyles(() => ({
@@ -44,13 +46,22 @@ const ImageNode = (props: ImageNodeProps): ReactElement => {
     className,
     titleProps,
     imgProps,
+    onClickHandler,
     ...rest
   } = props;
 
   const classes = useStyles();
 
+  const handleClick = () => {
+    if (onClickHandler) onClickHandler();
+  };
+
   return (
-    <div className={clsx(classes.root, className)} {...rest}>
+    <Box
+      className={clsx(classes.root, className)}
+      {...rest}
+      onClick={handleClick}
+    >
       <Image src={imgUrl} alt="badge" lazy={false} {...imgProps} />
       <Typography
         variant={titleVariant}
@@ -60,7 +71,7 @@ const ImageNode = (props: ImageNodeProps): ReactElement => {
       >
         {title}
       </Typography>
-    </div>
+    </Box>
   );
 };
 
@@ -70,6 +81,8 @@ ImageNode.defaultProps = {
   titleVariant: 'h4',
   titleProps: {},
   imgProps: {},
+
+  onClickHandler: undefined,
 };
 
 export default ImageNode;

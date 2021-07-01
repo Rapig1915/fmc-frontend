@@ -20,6 +20,7 @@ export const createFMCTheme = (): CustomTheme => {
       props: {
         MuiTextField: {
           variant: 'outlined',
+          size: 'medium',
         },
       },
       typography: {
@@ -30,19 +31,117 @@ export const createFMCTheme = (): CustomTheme => {
         drawer: 1100,
       },
       overrides: {
+        MuiCssBaseline: {
+          '@global': {
+            html: {
+              WebkitFontSmoothing: 'auto',
+            },
+            '*::-webkit-scrollbar': {
+              width: 8,
+            },
+            '*::-webkit-scrollbar-track': {},
+            '*::-webkit-scrollbar-thumb': {
+              backgroundColor: '#A2A1A8',
+              outline: 0,
+              borderRadius: 8,
+            },
+          },
+        },
         MuiButton: {
+          containedPrimary: {
+            '&:hover': {
+              // backgroundColor: '#36D9A0'
+            },
+          },
           containedSecondary: {
-            color: 'white',
+            color: '#7157FF',
+          },
+          label: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            alignContent: 'center',
+            justifyContent: 'space-around',
+          },
+        },
+        MuiRadio: {
+          colorSecondary: {
+            '&.Mui-checked': {
+              color: '#7157FF',
+            },
           },
         },
         MuiDialog: {
           paper: {
             borderRadius: '22px',
           },
+          paperWidthSm: {
+            maxWidth: 1000,
+          },
         },
         MuiBackdrop: {
           root: {
             backgroundColor: '#4A37B1E6', // Opacity 90%
+          },
+        },
+        MuiOutlinedInput: {
+          root: {
+            borderRadius: 5,
+          },
+          input: {
+            borderRadius: 5,
+            fontFamily: 'Lato',
+            fontWeight: 600,
+            fontSize: 17,
+            lineHeight: '21px',
+            color: '#2A2D3C',
+            border: '2px solid #D8D8D8',
+            paddingLeft: 20,
+            background: palette.common?.white,
+
+            '.with-start-icon &': {
+              paddingLeft: 40,
+            },
+          },
+          multiline: {
+            padding: 0,
+          },
+          inputMultiline: {
+            padding: 20,
+          },
+        },
+        MuiSelect: {
+          outlined: {
+            borderRadius: 5,
+          },
+        },
+        MuiInputLabel: {
+          outlined: {
+            fontFamily: 'Lato',
+            fontWeight: 600,
+            fontSize: 17,
+            lineHeight: '21px',
+            color: '#A2A1A8',
+            paddingLeft: 10,
+
+            '.with-start-icon &': {
+              paddingLeft: 40,
+            },
+
+            '&.Mui-focused': {
+              display: 'none',
+            },
+            '&.MuiFormLabel-filled': {
+              display: 'none',
+            },
+          },
+        },
+        MuiSvgIcon: {
+          colorSecondary: {
+            color: '#BDC1DA',
+          },
+          colorAction: {
+            color: '#FFFFFF',
           },
         },
       },

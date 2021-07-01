@@ -5,18 +5,21 @@ import { useMediaQuery, Grid } from '@material-ui/core';
 import { Image } from 'src/components/atoms';
 import { SectionHeader, ZipcodeQuote } from 'src/components/molecules';
 
+import SvgCertified from 'src/assets/badges/certified.svg';
+import ImageIntroBackground from 'src/assets/intro-background.png';
+
 interface IntroProps {
   className?: undefined;
+  onGetQuote?: (payload: { zip?: string; customer?: number }) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   introTitle: {
-    fontFamily: 'Artegra Sans',
     fontSize: '20px',
     fontStyle: 'normal',
     fontWeight: 600,
-    letterSpacing: '2.0999999046325684px',
+    letterSpacing: '2px',
     color: '#24CF93',
     padding: 0,
   },
@@ -47,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Intro = (props: IntroProps): ReactElement => {
-  const { className, ...rest } = props;
+  const { className, onGetQuote, ...rest } = props;
   const classes = useStyles();
 
   const theme = useTheme();
@@ -76,7 +79,7 @@ const Intro = (props: IntroProps): ReactElement => {
               <>
                 <Image
                   className={classes.certifiedImage}
-                  src="/assets/badges/certified.svg"
+                  src={SvgCertified}
                   alt="certified"
                   lazy={false}
                 />
@@ -89,7 +92,12 @@ const Intro = (props: IntroProps): ReactElement => {
                 <br /> come to you
               </span>
             }
-            ctaGroup={[<ZipcodeQuote className={classes.zipQuote} />]}
+            ctaGroup={[
+              <ZipcodeQuote
+                className={classes.zipQuote}
+                onGetQuote={onGetQuote}
+              />,
+            ]}
             align={isMd ? 'left' : 'center'}
             disableGutter
             titleVariant="h6"
@@ -112,7 +120,7 @@ const Intro = (props: IntroProps): ReactElement => {
           // data-aos="fade-up"
         >
           <Image
-            src="/assets/intro-background.png"
+            src={ImageIntroBackground}
             alt="TheFront Company"
             className={classes.image}
             data-aos="flip-left"
@@ -127,6 +135,7 @@ const Intro = (props: IntroProps): ReactElement => {
 
 Intro.defaultProps = {
   className: undefined,
+  onGetQuote: undefined,
 };
 
 export default Intro;
