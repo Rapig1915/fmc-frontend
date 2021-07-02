@@ -12,10 +12,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Add, ArrowForward } from '@material-ui/icons';
-import {
-  // ButtonForward,
-  Image,
-} from 'src/components/atoms';
+import { Image } from 'src/components/atoms';
 import { URL } from 'src/utils/consts';
 import useDeviseQuery from 'src/hooks/useDeviseQuery';
 import { TabSelector } from 'src/components/molecules';
@@ -23,11 +20,8 @@ import { IReduxState } from 'src/store/reducers';
 import { getUser } from 'src/api/auth';
 import { ResponseGetUser } from 'src/types';
 import { logout, setUser } from 'src/store/actions';
-
 import ImageMechanic from 'src/assets/candidates/steven.png';
 import SvgGift from 'src/assets/badges/gift.svg';
-// import logger from 'src/utils/logger';
-
 import { ServiceIntro } from '../Quote/components';
 import HighFive from './components/HighFive';
 import PendingQuotes from './components/PendingQuotes';
@@ -171,6 +165,7 @@ const Dashboard = (): ReactElement => {
     history.push(URL.LOGIN);
   }
 
+  const user = useSelector((state: IReduxState) => state.auth.user);
   const classes = useStyles();
   const { xsOnly } = useDeviseQuery();
 
@@ -188,13 +183,12 @@ const Dashboard = (): ReactElement => {
     };
   }, [dispatch]);
 
-  const handleHealthClick = () => {
-    history.push(URL.HOME);
-  };
-
   const [tab, setTab] = React.useState('pending');
 
-  const options = { pending: 'Pending quotes', completed: 'Completed service' };
+  const options = {
+    pending: 'Pending Quotes',
+    completed: 'Completed Services',
+  };
   const onTabSelected = (state: string) => {
     setTab(state);
   };
@@ -204,10 +198,6 @@ const Dashboard = (): ReactElement => {
   const handleShowIntro = () => {
     setShowIntro(true);
   };
-
-  // const handleScheduleService = () => {
-  //   logger.log('schedule service');
-  // };
 
   const handleNewServiceRequest = () => {
     history.push(URL.QUOTE);
@@ -267,11 +257,20 @@ const Dashboard = (): ReactElement => {
               <Hidden xsDown>
                 <Box key="spacer" className={classes.spacer} />
                 <Box key="engine-health" className={classes.engineHealth}>
-                  <Typography className="title">Your engine Health</Typography>
-                  <ArrowForward
-                    className="arrow"
-                    onClick={() => handleHealthClick()}
-                  />
+                  {user?.attributes.inspection_url && (
+                    <div>
+                      <Typography className="title">
+                        Your Engine Health
+                      </Typography>
+                      <a
+                        href={user.attributes.inspection_url}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        <ArrowForward className="arrow" />
+                      </a>
+                    </div>
+                  )}
                 </Box>
               </Hidden>
             </Box>
@@ -283,15 +282,6 @@ const Dashboard = (): ReactElement => {
           <Box onClick={handleShowIntro}>
             <Image src={SvgGift} lazy={false} className="button-mobile-info" />
           </Box>
-          {/* {tab === 'pending' && (
-            <ButtonForward
-              title="Schedule Service"
-              rounded
-              size="large"
-              onClickHandler={handleScheduleService}
-              className={classes.buttonSchedleService}
-            />
-          )} */}
         </Box>
       </Hidden>
       <ModalServiceIntro show={showIntro} onClose={() => setShowIntro(false)} />

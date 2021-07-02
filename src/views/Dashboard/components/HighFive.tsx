@@ -2,9 +2,10 @@ import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import { Image } from 'src/components/atoms';
-
 import ImageHighFive from 'src/assets/high-five.png';
 import ImageCongratsBg from 'src/assets/congrats-bg.png';
+import { useSelector } from 'react-redux';
+import { IReduxState } from 'src/store/reducers';
 
 interface HighFiveProps {
   className?: string;
@@ -62,10 +63,15 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 700,
     zIndex: 2,
   },
+  clipboard: {
+    cursor: 'pointer',
+  },
 }));
 
 const HighFive = (props: HighFiveProps): ReactElement => {
   const { className } = props;
+  const user = useSelector((state: IReduxState) => state.auth.user);
+  const code = user?.attributes.referral_code || '';
 
   const classes = useStyles();
 
@@ -79,10 +85,16 @@ const HighFive = (props: HighFiveProps): ReactElement => {
           src={ImageCongratsBg}
         />
         <Typography key="refer" className={classes.textRefer}>
-          Reffer someone & receive
+          Give $20, Get $20
         </Typography>
         <Typography key="gift" className={classes.textGift}>
-          $25 Gift card
+          Share your code
+        </Typography>
+        <Typography
+          onClick={() => navigator.clipboard.writeText(code)}
+          className={clsx(classes.textRefer, classes.clipboard)}
+        >
+          {code}
         </Typography>
       </Box>
     </Box>

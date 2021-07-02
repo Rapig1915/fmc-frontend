@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   infoService: {
     display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    // flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingBottom: theme.spacing(1),
@@ -87,13 +87,13 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     marginRight: theme.spacing(1),
     height: 'auto',
-    objectFit: 'cover',
+    objectFit: 'contain',
   },
 
   imageBrand: {
     width: (props: ItemQuoteProps) => (!props.miniMode ? 100 : 50),
     height: (props: ItemQuoteProps) => (!props.miniMode ? 70 : undefined),
-    objectFit: 'cover',
+    objectFit: 'contain',
     [theme.breakpoints.down('xs')]: {
       display: (props: ItemQuoteProps) => (props.miniMode ? 'block' : 'none'),
     },
@@ -466,6 +466,9 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
     )} ${appointmentTime}`;
   };
 
+  const jobCompleted =
+    status === 'completed' || status === 'diagnosis_complete';
+
   const canSchedule =
     isServiceQuote && estimate && status !== 'pending' && status !== 'booked';
 
@@ -487,9 +490,11 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
         <Typography key="car-name" className={classes.titleCar}>
           {car.year} {car.make} {car.model}
         </Typography>
-        <Typography key="quote-date" className={classes.titleQuoteDate}>
-          {scheduledTime()}
-        </Typography>
+        {!jobCompleted && (
+          <Typography key="quote-date" className={classes.titleQuoteDate}>
+            {scheduledTime()}
+          </Typography>
+        )}
       </Box>
       <Box className={classes.contentBox}>
         {!miniMode && renderCarLogo()}
@@ -501,13 +506,13 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
               {getTitle()}
             </Typography>
             <Box className={classes.flexGrow} />
-            {!!getPrice() && (
+            {!!getPrice() && !jobCompleted && (
               <Typography key="price" className={classes.textPrice}>
                 $ {getPrice()}
               </Typography>
             )}
 
-            {canSchedule && (
+            {canSchedule && !jobCompleted && (
               <ButtonForward
                 title="Schedule Service"
                 rounded

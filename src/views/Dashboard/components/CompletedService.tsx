@@ -62,7 +62,7 @@ const CompletedService = (props: CompletedServiceProps): ReactElement => {
 
   return (
     <Box className={clsx('dashboard-pending-quotes', classes.root, className)}>
-      <Typography className={classes.title}>Completed Service</Typography>
+      <Typography className={classes.title}>Completed Services</Typography>
       <Box className={classes.content}>{renderQuotes()}</Box>
     </Box>
   );

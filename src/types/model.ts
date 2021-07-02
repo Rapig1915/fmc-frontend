@@ -21,27 +21,22 @@ export interface ICarMeta {
 
 export interface IEstimate {
   id: number;
-
   address: {
     zipcode: string;
     description: string;
   };
-
   appointment_id: number;
   comments: string;
   created_by: string;
-
   customer_name: string | null;
   customer: {
     name: string;
     email: string;
     phone: string;
   };
-
   customer_car: string;
   vin: string | null;
   mileage: string | null;
-
   services: {
     [s: string]: {
       id: number;
@@ -61,19 +56,15 @@ export interface IEstimate {
       total_price: number;
     };
   };
-
   mechanic_id: number;
   mechanic: {
     name: string;
     phone: string;
     photo: string;
   };
-
   note_to_management: string | null;
   recommendations: string | null;
-
   subject_to_change: boolean;
-
   tax: number;
   approved_price: number;
   discount: number;
@@ -168,6 +159,7 @@ export interface IUser {
     diag_notes: IInspection | null;
     receipts: string[];
     last_inspection: IInspection | null;
+    inspection_url: string | null;
     all_cars: [
       {
         car: string;
