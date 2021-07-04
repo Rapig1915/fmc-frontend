@@ -286,6 +286,9 @@ const useStyles = makeStyles((theme) => ({
   accordionDetail: {
     display: 'flex',
     flexDirection: 'column',
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+    },
   },
 
   imageAccordion: {
@@ -297,6 +300,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20,
     lineHeight: '28px',
     fontWeight: 600,
+
+    [theme.breakpoints.down('xs')]: {
+      fontSize: 15,
+    },
   },
 
   actionContainer: {
@@ -514,23 +521,21 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                     </Typography>
                   </Box>
                 )}
-                {!appointmentCompleted && (
-                  <ImageNode
-                    key="happy-customers"
-                    title={
-                      <>
-                        <b>{cntHappyCustomers} happy customers</b>
-                        <br />
-                        Booked the same service in your area
-                      </>
-                    }
-                    imgUrl={ImageHappyCustomer}
-                    titleProps={{ className: classes.titleHappyCustomer }}
-                    imgProps={{ className: classes.imgHappyCustomer }}
-                    className={classes.containerHappyCustomer}
-                  />
-                )}
-                {!appointmentCompleted && <BoxFAQ />}
+                <ImageNode
+                  key="happy-customers"
+                  title={
+                    <>
+                      <b>{cntHappyCustomers} happy customers</b>
+                      <br />
+                      Booked the same service in your area
+                    </>
+                  }
+                  imgUrl={ImageHappyCustomer}
+                  titleProps={{ className: classes.titleHappyCustomer }}
+                  imgProps={{ className: classes.imgHappyCustomer }}
+                  className={classes.containerHappyCustomer}
+                />
+                <BoxFAQ />
               </AccordionDetails>
             </Accordion>
             <EstimateSummary />

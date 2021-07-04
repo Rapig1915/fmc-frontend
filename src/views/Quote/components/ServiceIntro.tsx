@@ -6,6 +6,7 @@ import { Image } from 'src/components/atoms';
 import { URL } from 'src/utils/consts';
 
 import ImageQuoteIntro from 'src/assets/quote-intro.png';
+import { carFacts } from 'src/utils/data';
 
 interface ServiceIntroProps {
   className?: string;
@@ -99,6 +100,20 @@ const ServiceIntro = (props: ServiceIntroProps): ReactElement => {
 
   const classes = useStyles({ rounded });
 
+  const [fact, setFact] = React.useState(
+    'Changing your oil every 3,000 miles will help your car last to a ripe  old age!'
+  );
+
+  React.useEffect(() => {
+    const intervalId = setInterval(
+      () => setFact(carFacts[Math.floor(Math.random() * carFacts.length)]),
+      5000
+    );
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, []);
+
   return (
     <Box
       className={clsx(
@@ -110,10 +125,7 @@ const ServiceIntro = (props: ServiceIntroProps): ReactElement => {
     >
       <InfoIcon fontSize="large" className={classes.icon} />
       <h1>Did you know?</h1>
-      <h3>
-        Changing your oil every 3,000 miles will help your car last to a ripe
-        old age!
-      </h3>
+      <h3>{fact}</h3>
       <Box className={classes.flexGrow} />
       <Image
         className={classes.image}

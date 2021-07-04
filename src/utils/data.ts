@@ -987,3 +987,17 @@ export const staticServiceList = [
   'Windshield Wiper/Washer System Inspection',
   'Wiper Gearbox Replacement',
 ];
+
+export const carFacts = [
+  'Most vehicles are equipped with a cabin air filter that filters the air for your A/C!',
+  'Cold air can actually shrink the air in your tires, causing your light to come on in the winter!',
+  'If your engine air filter gets too dirty it can actually restrict air flow and sometimes shut off the engine!',
+  'Changing your spark plugs every 75,000 to 100,000 miles can help increase your fuel efficiency!',
+  'Taking 5 minutes every other time you get gas, to check your fluids can save your car!',
+  "If you're planning to let your car sit for an extended period, make sure to start it every few days and let it run for about 10 minutes!",
+  'If your vehicle overheats, you should try not to drive it until you can get the problem addressed. It could save your engine!',
+  'Using a fuel treatment at every oil change could clean the carbon build up off your fuel injectors and help fuel efficiency!',
+  "Some fluids in the vehicle need to be flushed through and replaced with a clean fluid! Check your owner's manual for a maintenance schedule!",
+  'A flashing check engine light is a sign to stop driving the vehicle. It means there is something detrimentally wrong in the engine somewhere!',
+  'Getting your check engine light scanned, is oftentimes not a diagnosis of the vehicle! It only tells you where to begin looking!',
+];

@@ -115,6 +115,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
+      password: contact.password,
     });
   };
 
@@ -151,49 +152,51 @@ const FormContact = (props: FormContactProps): ReactElement => {
       )}
       <Grid container className={classes.contentContainer}>
         <Grid item sm={modalView ? 12 : 8} xs={12}>
-          <Box key="input-name" className={classes.lineContainer}>
-            <InputWithStatus
-              className={classes.flexGrow}
-              placeholder="First And Last Name"
-              value={contact.name}
-              valueChanged={(val: string) => handleInputChange('name', val)}
-              start={<Person color="secondary" />}
-            />
-          </Box>
-          <Box key="input-email" className={classes.lineContainer}>
-            <InputWithStatus
-              className={classes.flexGrow}
-              placeholder="Email"
-              email
-              value={contact.email}
-              valueChanged={(val: string) => handleInputChange('email', val)}
-              start={<Email color="secondary" />}
-            />
-          </Box>
-          {!loggedIn && (
-            <Box key="input-password" className={classes.lineContainer}>
+          <form>
+            <Box key="input-name" className={classes.lineContainer}>
               <InputWithStatus
                 className={classes.flexGrow}
-                placeholder="Password"
-                value={contact.password}
-                valueChanged={(val: string) =>
-                  handleInputChange('password', val)
-                }
-                start={<Lock color="secondary" />}
-                password
+                placeholder="First And Last Name"
+                value={contact.name}
+                valueChanged={(val: string) => handleInputChange('name', val)}
+                start={<Person color="secondary" />}
               />
             </Box>
-          )}
-          <Box key="input-phone" className={classes.lineContainer}>
-            <InputWithStatus
-              className={classes.flexGrow}
-              placeholder={`Cell phone number (${PHONE_NUMBER_LENGTH} digits)`}
-              value={contact.phone}
-              forceLength={PHONE_NUMBER_LENGTH}
-              valueChanged={(val: string) => handleInputChange('phone', val)}
-              start={<Phone color="secondary" />}
-            />
-          </Box>
+            <Box key="input-email" className={classes.lineContainer}>
+              <InputWithStatus
+                className={classes.flexGrow}
+                placeholder="Email"
+                email
+                value={contact.email}
+                valueChanged={(val: string) => handleInputChange('email', val)}
+                start={<Email color="secondary" />}
+              />
+            </Box>
+            {!loggedIn && (
+              <Box key="input-password" className={classes.lineContainer}>
+                <InputWithStatus
+                  className={classes.flexGrow}
+                  placeholder="Password"
+                  value={contact.password}
+                  valueChanged={(val: string) =>
+                    handleInputChange('password', val)
+                  }
+                  start={<Lock color="secondary" />}
+                  password
+                />
+              </Box>
+            )}
+            <Box key="input-phone" className={classes.lineContainer}>
+              <InputWithStatus
+                className={classes.flexGrow}
+                placeholder={`Cell phone number (${PHONE_NUMBER_LENGTH} digits)`}
+                value={contact.phone}
+                forceLength={PHONE_NUMBER_LENGTH}
+                valueChanged={(val: string) => handleInputChange('phone', val)}
+                start={<Phone color="secondary" />}
+              />
+            </Box>
+          </form>
         </Grid>
         <Grid
           item

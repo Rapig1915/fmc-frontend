@@ -1,12 +1,17 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react/display-name */
 import React, { ReactElement } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, Typography, ListItemIcon } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { ButtonForward } from 'src/components/atoms';
+import { URL } from 'src/utils/consts';
+import { IReduxState } from 'src/store/reducers';
+import { logout } from 'src/store/actions';
+import { useHistory } from 'react-router-dom';
 
 interface SidebarNavProps {
   className?: string;
@@ -41,6 +46,15 @@ const useStyles = makeStyles(() => ({
 const SidebarNav = (props: SidebarNavProps): ReactElement => {
   const { onClose, className, ...rest } = props;
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const loggedIn = useSelector((state: IReduxState) => state.auth.loggedIn);
+
+  const handleClickLogout = () => {
+    dispatch(logout());
+    history.push(URL.HOME);
+  };
 
   return (
     <List {...rest} className={clsx(classes.root, className)}>
@@ -54,10 +68,10 @@ const SidebarNav = (props: SidebarNavProps): ReactElement => {
           variant="h6"
           color="primary"
           component="a"
-          href="/home"
+          href={URL.HOME}
           className={classes.listItemLink}
         >
-          Services
+          Home
         </Typography>
       </ListItem>
       <ListItem className={classes.listItem}>
@@ -65,33 +79,34 @@ const SidebarNav = (props: SidebarNavProps): ReactElement => {
           variant="h6"
           color="primary"
           component="a"
-          href="/signup-simple"
+          href={URL.DASHBOARD}
           className={classes.listItemLink}
         >
-          Advice
+          Dashboard
         </Typography>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Typography
-          variant="h6"
-          color="primary"
-          component="a"
-          href="/not-found"
-          className={classes.listItemLink}
-        >
-          Help
-        </Typography>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Typography
-          variant="h6"
-          color="primary"
-          component="a"
-          href="/not-found"
-          className={classes.listItemLink}
-        >
-          More
-        </Typography>
+        {!loggedIn ? (
+          <Typography
+            variant="h6"
+            color="primary"
+            component="a"
+            href={URL.LOGIN}
+            className={classes.listItemLink}
+          >
+            Login
+          </Typography>
+        ) : (
+          <Typography
+            variant="h6"
+            color="primary"
+            component="a"
+            className={classes.listItemLink}
+            onClick={handleClickLogout}
+          >
+            Logout
+          </Typography>
+        )}
       </ListItem>
       <ListItem className={classes.listItem}>
         <ButtonForward rounded size="small" className={classes.buttonForward} />

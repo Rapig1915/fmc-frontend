@@ -78,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 15,
     lineHeight: '18px',
     color: '#302A3C',
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: 200,
+    },
 
     '&.expanded': {
       color: '#7157FF',

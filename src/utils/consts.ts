@@ -30,3 +30,8 @@ export const MIXPANEL_TRACK = {
   SCHEDULE_APPOINTMENT: 'Schedule appointment',
   CARD_INFO: 'Card info',
 };
+
+export const MODE_LOGIN = {
+  PHONE: 'phone',
+  EMAIL: 'email',
+};
