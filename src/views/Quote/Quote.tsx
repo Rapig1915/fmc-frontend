@@ -99,10 +99,6 @@ const Quote = (): ReactElement => {
     };
   }, [zipQuery, urlReferer, dispatch, history, zip]);
 
-  // if (!zip && !zipQuery) {
-  //   history.push(URL.HOME);
-  // }
-
   const showZipModal = !zip && !zipQuery;
 
   const handleSetZipFromModal = (payload: {
@@ -380,6 +376,7 @@ const Quote = (): ReactElement => {
       handleStepChange(QuoteStep.QUOTE_CONTACT, true);
     }
   };
+
   const handleConfirmAppointment = async (data: RequestConfirmAppointment) => {
     if (!appId) {
       // error handling
@@ -421,10 +418,6 @@ const Quote = (): ReactElement => {
       )
     );
   };
-
-  // const renderElfSight = () => {
-  //   return <ElfsightWidget widgetID="7c3d64f1-8c57-4795-a97e-3d46b32096b4" />;
-  // };
 
   return (
     <QuoteContext.Provider
@@ -498,7 +491,6 @@ const Quote = (): ReactElement => {
           text={openSplash ? '' : 'Logging you in'}
         />
         <ModalInputZip show={showZipModal} onGetQuote={handleSetZipFromModal} />
-        {/* {renderElfSight()} */}
       </Container>
     </QuoteContext.Provider>
   );

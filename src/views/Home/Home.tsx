@@ -114,8 +114,6 @@ const Home = (): ReactElement => {
     defaultMatches: true,
   });
 
-  // const refFollowUpZip = React.useRef<HTMLDivElement>(null);
-
   const [openSplash, setOpenSplash] = React.useState(false);
 
   const [openZipModal, setOpenZipModal] = React.useState(false);
@@ -125,10 +123,6 @@ const Home = (): ReactElement => {
     customer?: number;
   }) => {
     if (!payload.zip) {
-      // if (refFollowUpZip)
-      //   refFollowUpZip.current?.scrollIntoView({
-      //     behavior: 'smooth',
-      //   });
       setOpenZipModal(true);
     } else {
       mixPanel(MIXPANEL_TRACK.ZIP);
@@ -234,14 +228,12 @@ const Home = (): ReactElement => {
         <Section
           className={clsx(classes.pagePaddingTop, classes.positionRelative)}
         >
-          {/* <div ref={refFollowUpZip}> */}
           <FollowUp
             title="Find your mechanic"
             comment="In 120+ cities and growing"
             toGetQuote
             onGetQuote={handleClickGetQuote}
           />
-          {/* </div> */}
         </Section>
         <Section className={classes.sectionNoPaddingTop}>
           <Location />
