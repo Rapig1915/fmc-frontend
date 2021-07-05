@@ -107,7 +107,7 @@ const ServiceIntro = (props: ServiceIntroProps): ReactElement => {
   React.useEffect(() => {
     const intervalId = setInterval(
       () => setFact(carFacts[Math.floor(Math.random() * carFacts.length)]),
-      5000
+      50000
     );
     return () => {
       if (intervalId) clearInterval(intervalId);
