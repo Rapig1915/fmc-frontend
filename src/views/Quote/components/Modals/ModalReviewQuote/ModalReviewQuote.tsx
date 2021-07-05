@@ -344,6 +344,10 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   } = attributes;
 
   const isServiceQuote = appointmentType === 'repair';
+  const diagCanSchedule =
+    !isServiceQuote &&
+    appointmentStatus !== 'pending' &&
+    appointmentStatus !== 'booked';
 
   const appointmentCompleted =
     appointmentStatus === 'completed' ||
@@ -380,7 +384,8 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const canSchedule =
-    !appointmentCompleted && (!urlReferer || (isServiceQuote && estimate));
+    !appointmentCompleted &&
+    (!urlReferer || (isServiceQuote && estimate) || diagCanSchedule);
 
   return (
     <Dialog

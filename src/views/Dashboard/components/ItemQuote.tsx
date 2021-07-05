@@ -363,9 +363,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
                 Check back in:
               </Typography>
               <Typography key="hours" className={classes.hoursWaiting}>
-                {/* <b>02</b> h &nbsp; */}
                 <b>{min}</b> m &nbsp;
-                {/* <b>45</b> s */}
               </Typography>
             </Box>
           ) : (
@@ -476,7 +474,9 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
     status === 'completed' || status === 'diagnosis_complete';
 
   const canSchedule =
-    isServiceQuote && estimate && status !== 'pending' && status !== 'booked';
+    status !== 'pending' &&
+    status !== 'booked' &&
+    ((isServiceQuote && estimate) || !isServiceQuote);
 
   const isCompleted = status === 'completed' || status === 'diagnosis_complete';
 
