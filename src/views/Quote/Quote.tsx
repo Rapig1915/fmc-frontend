@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { Container, makeStyles, Typography } from '@material-ui/core';
-// import { ElfsightWidget } from 'react-elfsight-widget';
 
 import {
   QuoteShowModal,
@@ -130,6 +129,14 @@ const Quote = (): ReactElement => {
     []
   );
 
+  const handleStepChange = (newStep: QuoteStep, bForce?: boolean): void => {
+    if (
+      bForce ||
+      parseInt(newStep as string, 10) <= parseInt(step as string, 10)
+    )
+      handleSetStep(newStep);
+  };
+
   const [showModal, setShowModal] = useState(
     (location.state && location.state.modal) || QuoteShowModal.NONE
   );
@@ -206,6 +213,46 @@ const Quote = (): ReactElement => {
     setLoggingIn(state);
   };
 
+  const login = (resp: ResponseAppointment) => {
+    handleSetLoggingIn(true);
+
+    const timerId = setTimeout(async () => {
+      const response: ResponseSignin = await signIn(
+        {
+          id: `${resp.data && resp.data.id}`,
+        },
+        true
+      );
+
+      handleSetLoggingIn(false);
+
+      if (
+        response &&
+        response.auth_token &&
+        response.user &&
+        response.user.id
+      ) {
+        dispatch(
+          setAuthToken(
+            response.auth_token,
+            response.user.id,
+            response.user.email
+          )
+        );
+
+        if (isNotSureFunnel) {
+          history.push(URL.DASHBOARD);
+        } else {
+          handleSetStep(QuoteStep.QUOTE_CONGRATS);
+        }
+      } else {
+        handleStepChange(QuoteStep.QUOTE_CONTACT, true);
+      }
+
+      if (timerId) clearTimeout(timerId);
+    }, 3000);
+  };
+
   const clearAll = useCallback(() => {
     handleSetStep(QuoteStep.QUOTE_SERVICE_DESK);
     handleShowModal(QuoteShowModal.NONE);
@@ -250,14 +297,6 @@ const Quote = (): ReactElement => {
     handleSetCar,
     handleSetContact,
   ]);
-
-  const handleStepChange = (newStep: QuoteStep, bForce?: boolean): void => {
-    if (
-      bForce ||
-      parseInt(newStep as string, 10) <= parseInt(step as string, 10)
-    )
-      handleSetStep(newStep);
-  };
 
   const handleContinueOnService = () => {
     handleStepChange(QuoteStep.QUOTE_SEARCH_CAR, true);
@@ -342,39 +381,7 @@ const Quote = (): ReactElement => {
         handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
       else handleShowModal(QuoteShowModal.REVIEW_QUOTE);
     } else if (step === QuoteStep.QUOTE_CONTACT) {
-      handleSetLoggingIn(true);
-
-      const timerId = setTimeout(async () => {
-        const response: ResponseSignin = await signIn(
-          {
-            id: `${resp.data && resp.data.id}`,
-          },
-          true
-        );
-
-        handleSetLoggingIn(false);
-
-        if (
-          response &&
-          response.auth_token &&
-          response.user &&
-          response.user.id
-        ) {
-          dispatch(
-            setAuthToken(
-              response.auth_token,
-              response.user.id,
-              response.user.email
-            )
-          );
-
-          handleSetStep(QuoteStep.QUOTE_CONGRATS);
-        } else {
-          handleStepChange(QuoteStep.QUOTE_CONTACT, true);
-        }
-
-        if (timerId) clearTimeout(timerId);
-      }, 3000);
+      login(resp);
     } else {
       handleStepChange(QuoteStep.QUOTE_CONTACT, true);
     }
@@ -393,7 +400,8 @@ const Quote = (): ReactElement => {
     }
 
     dispatch(setAppointment(resp.data));
-    handleShowModal(QuoteShowModal.CONGRATS);
+    handleShowModal(QuoteShowModal.NONE);
+    login(resp);
   };
 
   const handleConfirmCar = () => {
