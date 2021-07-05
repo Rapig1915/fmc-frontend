@@ -45,6 +45,7 @@ import {
   QuoteContext,
   IQuoteContact,
 } from './QuoteContext';
+import { ModalInputZip } from '../Home/components';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -73,32 +74,20 @@ const Quote = (): ReactElement => {
 
   useEffect(() => {
     const asyncReadZip = async () => {
-      let success = false;
-
       if (zipQuery && zipQuery !== zip) {
         if (!urlReferer) setOpenSplash(true);
 
         if (zipQuery.length === 5) {
-          try {
-            const happyCustomer = await getHappyCustomer(zipQuery);
-            const newHappyCustomer =
-              (happyCustomer && happyCustomer['times-used']) || 0;
+          const happyCustomer = await getHappyCustomer(zipQuery);
+          const newHappyCustomer =
+            (happyCustomer && happyCustomer['times-used']) || 0;
 
+          if (zipQuery && newHappyCustomer) {
             dispatch(setZip(zipQuery, newHappyCustomer));
-
-            if (zipQuery && newHappyCustomer) {
-              success = true;
-              mixPanel(MIXPANEL_TRACK.ZIP);
-            }
-          } catch (err) {
-            success = false;
+            mixPanel(MIXPANEL_TRACK.ZIP);
           }
         }
       }
-
-      success = success || !!zip;
-
-      if (!success) history.push(URL.HOME);
     };
 
     asyncReadZip();
@@ -110,9 +99,21 @@ const Quote = (): ReactElement => {
     };
   }, [zipQuery, urlReferer, dispatch, history, zip]);
 
-  if (!zip && !zipQuery) {
-    history.push(URL.HOME);
-  }
+  // if (!zip && !zipQuery) {
+  //   history.push(URL.HOME);
+  // }
+
+  const showZipModal = !zip && !zipQuery;
+
+  const handleSetZipFromModal = (payload: {
+    zip?: string;
+    customer?: number;
+  }) => {
+    if (payload.zip) {
+      mixPanel(MIXPANEL_TRACK.ZIP);
+      dispatch(setZip(payload.zip || '', payload.customer || 0));
+    }
+  };
 
   const appId = useSelector(
     (state: IReduxState) =>
@@ -496,6 +497,7 @@ const Quote = (): ReactElement => {
           show={loggingIn || openSplash}
           text={openSplash ? '' : 'Logging you in'}
         />
+        <ModalInputZip show={showZipModal} onGetQuote={handleSetZipFromModal} />
         {/* {renderElfSight()} */}
       </Container>
     </QuoteContext.Provider>
