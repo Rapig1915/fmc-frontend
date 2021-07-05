@@ -236,7 +236,20 @@ export const itemsCandidates = [
 ];
 
 export const itemFooter = {
-  menu: ['Services', 'Advice', 'Help'],
+  menu: [
+    {
+      title: 'Blogs',
+      url: 'https://blog.fixmycar.io',
+    },
+    {
+      title: 'Services',
+      url: 'https://staging.fixmycar.io/services',
+    },
+    {
+      title: 'FAQ',
+      url: 'https://staging.fixmycar.io/faq',
+    },
+  ],
   carMakers: [
     'Acura',
     'Aston Martin',

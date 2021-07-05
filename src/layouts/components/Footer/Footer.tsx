@@ -12,15 +12,16 @@ import {
 } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
+import YouTubeIcon from '@material-ui/icons/YouTube';
 import InstagramIcon from '@material-ui/icons/Instagram';
-import PinterestIcon from '@material-ui/icons/Pinterest';
 
 import { CustomTheme } from 'src/themes';
 import { Image } from 'src/components/atoms';
 import { itemFooter } from 'src/utils/data';
 
 import ImageFootBack from 'src/assets/footer-back.png';
-import SvgLogoWhite from 'src/assets/logo-white.svg';
+import SvgLogoWhite from 'src/assets/logo/FMC-logoFMC-white.svg';
 import SvgTrustPilot from 'src/assets/trust-pilot.svg';
 import logos from 'src/assets/brands';
 
@@ -69,6 +70,12 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     },
   },
   logoImage: {
+    textAlign: 'left',
+    width: 'auto',
+    height: 36,
+    color: '#FFFFFF',
+  },
+  trustImage: {
     width: '100%',
     height: '100%',
     color: '#FFFFFF',
@@ -76,7 +83,10 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   socialIcon: {
     padding: 0,
     marginRight: theme.spacing(1),
-    color: 'rgba(255,255,255,.6)',
+    '& a': {
+      color: 'rgba(255,255,255,.6)',
+    },
+
     '&:hover': {
       background: 'transparent',
     },
@@ -186,7 +196,7 @@ const Footer = (props: FooterProps): ReactElement => {
                 <Hidden xsDown>
                   <a href="/" title="thefront">
                     <Image
-                      className={classes.logoImage}
+                      className={classes.trustImage}
                       src={SvgTrustPilot}
                       alt="thefront"
                       lazy={false}
@@ -200,27 +210,63 @@ const Footer = (props: FooterProps): ReactElement => {
                 <Grid item md={3} sm={4} xs={12}>
                   <h2>Contact Us</h2>
                   <hr />
-                  <h6>team@fixmycar.io</h6>
-                  <h6>(214) 620-0702</h6>
+                  <Link key="link-team-fixmycar" href="mailto:team@fixmycar.io">
+                    <h6>team@fixmycar.io</h6>
+                  </Link>
+                  <Link key="tel-team-fixmycar" href="tel:(313) 474-9816">
+                    <h6>(214) 620-0702</h6>
+                  </Link>
                   <div>
-                    <IconButton className={classes.socialIcon}>
-                      <FacebookIcon className={classes.icon} />
+                    <IconButton
+                      key="icon-button-facebook"
+                      className={classes.socialIcon}
+                    >
+                      <Link href="https://www.facebook.com/fixmycar.io">
+                        <FacebookIcon className={classes.icon} />
+                      </Link>
                     </IconButton>
-                    <IconButton className={classes.socialIcon}>
-                      <InstagramIcon className={classes.icon} />
+                    <IconButton
+                      key="icon-button-twitter"
+                      className={classes.socialIcon}
+                    >
+                      <Link href="https://twitter.com/fixmycar_io?lang=en">
+                        <TwitterIcon className={classes.icon} />
+                      </Link>
                     </IconButton>
-                    <IconButton className={classes.socialIcon}>
-                      <TwitterIcon className={classes.icon} />
+                    <IconButton
+                      key="icon-button-linkedin"
+                      className={classes.socialIcon}
+                    >
+                      <Link href="https://www.linkedin.com/company/fixmycar-llc/">
+                        <LinkedInIcon className={classes.icon} />
+                      </Link>
                     </IconButton>
-                    <IconButton className={classes.socialIcon}>
-                      <PinterestIcon className={classes.icon} />
+                    <IconButton
+                      key="icon-button-youtube"
+                      className={classes.socialIcon}
+                    >
+                      <Link href="https://www.youtube.com/channel/UCAO1coIKO-4e_7M6fMyJVgQ">
+                        <YouTubeIcon className={classes.icon} />
+                      </Link>
+                    </IconButton>
+                    <IconButton
+                      key="icon-button-instagram"
+                      className={classes.socialIcon}
+                    >
+                      <Link href="https://www.instagram.com/fixmycar.io/">
+                        <InstagramIcon className={classes.icon} />
+                      </Link>
                     </IconButton>
                   </div>
                   <h2>Menu</h2>
                   <hr />
                   {itemFooter &&
                     itemFooter.menu &&
-                    itemFooter.menu.map((m) => <h6 key={m}>{m}</h6>)}
+                    itemFooter.menu.map((m) => (
+                      <Link key={m.title} href={m.url}>
+                        <h6>{m.title}</h6>
+                      </Link>
+                    ))}
                 </Grid>
                 <Hidden xsDown>
                   <Grid
