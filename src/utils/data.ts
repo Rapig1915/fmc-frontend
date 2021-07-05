@@ -359,24 +359,6 @@ export const arrQuoteSteps = [
   QuoteStep.QUOTE_CONTACT,
 ];
 
-export const allBrands = {
-  Audi: 'Audi',
-  Ford: 'Ford',
-  Benz: 'Benz',
-};
-
-export const allModels = {
-  V3: 'V3',
-  MM1: 'MM1',
-  H123: 'H123',
-};
-
-export const allMotors = {
-  V3: 'V3',
-  MM1: 'MM1',
-  H123: 'H123',
-};
-
 export const allMileage = [
   'less than 50,000',
   '50,000 - 75,000',
@@ -397,7 +379,7 @@ export const allStaticServices = [
     imageSelected: imgService.used_car_selected,
   },
   {
-    name: 'Diagnosis / Inspection',
+    name: 'Replace Alternator',
     image: imgService.diagnosis,
     imageSelected: imgService.diagnosis_selected,
   },
