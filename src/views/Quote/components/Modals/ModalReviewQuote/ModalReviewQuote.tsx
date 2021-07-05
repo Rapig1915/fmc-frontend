@@ -286,6 +286,9 @@ const useStyles = makeStyles((theme) => ({
   accordionDetail: {
     display: 'flex',
     flexDirection: 'column',
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+    },
   },
 
   imageAccordion: {
@@ -297,6 +300,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20,
     lineHeight: '28px',
     fontWeight: 600,
+
+    [theme.breakpoints.down('xs')]: {
+      fontSize: 15,
+    },
   },
 
   actionContainer: {

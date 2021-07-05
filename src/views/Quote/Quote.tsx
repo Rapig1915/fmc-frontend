@@ -264,6 +264,15 @@ const Quote = (): ReactElement => {
   };
 
   const grabInputData = (): RequestCreateAppointment => {
+    let diagInput =
+      reason.subReason[0] === 'Other'
+        ? reason.otherReason
+        : reason.subReason.join('. ');
+
+    if (reason.note !== '') {
+      diagInput += `. ${reason.note}`;
+    }
+
     return {
       appointment_type: isNotSureFunnel ? 'diagnosis' : 'repair',
       car_attributes: {
@@ -281,10 +290,7 @@ const Quote = (): ReactElement => {
         zip,
       },
       address: zip,
-      diagnosis_input:
-        reason.subReason[0] === 'Other'
-          ? reason.otherReason
-          : reason.subReason.join(','),
+      diagnosis_input: diagInput,
       services: [...services, ...staticServices],
       category_selected: reason.reason,
     };

@@ -72,13 +72,17 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     flexGrow: 1,
     padding: theme.spacing(1),
+
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(0.2),
+    },
   },
   infoService: {
     display: 'flex',
     flexDirection: 'row',
     // flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     paddingBottom: theme.spacing(1),
     borderBottom: '1px solid #EFF1F7',
   },
@@ -92,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 
   imageBrand: {
     width: (props: ItemQuoteProps) => (!props.miniMode ? 100 : 50),
-    height: (props: ItemQuoteProps) => (!props.miniMode ? 70 : undefined),
+    height: (props: ItemQuoteProps) => (!props.miniMode ? 70 : 'auto'),
     objectFit: 'contain',
     [theme.breakpoints.down('xs')]: {
       display: (props: ItemQuoteProps) => (props.miniMode ? 'block' : 'none'),
@@ -113,6 +117,8 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '24px',
     color: theme.palette.common.black,
     marginRight: theme.spacing(1),
+    flexGrow: 1,
+    textAlign: 'right',
   },
 
   boxMechanic: {
@@ -472,6 +478,8 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
   const canSchedule =
     isServiceQuote && estimate && status !== 'pending' && status !== 'booked';
 
+  const isCompleted = status === 'completed' || status === 'diagnosis_complete';
+
   const getTitle = () => {
     if (!isServiceQuote) return 'Diagnose my car';
 
@@ -490,7 +498,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
         <Typography key="car-name" className={classes.titleCar}>
           {car.year} {car.make} {car.model}
         </Typography>
-        {!jobCompleted && (
+        {!isCompleted && (
           <Typography key="quote-date" className={classes.titleQuoteDate}>
             {scheduledTime()}
           </Typography>
@@ -512,7 +520,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
               </Typography>
             )}
 
-            {canSchedule && !jobCompleted && (
+            {canSchedule && !isCompleted && (
               <ButtonForward
                 title="Schedule Service"
                 rounded

@@ -160,7 +160,6 @@ const Dashboard = (): ReactElement => {
   const dispatch = useDispatch();
 
   const loggedIn = useSelector((state: IReduxState) => state.auth.loggedIn);
-
   if (!loggedIn) {
     history.push(URL.LOGIN);
   }
@@ -200,7 +199,11 @@ const Dashboard = (): ReactElement => {
   };
 
   const handleNewServiceRequest = () => {
-    history.push(URL.QUOTE);
+    if (user?.attributes.zip_code) {
+      history.push(`${URL.QUOTE}?zip=${user.attributes.zip_code}`);
+    } else {
+      history.push(URL.QUOTE);
+    }
   };
 
   return (

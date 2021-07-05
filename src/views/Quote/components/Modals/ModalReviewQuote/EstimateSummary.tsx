@@ -55,6 +55,11 @@ const useStyles = makeStyles((theme) => ({
     '& b': {
       color: '#24CA90',
     },
+
+    [theme.breakpoints.down('xs')]: {
+      fontSize: 15,
+      marginLeft: theme.spacing(0.2),
+    },
   },
   itemService: {
     display: 'flex',
@@ -78,6 +83,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 18,
     lineHeight: '28px',
     color: theme.palette.common.black,
+
+    [theme.breakpoints.down('xs')]: {
+      fontSize: 14,
+    },
   },
   itemContent: {
     fontWeight: 400,
@@ -110,6 +119,10 @@ const useStyles = makeStyles((theme) => ({
       '& span': {
         display: 'inline-block',
         minWidth: 60,
+      },
+
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 15,
       },
     },
   },
