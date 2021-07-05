@@ -19,6 +19,7 @@ const Routes = (): ReactElement => {
         exact
         layout={MainLayout}
         path={URL.HOME}
+        otherDomainUrl="https://www.fixmycar.io/"
       />
       <RouteWithLayout
         component={Quote}

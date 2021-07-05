@@ -108,11 +108,6 @@ const ZipcodeQuote = ({
         disabled={!isReadyToQuote}
         processing={processing}
       />
-      {!!zip && !!customer && (
-        <Typography className={classes.customer}>
-          <b>{customer}</b> customers have used
-        </Typography>
-      )}
     </div>
   );
 };

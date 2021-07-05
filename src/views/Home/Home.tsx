@@ -32,6 +32,7 @@ import {
   Feedbacks,
   Candidates,
   Location,
+  ModalInputZip,
 } from './components';
 
 const useStyles = makeStyles((theme: CustomTheme) => ({
@@ -113,19 +114,16 @@ const Home = (): ReactElement => {
     defaultMatches: true,
   });
 
-  const refFollowUpZip = React.useRef<HTMLDivElement>(null);
-
   const [openSplash, setOpenSplash] = React.useState(false);
+
+  const [openZipModal, setOpenZipModal] = React.useState(false);
 
   const handleClickGetQuote = (payload: {
     zip?: string;
     customer?: number;
   }) => {
     if (!payload.zip) {
-      if (refFollowUpZip)
-        refFollowUpZip.current?.scrollIntoView({
-          behavior: 'smooth',
-        });
+      setOpenZipModal(true);
     } else {
       mixPanel(MIXPANEL_TRACK.ZIP);
       dispatch(setZip(payload.zip || '', payload.customer || 0));
@@ -230,20 +228,23 @@ const Home = (): ReactElement => {
         <Section
           className={clsx(classes.pagePaddingTop, classes.positionRelative)}
         >
-          <div ref={refFollowUpZip}>
-            <FollowUp
-              title="Find your mechanic"
-              comment="In 120+ cities and growing"
-              toGetQuote
-              onGetQuote={handleClickGetQuote}
-            />
-          </div>
+          <FollowUp
+            title="Find your mechanic"
+            comment="In 120+ cities and growing"
+            toGetQuote
+            onGetQuote={handleClickGetQuote}
+          />
         </Section>
         <Section className={classes.sectionNoPaddingTop}>
           <Location />
         </Section>
       </Box>
       <Splash show={openSplash} />
+      <ModalInputZip
+        show={openZipModal}
+        onGetQuote={handleClickGetQuote}
+        onClose={() => setOpenZipModal(false)}
+      />
     </Box>
   );
 };
