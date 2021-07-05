@@ -27,8 +27,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     textAlign: 'center',
-    display: 'flex',
-    flexDirection: 'column',
     marginTop: theme.spacing(2),
     paddingBottom: theme.spacing(1),
   },
@@ -80,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
   infoService: {
     display: 'flex',
     flexDirection: 'row',
-    // flexWrap: 'wrap',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingBottom: theme.spacing(1),
