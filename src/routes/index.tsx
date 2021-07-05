@@ -5,7 +5,6 @@ import {
   Main as MainLayout,
   Minimal as MinimalLayout,
   Dashboard as DashboardLayout,
-  // Blank as BlankLayout,
 } from 'src/layouts';
 import { URL } from 'src/utils/consts';
 

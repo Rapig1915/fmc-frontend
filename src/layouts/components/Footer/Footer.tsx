@@ -8,6 +8,7 @@ import {
   IconButton,
   List,
   ListItem,
+  Link,
 } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
@@ -234,7 +235,12 @@ const Footer = (props: FooterProps): ReactElement => {
                     {itemFooter &&
                       allModels &&
                       allModels.map(
-                        (c) => c !== 'Blank' && <h6 key={c}>{c}</h6>
+                        (c) =>
+                          c !== 'Blank' && (
+                            <Link href={`https://www.fixmycar.io/car/${c}`}>
+                              <h6 key={c}>{c}</h6>
+                            </Link>
+                          )
                       )}
                   </Grid>
                 </Hidden>
