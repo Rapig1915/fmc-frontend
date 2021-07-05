@@ -11,12 +11,6 @@ interface GoogleAddressInputWithStatusProps {
   value?: string;
   start?: React.ReactNode;
   valueChanged?: (v: string) => void;
-  // multiline?: boolean;
-  // placeholder?: string;
-  // disabled?: boolean;
-  // password?: boolean;
-  // email?: boolean;
-  // forceLength?: number;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -75,6 +69,16 @@ const useStyles = makeStyles((theme) => ({
     width: 30,
     maxHeight: 55,
   },
+  googlecontainer: {
+    padding: 10,
+  },
+  googlesuggestion: {
+    padding: 5,
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: '#e5e5e5',
+    },
+  },
 }));
 
 /**
@@ -85,18 +89,7 @@ const useStyles = makeStyles((theme) => ({
 const GoogleAddressInputWithStatus = (
   props: GoogleAddressInputWithStatusProps
 ): ReactElement => {
-  const {
-    className,
-    valueChanged,
-    value,
-    // placeholder,
-    start,
-    // disabled,
-    // password,
-    // multiline,
-    // email,
-    // forceLength,
-  } = props;
+  const { className, valueChanged, value, start } = props;
 
   const classes = useStyles();
 
@@ -123,17 +116,11 @@ const GoogleAddressInputWithStatus = (
         apiKey={GOOGLE_API_KEY}
         initialValue={value}
         debounce={300}
+        suggestionsClassNames={{
+          container: classes.googlecontainer,
+          suggestion: classes.googlesuggestion,
+        }}
       />
-      {/* <TextField
-        autoComplete="off"
-        type={password ? 'password' : 'text'}
-        value={value}
-        placeholder={placeholder}
-        onChange={handleChange}
-        className={}
-        disabled={disabled}
-        multiline={multiline}
-      /> */}
       {!!isCheck && <CheckCircle className={classes.checked} />}
     </FormControl>
   );
@@ -144,12 +131,6 @@ GoogleAddressInputWithStatus.defaultProps = {
   value: '',
   valueChanged: undefined,
   start: undefined,
-  // placeholder: '',
-  // disabled: false,
-  // multiline: false,
-  // password: false,
-  // forceLength: 0,
-  // email: false,
 };
 
 export default GoogleAddressInputWithStatus;
