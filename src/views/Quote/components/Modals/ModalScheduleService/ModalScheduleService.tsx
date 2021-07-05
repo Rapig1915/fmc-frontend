@@ -373,7 +373,7 @@ const ModalScheduleService = (
             <SelectWithStatus
               start={<LocationOn color="secondary" />}
               items={optionCarLocations}
-              label="Your car Location"
+              label="Your car location"
               value={location.type_of_site}
               valueChanged={(val: string) =>
                 handleLocationInputChange('type_of_site', val)
