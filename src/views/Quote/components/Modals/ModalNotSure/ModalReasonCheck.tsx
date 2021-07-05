@@ -150,17 +150,8 @@ const ModalReasonCheck = (props: ModalReasonCheckProps): ReactElement => {
         </AccordionSummary>
         <AccordionDetails>
           <Box className={classes.inspectContainer}>
-            <Typography className={classes.inspectTitle} key="title-1">
-              1. Possible repairs
-            </Typography>
-            <Typography className={classes.inspectContent} key="content-1-1">
-              Replace Catalytic Converter
-            </Typography>
-            <Typography className={classes.inspectContent} key="content-1-2">
-              Replace Muffler
-            </Typography>
             <Typography className={classes.inspectTitle} key="title-2">
-              2. What&apos;s next?
+              What&apos;s next?
             </Typography>
             <Typography className={classes.inspectContent} key="content-2-1">
               Our certified mechanic will perform an inspection & provide a

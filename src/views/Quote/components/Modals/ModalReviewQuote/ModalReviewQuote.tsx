@@ -286,6 +286,9 @@ const useStyles = makeStyles((theme) => ({
   accordionDetail: {
     display: 'flex',
     flexDirection: 'column',
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+    },
   },
 
   imageAccordion: {
@@ -297,6 +300,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20,
     lineHeight: '28px',
     fontWeight: 600,
+
+    [theme.breakpoints.down('xs')]: {
+      fontSize: 15,
+    },
   },
 
   actionContainer: {
@@ -337,6 +344,10 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   } = attributes;
 
   const isServiceQuote = appointmentType === 'repair';
+  const diagCanSchedule =
+    !isServiceQuote &&
+    appointmentStatus !== 'pending' &&
+    appointmentStatus !== 'booked';
 
   const appointmentCompleted =
     appointmentStatus === 'completed' ||
@@ -373,7 +384,8 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const canSchedule =
-    !appointmentCompleted && (!urlReferer || (isServiceQuote && estimate));
+    !appointmentCompleted &&
+    (!urlReferer || (isServiceQuote && estimate) || diagCanSchedule);
 
   return (
     <Dialog

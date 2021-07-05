@@ -38,6 +38,7 @@ import { IReduxState } from 'src/store/reducers';
 import { checkAvailability } from 'src/api/quote';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
+import useDeviseQuery from 'src/hooks/useDeviseQuery';
 
 interface ModalScheduleServiceProps {
   show: boolean;
@@ -50,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       minWidth: 300,
     },
+
+    overflowX: 'hidden',
   },
   flexGrow: {
     flexGrow: 1,
@@ -131,10 +134,13 @@ const useStyles = makeStyles((theme) => ({
 
   containerDatepicker: {
     borderRadius: 5,
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: theme.spacing(-3),
+    },
   },
   containerTimeSlots: {
     margin: 0,
-    padding: 0,
+    marginBottom: theme.spacing(1),
     display: 'flex',
     flexDirection: 'column',
     maxHeight: 310,
@@ -148,7 +154,6 @@ const useStyles = makeStyles((theme) => ({
   },
   itemTimeSlot: {
     cursor: 'pointer',
-    background: theme.palette.common.white,
     marginBottom: theme.spacing(0.5),
     borderRadius: 6,
     padding: theme.spacing(1.5),
@@ -160,18 +165,20 @@ const useStyles = makeStyles((theme) => ({
     color: '#7E7A92',
     border: '1px solid #FFFFFF',
 
+    background: theme.palette.common.white,
+
     '&.selected': {
       background: theme.palette.primary.main,
       color: theme.palette.common.white,
     },
 
     [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(1),
       fontSize: 15,
     },
 
     [theme.breakpoints.down('xs')]: {
-      margin: theme.spacing(0.3),
+      background: '#F0F0F0',
+      margin: theme.spacing(0.5),
       width: '45%',
       flexGrow: 1,
     },
@@ -273,6 +280,8 @@ const ModalScheduleService = (
     };
   }, {});
 
+  const { xsOnly } = useDeviseQuery();
+
   return (
     <Dialog
       open={show}
@@ -297,7 +306,7 @@ const ModalScheduleService = (
         <Box key="pick-date-time-title" flexDirection="row" display="flex">
           <CalendarToday color="primary" />
           <Typography className={classes.titleDatetime} noWrap>
-            Pick a date & time
+            {xsOnly ? 'Pick a date' : 'Pick a date & time'}
           </Typography>
         </Box>
         <Box key="pick-date-time" className={classes.boxDateTime}>
@@ -317,6 +326,20 @@ const ModalScheduleService = (
                 onChange={handleChangeDate}
               />
             </Grid>
+            {xsOnly && (
+              <Grid xs={12} className={classes.containerTimeSlots}>
+                <Box
+                  key="pick-date-time-title"
+                  flexDirection="row"
+                  display="flex"
+                >
+                  <CalendarToday color="primary" />
+                  <Typography className={classes.titleDatetime} noWrap>
+                    Pick a time
+                  </Typography>
+                </Box>
+              </Grid>
+            )}
             <Grid
               item
               sm={3}
@@ -333,7 +356,7 @@ const ModalScheduleService = (
                   )}
                   onClick={() => setSelectedTimeSlotIndex(index)}
                 >
-                  {tm}
+                  {tm.replaceAll(':00', '')}
                 </Box>
               ))}
             </Grid>
@@ -350,7 +373,7 @@ const ModalScheduleService = (
             <SelectWithStatus
               start={<LocationOn color="secondary" />}
               items={optionCarLocations}
-              label="Your car Location"
+              label="Your car location"
               value={location.type_of_site}
               valueChanged={(val: string) =>
                 handleLocationInputChange('type_of_site', val)

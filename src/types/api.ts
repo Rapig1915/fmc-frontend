@@ -42,6 +42,7 @@ export interface RequestUpdateAppointmentContact {
   name: string;
   email: string;
   phone: string;
+  password: string;
 }
 
 export interface RequestUpdateAppointmentTime {
@@ -85,7 +86,9 @@ export interface ResponseAuth {
 
 export interface RequestSignin {
   user: {
-    code: string;
+    code?: string;
+    email?: string;
+    password?: string;
   };
 }
 

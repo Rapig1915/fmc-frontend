@@ -69,15 +69,6 @@ const ModalReasonAccordion = (
     setExpanded(newExpanded ? panel : false);
   };
 
-  // const handleSubReasonSelect = (
-  //   rId: number,
-  //   r: string,
-  //   evt: ChangeEvent<{ value: string }>
-  // ) => {
-  //   const v = evt.target.value as string;
-  //   onChange(rId, r, v);
-  // };
-
   const handleClickSubreason = _.debounce(
     (rId: number, r: string, value: string) => {
       if (value === 'Other') onChange(rId, r, [value]);
@@ -117,13 +108,6 @@ const ModalReasonAccordion = (
             </AccordionSummary>
             <AccordionDetails>
               <FormControl component="fieldset">
-                {/* <RadioGroup
-                  aria-multiselectable
-                  aria-label="gender"
-                  name={`reason-${x.id}`}
-                  value={x.id === reasonId ? subReason : ''}
-                  onChange={(evt) => handleSubReasonSelect(x.id, x.title, evt)}
-                > */}
                 {x.subReason.map((r) => (
                   <FormControlLabel
                     key={r}
@@ -142,7 +126,6 @@ const ModalReasonAccordion = (
                   checked={x.id === reasonId && subReason.includes('Other')}
                   onClick={() => handleClickSubreason(x.id, x.title, 'Other')}
                 />
-                {/* </RadioGroup> */}
               </FormControl>
             </AccordionDetails>
           </Accordion>

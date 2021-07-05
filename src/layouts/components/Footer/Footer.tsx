@@ -8,6 +8,7 @@ import {
   IconButton,
   List,
   ListItem,
+  Link,
 } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
@@ -21,6 +22,7 @@ import { itemFooter } from 'src/utils/data';
 import ImageFootBack from 'src/assets/footer-back.png';
 import SvgLogoWhite from 'src/assets/logo-white.svg';
 import SvgTrustPilot from 'src/assets/trust-pilot.svg';
+import logos from 'src/assets/brands';
 
 interface FooterProps {
   className?: string;
@@ -152,6 +154,13 @@ const Footer = (props: FooterProps): ReactElement => {
 
   const classes = useStyles();
 
+  const capitalize = (s: string): string =>
+    s.charAt(0).toUpperCase() + s.slice(1);
+
+  const allModels = React.useMemo(() => {
+    return Object.keys(logos).map((brand) => capitalize(brand));
+  }, []);
+
   return (
     <Container>
       <div {...rest} className={clsx(classes.root, className)}>
@@ -224,8 +233,15 @@ const Footer = (props: FooterProps): ReactElement => {
                     <h2>Car Makes</h2>
                     <hr />
                     {itemFooter &&
-                      itemFooter.carMakers &&
-                      itemFooter.carMakers.map((c) => <h6 key={c}>{c}</h6>)}
+                      allModels &&
+                      allModels.map(
+                        (c) =>
+                          c !== 'Blank' && (
+                            <Link href={`https://www.fixmycar.io/car/${c}`}>
+                              <h6 key={c}>{c}</h6>
+                            </Link>
+                          )
+                      )}
                   </Grid>
                 </Hidden>
               </Grid>
