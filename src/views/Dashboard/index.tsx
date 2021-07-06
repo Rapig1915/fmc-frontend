@@ -227,19 +227,6 @@ const Dashboard = (): ReactElement => {
               New service request
             </Button>
             <Box key="spacer" className={classes.spacer} />
-            <Button
-              key="button-book-again"
-              startIcon={
-                <Image
-                  lazy={false}
-                  className={classes.imageMechanic}
-                  src={ImageMechanic}
-                />
-              }
-              className={classes.button}
-            >
-              Book with John again
-            </Button>
           </Box>
           <Box key="space-1" className={classes.spacer} />
           <Hidden smUp>

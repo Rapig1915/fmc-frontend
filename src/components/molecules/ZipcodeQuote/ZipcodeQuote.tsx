@@ -46,7 +46,7 @@ const useStyles = makeStyles(() => ({
     right: 0,
   },
   customer: {
-    fontSize: 20,
+    fontSize: 12,
     fontWeight: 500,
     lineHeight: '22px',
     position: 'absolute',
@@ -62,6 +62,7 @@ const ZipcodeQuote = ({
   const classes = useStyles();
 
   const [customer, setCustomer] = useState(0);
+  const [notExpanded, setNotExpanded] = useState(false);
   const [zip, setZip] = useState('');
 
   const [processing, setProcessing] = useState(false);
@@ -79,6 +80,7 @@ const ZipcodeQuote = ({
         setCustomer((happyCustomer && happyCustomer['times-used']) || 0);
       } catch (err) {
         setCustomer(0);
+        setNotExpanded(true);
       }
     } else {
       setCustomer(0);
@@ -108,6 +110,11 @@ const ZipcodeQuote = ({
         disabled={!isReadyToQuote}
         processing={processing}
       />
+      {!!zip && notExpanded && customer === 0 && (
+        <Typography className={classes.customer}>
+          Sorry, we have not expanded to your area yet.
+        </Typography>
+      )}
     </div>
   );
 };

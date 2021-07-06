@@ -130,7 +130,6 @@ const CheckoutForm = ({
             alignItems="center"
             justifyContent="flex-start"
             className={classes.buttonPayFull}
-            // onClick={() => handlePayment()}
           >
             {requestInProgress ? (
               <CircularProgress
@@ -151,7 +150,7 @@ const CheckoutForm = ({
                 Book Now
               </Typography>
               <Typography key="description" className="descAction">
-                Pay in Full later
+                Pay later
               </Typography>
             </Box>
           </Box>

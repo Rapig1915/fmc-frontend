@@ -40,7 +40,6 @@ import SvgDiagnosis from 'src/assets/badges/diagnosis.svg';
 import ImageHappyCustomer from 'src/assets/happy-customer.svg';
 import { brandOf } from 'src/assets/brands';
 
-import BoxFAQ from './BoxFAQ';
 import TitleTip from './TitleTip';
 import EstimateSummary from './EstimateSummary';
 
@@ -540,7 +539,6 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                   imgProps={{ className: classes.imgHappyCustomer }}
                   className={classes.containerHappyCustomer}
                 />
-                <BoxFAQ />
               </AccordionDetails>
             </Accordion>
             <EstimateSummary />
