@@ -65,6 +65,10 @@ const Quote = (): ReactElement => {
 
   const params = queryString.parse(location.search);
   const zipQuery = Array.isArray(params.zip) ? params.zip[0] || '' : params.zip;
+  const utmSrcQuery = Array.isArray(params.utm_source)
+    ? params.utm_source[0] || ''
+    : params.utm_source;
+
   const urlReferer = Array.isArray(params.referer)
     ? params.referer[0] || ''
     : params.referer || '';
@@ -317,7 +321,7 @@ const Quote = (): ReactElement => {
         ...car.attributes,
       },
       tracking_attributes: {
-        utm_source: '',
+        utm_source: utmSrcQuery || '',
         utm_medium: '',
         utm_term: '',
         utm_content: '',
