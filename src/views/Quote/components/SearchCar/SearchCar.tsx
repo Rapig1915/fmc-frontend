@@ -97,6 +97,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
           model: '',
           engine_size: '',
           mileage: '',
+          vin: '',
         },
       });
   };
@@ -136,6 +137,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
             model: carMeta.model,
             engine_size: carMeta.engine,
             mileage: '',
+            vin: carMeta.vin,
           },
         });
 

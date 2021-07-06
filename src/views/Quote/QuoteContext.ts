@@ -26,6 +26,7 @@ export interface IQuoteCar {
     model: string;
     engine_size: string;
     mileage: string;
+    vin: string;
   };
 }
 
@@ -105,6 +106,7 @@ export const QuoteContext = React.createContext<IQuoteContext>({
       model: '',
       engine_size: '',
       mileage: '',
+      vin: '',
     },
   },
   handleSetCar: () => {},

@@ -189,6 +189,7 @@ const Quote = (): ReactElement => {
       model: '',
       engine_size: '',
       mileage: '',
+      vin: '',
     },
   });
   const handleSetCar = useCallback((newCar: IQuoteCar) => setCar(newCar), []);
@@ -276,6 +277,7 @@ const Quote = (): ReactElement => {
         model: '',
         engine_size: '',
         mileage: '',
+        vin: '',
       },
     });
 
