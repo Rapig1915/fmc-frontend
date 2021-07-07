@@ -20,7 +20,6 @@ import { IReduxState } from 'src/store/reducers';
 import { getUser } from 'src/api/auth';
 import { ResponseGetUser } from 'src/types';
 import { logout, setUser } from 'src/store/actions';
-import ImageMechanic from 'src/assets/candidates/steven.png';
 import SvgGift from 'src/assets/badges/gift.svg';
 import { ServiceIntro } from '../Quote/components';
 import HighFive from './components/HighFive';

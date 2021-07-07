@@ -9,6 +9,7 @@ import {
   ResponseZipcode,
   ResponseAvailability,
   ResponseAppointmentEstimate,
+  RequestUpdateEstimateResponse,
 } from 'src/types';
 import { callApi } from './request';
 
@@ -59,6 +60,15 @@ export const checkAvailability = async (
   });
 };
 
+export const getAppointment = async (
+  id: string
+): Promise<ResponseAppointment> => {
+  return callApi<ResponseAppointment>({
+    url: `/api/v1/appointments/${id}`,
+    method: 'GET',
+  });
+};
+
 export const createAppointment = async (
   data: RequestCreateAppointment
 ): Promise<ResponseAppointment> => {
@@ -79,6 +89,17 @@ export const updateAppointment = async (
   return callApi<ResponseAppointment>({
     url: `/api/v2/appointments/${id}`,
     method: 'PUT',
+    data,
+  });
+};
+
+export const updateAppointmentEstimate = async (
+  id: number,
+  data: RequestUpdateEstimateResponse
+): Promise<ResponseAppointment> => {
+  return callApi<ResponseAppointment>({
+    url: `/api/v1/appointments/estimate_booking/${id}`,
+    method: 'PATCH',
     data,
   });
 };

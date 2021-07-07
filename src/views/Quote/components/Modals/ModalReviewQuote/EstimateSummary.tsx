@@ -240,7 +240,7 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
               {s}:
             </Typography>
             <Box flexGrow={1} />
-            <Typography className={classes.titleService} noWrap>
+            <Typography key="price" className={classes.titleService} noWrap>
               <b>$</b> {estimate.services[s].total_price}
             </Typography>
             <KeyboardArrowDown />
@@ -257,17 +257,17 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
               <Typography className={classes.itemTitle}>{s}</Typography>
               <List>
                 {estimate.services[s].parts.map((part) => (
-                  <ListItem>• {part.name}</ListItem>
+                  <ListItem key={part.id}>• {part.name}</ListItem>
                 ))}
               </List>
             </Box>
           </Box>
           <Box key="price" className={classes.boxPrice}>
-            <Typography>
+            <Typography key="price-total">
               <b>Total Parts: $</b>{' '}
               <span>{estimate.services[s].parts_price}</span>
             </Typography>
-            <Typography>
+            <Typography key="price-labor">
               <b>Labor: $</b> <span>{estimate.services[s].labor_price}</span>
             </Typography>
           </Box>
@@ -280,13 +280,13 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
             Total:
           </Typography>
           <Box flexGrow={1} />
-          <Typography className={classes.titleService} noWrap>
+          <Typography key="total-price" className={classes.titleService} noWrap>
             <b>$</b> {estimate.total_price}
           </Typography>
           <KeyboardArrowDown />
         </Box>
         <Box key="price" className={classes.boxPrice}>
-          <Typography>
+          <Typography key="services">
             <b>Services: $</b>{' '}
             <span>
               {Object.keys(estimate.services).reduce(
@@ -295,17 +295,17 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
               )}
             </span>
           </Typography>
-          <Typography>
+          <Typography key="tax">
             <b>Tax: $</b>{' '}
             <span>
               {((estimate.tax * estimate.total_price) / 100).toFixed(2)}
             </span>
           </Typography>
-          <Typography>
+          <Typography key="total-price">
             <b>Total Price (15% savings): $</b>{' '}
             <span>{estimate.total_price}</span>
           </Typography>
-          <Typography>
+          <Typography key="shop-price">
             <b>Shop price: $</b>{' '}
             <span>
               <del>{estimate.shop_price}</del>

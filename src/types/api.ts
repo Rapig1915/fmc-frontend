@@ -53,6 +53,15 @@ export interface RequestUpdateAppointmentTime {
   exact_address: string;
 }
 
+export interface RequestUpdateEstimateResponse {
+  appointment: {
+    id?: number;
+    mechanic_already_here?: string;
+    appointment_day?: string;
+    appointment_time?: string;
+  };
+}
+
 export interface RequestConfirmAppointment {
   token: string;
 }

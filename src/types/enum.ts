@@ -15,6 +15,8 @@ export enum QuoteShowModal {
   FINISH_BOOKING,
   CONTACT,
   CONGRATS,
+
+  DECIDE_ESTIMATE_RESPONSE,
 }
 
 export enum CarSelectType {

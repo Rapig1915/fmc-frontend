@@ -325,7 +325,9 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
 
   const [showTip, setShowTip] = React.useState(false);
 
-  const { handleShowModal, urlReferer } = useContext(QuoteContext);
+  const { handleShowModal, urlReferer, isEstimateResponse } = useContext(
+    QuoteContext
+  );
 
   if (!appointment || !appointment?.attributes || !appointment?.id) {
     return <></>;
@@ -355,6 +357,10 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   const handleSchedule = () => {
     mixPanel(MIXPANEL_TRACK.DIAGNOSIS_ESTIMATE);
     handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
+  };
+
+  const handleEstimateContinue = () => {
+    handleShowModal(QuoteShowModal.DECIDE_ESTIMATE_RESPONSE);
   };
 
   const handleStepBack = () => {
@@ -574,7 +580,16 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                   )
               )}
             <DialogActions className={classes.actionContainer}>
-              {canSchedule && (
+              {isEstimateResponse && (
+                <ButtonForward
+                  key="continue-estimate-decision"
+                  title="Continue"
+                  size="large"
+                  rounded
+                  onClickHandler={handleEstimateContinue}
+                />
+              )}
+              {!isEstimateResponse && canSchedule && (
                 <ButtonForward
                   key="schedule-service"
                   title="Schedule service"

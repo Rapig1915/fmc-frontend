@@ -6,3 +6,4 @@ export { default as ModalScheduleService } from './ModalScheduleService';
 export { default as ModalContact } from './ModalContact';
 export { default as ModalServiceIntro } from './ModalServiceIntro';
 export { default as ModalSelectStaticService } from './ModalSelectStaticService';
+export { default as ModalDecideEstimate } from './ModalDecideEstimate';

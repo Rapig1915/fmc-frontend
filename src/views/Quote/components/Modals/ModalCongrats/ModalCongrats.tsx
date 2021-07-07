@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: theme.spacing(10),
+    paddingTop: theme.spacing(6),
     position: 'relative',
   },
   titleText: {
@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20,
     lineHeight: '28px',
     fontWeight: 400,
-    maxWidth: 300,
+    maxWidth: 500,
     textAlign: 'center',
     zIndex: 100,
   },
@@ -165,6 +165,7 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
     handleSetLoggingIn,
     handleShowModal,
     loggingIn,
+    isEstimateResponse,
   } = useContext(QuoteContext);
 
   const appointment = useSelector(
@@ -225,10 +226,12 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
             lazy={false}
           />
           <Typography key="title" className={classes.titleText}>
-            Congrats!
+            {isEstimateResponse ? 'Success!' : 'Congrats!'}
           </Typography>
           <Typography key="subtitle" className={classes.subTitleText}>
-            You should hear from us in the next 2-hours.
+            {isEstimateResponse
+              ? 'Your appointment is scheduled and we will text you when your FixMyCar mechanic confirms your appointment!'
+              : 'You should hear from us in the next 2-hours.'}
           </Typography>
           <IconButton
             aria-label="close"
@@ -240,40 +243,46 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
         </Box>
       </DialogTitle>
       <DialogContent className={classes.root}>
-        <Box key="payment" className={classes.boxInformation}>
-          <ImageNode
-            key="questions"
-            title={
-              <>
-                <b>Questions?</b>
-                <br />
-                Call us (214) 620-0702
-              </>
-            }
-            imgUrl={SvgQuestion}
-            titleProps={{ className: classes.titleQuestion }}
-            imgProps={{ className: classes.imgQuestion }}
-            className={classes.containerQuestion}
-          />
-          <ImageNode
-            key="next-steps"
-            title={
-              <>
-                <b>Next steps:</b>
-                <br />
-                See your service request in your Active
-              </>
-            }
-            imgUrl={SvgInformation}
-            titleProps={{ className: classes.titleQuestion }}
-            imgProps={{ className: classes.imgQuestion }}
-            className={classes.containerQuestion}
-          />
-        </Box>
-        <Typography className={classes.titleDatetime} noWrap>
-          Help us know your car
-        </Typography>
-        <HelperQuestions className={clsx(classes.helperQuestion)} />
+        {!isEstimateResponse && (
+          <Box key="payment" className={classes.boxInformation}>
+            <ImageNode
+              key="questions"
+              title={
+                <>
+                  <b>Questions?</b>
+                  <br />
+                  Call us (214) 620-0702
+                </>
+              }
+              imgUrl={SvgQuestion}
+              titleProps={{ className: classes.titleQuestion }}
+              imgProps={{ className: classes.imgQuestion }}
+              className={classes.containerQuestion}
+            />
+            <ImageNode
+              key="next-steps"
+              title={
+                <>
+                  <b>Next steps:</b>
+                  <br />
+                  See your service request in your Active
+                </>
+              }
+              imgUrl={SvgInformation}
+              titleProps={{ className: classes.titleQuestion }}
+              imgProps={{ className: classes.imgQuestion }}
+              className={classes.containerQuestion}
+            />
+          </Box>
+        )}
+        {!isEstimateResponse && (
+          <Typography className={classes.titleDatetime} noWrap>
+            Help us know your car
+          </Typography>
+        )}
+        {!isEstimateResponse && (
+          <HelperQuestions className={clsx(classes.helperQuestion)} />
+        )}
         <DialogActions className={classes.actionContainer}>
           <ButtonForward
             key="done"
