@@ -1,6 +1,6 @@
 import React, { ReactElement, useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import queryString from 'query-string';
 import { Container, makeStyles, Typography } from '@material-ui/core';
 
@@ -13,12 +13,15 @@ import {
   RequestUpdateAppointmentContact,
   ResponseAppointment,
   ResponseSignin,
+  RequestUpdateEstimateResponse,
 } from 'src/types';
 import {
   confirmAppointment,
   createAppointment,
+  getAppointment,
   getHappyCustomer,
   updateAppointment,
+  updateAppointmentEstimate,
 } from 'src/api/quote';
 import { IReduxState } from 'src/store/reducers';
 import { setAppointment, setAuthToken, setZip } from 'src/store/actions';
@@ -26,6 +29,7 @@ import { Splash } from 'src/layouts/components';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK, URL } from 'src/utils/consts';
 import { signIn } from 'src/api/auth';
+import logger from 'src/utils/logger';
 
 import { FormContact, SearchCar, ServiceDesk } from './components';
 import SimpleCongrats from './components/SimpleCongrats';
@@ -37,6 +41,7 @@ import {
   ModalContact,
   ModalFinishBooking,
   ModalServiceIntro,
+  ModalDecideEstimate,
 } from './components/Modals';
 import {
   IQuoteReason,
@@ -63,6 +68,9 @@ const Quote = (): ReactElement => {
   const user = useSelector((state: IReduxState) => state.auth.user);
   const location = useLocation();
 
+  const { appId: appIdParam }: { appId: string } = useParams();
+  const isEstimateResponse = !!appIdParam;
+
   const params = queryString.parse(location.search);
   const zipQuery = Array.isArray(params.zip) ? params.zip[0] || '' : params.zip;
   const utmSrcQuery = Array.isArray(params.utm_source)
@@ -76,33 +84,71 @@ const Quote = (): ReactElement => {
   const [openSplash, setOpenSplash] = React.useState(false);
 
   useEffect(() => {
-    const asyncReadZip = async () => {
-      if (zipQuery && zipQuery !== zip) {
-        if (!urlReferer) setOpenSplash(true);
+    if (!isEstimateResponse) {
+      // For normal quote page, require zip
+      const asyncReadZip = async () => {
+        if (zipQuery && zipQuery !== zip) {
+          if (!urlReferer) setOpenSplash(true);
 
-        if (zipQuery.length === 5) {
-          const happyCustomer = await getHappyCustomer(zipQuery);
-          const newHappyCustomer =
-            (happyCustomer && happyCustomer['times-used']) || 0;
+          if (zipQuery.length === 5) {
+            const happyCustomer = await getHappyCustomer(zipQuery);
+            const newHappyCustomer =
+              (happyCustomer && happyCustomer['times-used']) || 0;
 
-          if (zipQuery && newHappyCustomer) {
-            dispatch(setZip(zipQuery, newHappyCustomer));
-            mixPanel(MIXPANEL_TRACK.ZIP);
+            if (zipQuery && newHappyCustomer) {
+              dispatch(setZip(zipQuery, newHappyCustomer));
+              mixPanel(MIXPANEL_TRACK.ZIP);
+            }
           }
         }
+      };
+
+      asyncReadZip();
+
+      const timerSplashId = setTimeout(() => setOpenSplash(false), 3000);
+
+      return () => {
+        if (timerSplashId) clearTimeout(timerSplashId);
+      };
+    }
+
+    const asyncReadAppointment = async () => {
+      try {
+        const appointment = await getAppointment(appIdParam);
+
+        const happyCustomer = await getHappyCustomer(
+          appointment.data.attributes.address
+        );
+        const newHappyCustomer =
+          (happyCustomer && happyCustomer['times-used']) || 0;
+
+        if (newHappyCustomer) {
+          mixPanel(MIXPANEL_TRACK.ZIP);
+          dispatch(
+            setZip(appointment.data.attributes.address, newHappyCustomer)
+          );
+          dispatch(setAppointment(appointment.data));
+        }
+      } catch (err) {
+        logger.error(err);
+        history.push(URL.HOME);
       }
     };
 
-    asyncReadZip();
+    asyncReadAppointment();
 
-    const timerSplashId = setTimeout(() => setOpenSplash(false), 3000);
+    return () => {};
+  }, [
+    zipQuery,
+    urlReferer,
+    dispatch,
+    history,
+    zip,
+    isEstimateResponse,
+    appIdParam,
+  ]);
 
-    return () => {
-      if (timerSplashId) clearTimeout(timerSplashId);
-    };
-  }, [zipQuery, urlReferer, dispatch, history, zip]);
-
-  const showZipModal = !zip && !zipQuery;
+  const showZipModal = !isEstimateResponse && !zip && !zipQuery;
 
   const handleSetZipFromModal = (payload: {
     zip?: string;
@@ -139,7 +185,8 @@ const Quote = (): ReactElement => {
   };
 
   const [showModal, setShowModal] = useState(
-    (location.state && location.state.modal) || QuoteShowModal.NONE
+    (location.state && location.state.modal) ||
+      (isEstimateResponse ? QuoteShowModal.REVIEW_QUOTE : QuoteShowModal.NONE)
   );
   const handleShowModal = useCallback(
     (newShowModal: QuoteShowModal) => setShowModal(newShowModal),
@@ -368,14 +415,12 @@ const Quote = (): ReactElement => {
 
     const resp: ResponseAppointment = await updateAppointment(appId, data);
 
-    if (!resp || !resp.data) {
-      // error handling
-      return;
-    }
-
     dispatch(setAppointment(resp.data));
 
-    if (isNotSureFunnel || urlReferer === URL.DASHBOARD) {
+    if (isEstimateResponse) {
+      if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
+        handleShowModal(QuoteShowModal.FINISH_BOOKING);
+    } else if (isNotSureFunnel || urlReferer === URL.DASHBOARD) {
       if (!contact || !contact.name || !contact.email || !contact.phone)
         handleShowModal(QuoteShowModal.CONTACT);
       else if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
@@ -387,6 +432,21 @@ const Quote = (): ReactElement => {
       login(resp);
     } else {
       handleStepChange(QuoteStep.QUOTE_CONTACT, true);
+    }
+  };
+
+  const handleRespondAppointmentEstimate = async (
+    data: RequestUpdateEstimateResponse
+  ) => {
+    if (!appId) {
+      // error handling
+      return;
+    }
+
+    await updateAppointmentEstimate(appId, data);
+
+    if (isEstimateResponse) {
+      handleShowModal(QuoteShowModal.CONGRATS);
     }
   };
 
@@ -460,6 +520,7 @@ const Quote = (): ReactElement => {
         handleCreateAppointment,
         handleUpdateAppointment,
         handleConfirmAppointment,
+        handleRespondAppointmentEstimate,
 
         clearAll,
 
@@ -467,6 +528,8 @@ const Quote = (): ReactElement => {
         handleSetLoggingIn,
 
         urlReferer,
+
+        isEstimateResponse,
       }}
     >
       <Container className={classes.root}>
@@ -498,6 +561,10 @@ const Quote = (): ReactElement => {
         />
         <ModalServiceIntro
           show={showModal === QuoteShowModal.SERVICE_INTRO}
+          onClose={() => handleShowModal(QuoteShowModal.NONE)}
+        />
+        <ModalDecideEstimate
+          show={showModal === QuoteShowModal.DECIDE_ESTIMATE_RESPONSE}
           onClose={() => handleShowModal(QuoteShowModal.NONE)}
         />
         <Splash

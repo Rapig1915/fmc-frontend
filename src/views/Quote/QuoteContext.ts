@@ -5,6 +5,7 @@ import {
   RequestConfirmAppointment,
   RequestUpdateAppointmentTime,
   RequestUpdateAppointmentContact,
+  RequestUpdateEstimateResponse,
 } from 'src/types';
 
 export interface IQuoteReason {
@@ -63,6 +64,9 @@ export interface IQuoteContext {
   handleUpdateAppointment: (
     data: RequestUpdateAppointmentTime | RequestUpdateAppointmentContact
   ) => void;
+  handleRespondAppointmentEstimate: (
+    data: RequestUpdateEstimateResponse
+  ) => void;
   handleConfirmAppointment: (data: RequestConfirmAppointment) => void;
 
   clearAll: () => void;
@@ -71,6 +75,8 @@ export interface IQuoteContext {
   handleSetLoggingIn: (state: boolean) => void;
 
   urlReferer: string;
+
+  isEstimateResponse: boolean;
 }
 
 export const QuoteContext = React.createContext<IQuoteContext>({
@@ -122,6 +128,7 @@ export const QuoteContext = React.createContext<IQuoteContext>({
   handleCreateAppointment: () => {},
   handleUpdateAppointment: () => {},
   handleConfirmAppointment: () => {},
+  handleRespondAppointmentEstimate: () => {},
 
   clearAll: () => {},
 
@@ -129,4 +136,6 @@ export const QuoteContext = React.createContext<IQuoteContext>({
   handleSetLoggingIn: () => {},
 
   urlReferer: '',
+
+  isEstimateResponse: false,
 });

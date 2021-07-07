@@ -195,7 +195,12 @@ const ModalScheduleService = (
   const isSm = useMediaQuery(theme.breakpoints.down('sm'), {
     defaultMatches: true,
   });
-  const { handleUpdateAppointment, handleShowModal } = useContext(QuoteContext);
+  const {
+    handleUpdateAppointment,
+    handleRespondAppointmentEstimate,
+    isEstimateResponse,
+    handleShowModal,
+  } = useContext(QuoteContext);
 
   const appointmentId = useSelector(
     (state: IReduxState) => state.quote.appointment?.id
@@ -248,13 +253,23 @@ const ModalScheduleService = (
     if (isReadyToSchedule) {
       mixPanel(MIXPANEL_TRACK.SCHEDULE_APPOINTMENT);
 
-      handleUpdateAppointment({
-        appointment_day: keyDate,
-        appointment_time: timeSlotsToday[selectedTimeSlotIndex],
-        type_of_site: location.type_of_site,
-        hints_to_find: location.description,
-        exact_address: location.exact_address,
-      });
+      if (isEstimateResponse) {
+        handleRespondAppointmentEstimate({
+          appointment: {
+            id: appointmentId,
+            appointment_day: keyDate,
+            appointment_time: timeSlotsToday[selectedTimeSlotIndex],
+          },
+        });
+      } else {
+        handleUpdateAppointment({
+          appointment_day: keyDate,
+          appointment_time: timeSlotsToday[selectedTimeSlotIndex],
+          type_of_site: location.type_of_site,
+          hints_to_find: location.description,
+          exact_address: location.exact_address,
+        });
+      }
     }
   };
 
