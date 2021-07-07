@@ -227,10 +227,10 @@ const ModalScheduleService = (
   const isReadyToSchedule =
     timeSlotsToday &&
     timeSlotsToday[selectedTimeSlotIndex] &&
-    location.type_of_site &&
-    location.exact_address &&
-    location.description;
-
+    (isEstimateResponse ||
+      (location.type_of_site &&
+        location.exact_address &&
+        location.description));
   React.useEffect(() => {
     const timer = setTimeout(async () => {
       if (!appointmentId) return;
@@ -377,44 +377,48 @@ const ModalScheduleService = (
             </Grid>
           </Grid>
         </Box>
-        <Box key="pick-location-title" flexDirection="row" display="flex">
-          <LocationOn color="primary" />
-          <Typography className={classes.titleDatetime} noWrap>
-            Your location
-          </Typography>
-        </Box>
-        <Box key="pick-location" className={classes.boxDateTime}>
-          <Box key="location-info-1" className={classes.boxLocation}>
-            <SelectWithStatus
-              start={<LocationOn color="secondary" />}
-              items={optionCarLocations}
-              label="Your car location"
-              value={location.type_of_site}
-              valueChanged={(val: string) =>
-                handleLocationInputChange('type_of_site', val)
-              }
-            />
+        {!isEstimateResponse && (
+          <Box key="pick-location-title" flexDirection="row" display="flex">
+            <LocationOn color="primary" />
+            <Typography className={classes.titleDatetime} noWrap>
+              Your location
+            </Typography>
           </Box>
-          <Box key="location-info-2" className={classes.boxLocation}>
-            <GoogleAddressInputWithStatus
-              start={<DirectionsCar color="secondary" />}
-              value={location.exact_address}
-              valueChanged={(val: string) =>
-                handleLocationInputChange('exact_address', val)
-              }
-            />
+        )}
+        {!isEstimateResponse && (
+          <Box key="pick-location" className={classes.boxDateTime}>
+            <Box key="location-info-1" className={classes.boxLocation}>
+              <SelectWithStatus
+                start={<LocationOn color="secondary" />}
+                items={optionCarLocations}
+                label="Your car location"
+                value={location.type_of_site}
+                valueChanged={(val: string) =>
+                  handleLocationInputChange('type_of_site', val)
+                }
+              />
+            </Box>
+            <Box key="location-info-2" className={classes.boxLocation}>
+              <GoogleAddressInputWithStatus
+                start={<DirectionsCar color="secondary" />}
+                value={location.exact_address}
+                valueChanged={(val: string) =>
+                  handleLocationInputChange('exact_address', val)
+                }
+              />
+            </Box>
+            <Box key="location-info-3" className={classes.boxLocation}>
+              <InputWithStatus
+                placeholder="Describe your car and location"
+                value={location.description}
+                valueChanged={(val: string) =>
+                  handleLocationInputChange('description', val)
+                }
+                multiline
+              />
+            </Box>
           </Box>
-          <Box key="location-info-3" className={classes.boxLocation}>
-            <InputWithStatus
-              placeholder="Describe your car and location"
-              value={location.description}
-              valueChanged={(val: string) =>
-                handleLocationInputChange('description', val)
-              }
-              multiline
-            />
-          </Box>
-        </Box>
+        )}
         <DialogActions className={classes.actionContainer}>
           <ButtonForward
             key="schedule-service"
