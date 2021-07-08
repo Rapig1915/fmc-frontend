@@ -16,6 +16,7 @@ export const URL = {
   HOME: '/',
   QUOTE: '/quote',
   DASHBOARD: '/dashboard',
+  ESTIMATE: '/appointment/estimate/:appId',
   ESTIMATE_RESPONSE: '/appointment/estimate_response/:appId',
 };
 

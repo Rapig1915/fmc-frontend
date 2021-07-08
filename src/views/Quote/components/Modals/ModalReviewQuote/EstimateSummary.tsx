@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,23 +6,23 @@ import { Box, List, ListItem, Typography } from '@material-ui/core';
 import {
   AttachMoney,
   KeyboardArrowDown,
+  KeyboardArrowRight,
   RemoveCircle,
 } from '@material-ui/icons';
 import { IReduxState } from 'src/store/reducers';
-// import { getEstimate } from 'src/api/quote';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     padding: 0,
-    // background: '#EBF1FA',
-    // borderRadius: 6,
-    // padding: theme.spacing(4),
-    // marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2),
     borderBottom: '1px solid #D8D8D8',
 
     [theme.breakpoints.down('xs')]: {},
+
+    '& .button-expand': {
+      cursor: 'pointer',
+    },
   },
   boxService: {
     marginBottom: theme.spacing(1),
@@ -137,93 +137,31 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
 
   const classes = useStyles();
 
-  // const appId = useSelector(
-  //   (state: IReduxState) =>
-  //     state.quote.appointment && state.quote.appointment.id
-  // );
-
   const estimate = useSelector(
     (state: IReduxState) =>
       state.quote.appointment && state.quote.appointment.attributes.estimate
   );
 
-  // React.useEffect(() => {
-  //   const timerId = setTimeout(async () => {
-  //     await getEstimate(appId);
-  //   }, 0);
+  const [statusBlockExpanded, setStatusBlockExpanded] = useState<{
+    [key: string]: boolean;
+  }>({});
 
-  //   return () => {
-  //     if (timerId) clearTimeout(timerId);
-  //   };
-  // }, [appId]);
+  const handleCollapseBlock = (index: number | string, value: boolean) => {
+    setStatusBlockExpanded((state) => ({
+      ...state,
+      [index]: value,
+    }));
+  };
+
+  useEffect(() => {
+    setStatusBlockExpanded({});
+  }, [estimate]);
 
   if (!estimate) return <></>;
 
   return (
     <Box className={clsx(classes.root, className)}>
-      {/* <Box key="service-summary" className={classes.boxService}>
-        <Box
-          key="title"
-          flexDirection="row"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <AttachMoney className={classes.iconService} />
-          <Typography key="title" className={classes.titleService} noWrap>
-            Summary:
-          </Typography>
-          <Box flexGrow={1} />
-          <Typography className={classes.titleService} noWrap>
-            <b>$</b>{' '}
-            {Object.keys(estimate.services).reduce(
-              (sum, s) => sum + estimate.services[s].total_price,
-              0
-            )}{' '}
-          </Typography>
-          <KeyboardArrowDown />
-        </Box>
-        {Object.keys(estimate.services).map((s) => (
-          <Box
-            key="item"
-            flexDirection="row"
-            display="flex"
-            alignItems="center"
-            className={classes.itemService}
-          >
-            <RemoveCircle className={classes.iconServiceItem} />
-            <Box key="content" className={classes.itemContent}>
-              <Typography className={classes.itemTitle}>{s}</Typography>
-              <List>
-                {estimate.services[s].parts.map((part) => (
-                  <ListItem>• {part.name}</ListItem>
-                ))}
-              </List>
-            </Box>
-          </Box>
-        ))}
-        <Box key="price" className={classes.boxPrice}>
-          <Typography>
-            <b>Total Parts: $</b>{' '}
-            <span>
-              {Object.keys(estimate.services).reduce(
-                (sum, s) => sum + estimate.services[s].parts_price,
-                0
-              )}
-            </span>
-          </Typography>
-          <Typography>
-            <b>Labor: $</b>{' '}
-            <span>
-              {Object.keys(estimate.services).reduce(
-                (sum, s) => sum + estimate.services[s].labor_price,
-                0
-              )}
-            </span>
-          </Typography>
-        </Box>
-      </Box> */}
-      {Object.keys(estimate.services).map((s) => (
+      {Object.keys(estimate.services).map((s, ind) => (
         <Box
           key={`service-${estimate.services[s].id}`}
           className={classes.boxService}
@@ -243,34 +181,48 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
             <Typography key="price" className={classes.titleService} noWrap>
               <b>$</b> {estimate.services[s].total_price}
             </Typography>
-            <KeyboardArrowDown />
+            {!statusBlockExpanded[ind] ? (
+              <KeyboardArrowDown
+                className="button-expand"
+                onClick={() => handleCollapseBlock(ind, true)}
+              />
+            ) : (
+              <KeyboardArrowRight
+                className="button-expand"
+                onClick={() => handleCollapseBlock(ind, false)}
+              />
+            )}
           </Box>
-          <Box
-            key="item"
-            flexDirection="row"
-            display="flex"
-            alignItems="center"
-            className={classes.itemService}
-          >
-            <RemoveCircle className={classes.iconServiceItem} />
-            <Box key="content" className={classes.itemContent}>
-              <Typography className={classes.itemTitle}>{s}</Typography>
-              <List>
-                {estimate.services[s].parts.map((part) => (
-                  <ListItem key={part.id}>• {part.name}</ListItem>
-                ))}
-              </List>
+          {statusBlockExpanded[ind] && (
+            <Box
+              key="item"
+              flexDirection="row"
+              display="flex"
+              alignItems="center"
+              className={classes.itemService}
+            >
+              <RemoveCircle className={classes.iconServiceItem} />
+              <Box key="content" className={classes.itemContent}>
+                <Typography className={classes.itemTitle}>{s}</Typography>
+                <List>
+                  {estimate.services[s].parts.map((part) => (
+                    <ListItem key={part.id}>• {part.name}</ListItem>
+                  ))}
+                </List>
+              </Box>
             </Box>
-          </Box>
-          <Box key="price" className={classes.boxPrice}>
-            <Typography key="price-total">
-              <b>Total Parts: $</b>{' '}
-              <span>{estimate.services[s].parts_price}</span>
-            </Typography>
-            <Typography key="price-labor">
-              <b>Labor: $</b> <span>{estimate.services[s].labor_price}</span>
-            </Typography>
-          </Box>
+          )}
+          {statusBlockExpanded[ind] && (
+            <Box key="price" className={classes.boxPrice}>
+              <Typography key="price-total">
+                <b>Total Parts: $</b>{' '}
+                <span>{estimate.services[s].parts_price}</span>
+              </Typography>
+              <Typography key="price-labor">
+                <b>Labor: $</b> <span>{estimate.services[s].labor_price}</span>
+              </Typography>
+            </Box>
+          )}
         </Box>
       ))}
       <Box key="total" className={classes.boxTotal}>
@@ -283,35 +235,43 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
           <Typography key="total-price" className={classes.titleService} noWrap>
             <b>$</b> {estimate.total_price}
           </Typography>
-          <KeyboardArrowDown />
+          {!statusBlockExpanded.total ? (
+            <KeyboardArrowDown
+              className="button-expand"
+              onClick={() => handleCollapseBlock('total', true)}
+            />
+          ) : (
+            <KeyboardArrowRight
+              className="button-expand"
+              onClick={() => handleCollapseBlock('total', false)}
+            />
+          )}
         </Box>
-        <Box key="price" className={classes.boxPrice}>
-          <Typography key="services">
-            <b>Services: $</b>{' '}
-            <span>
-              {Object.keys(estimate.services).reduce(
-                (sum, s) => sum + estimate.services[s].total_price,
-                0
-              )}
-            </span>
-          </Typography>
-          <Typography key="tax">
-            <b>Tax: $</b>{' '}
-            <span>
-              {((estimate.tax * estimate.total_price) / 100).toFixed(2)}
-            </span>
-          </Typography>
-          <Typography key="total-price">
-            <b>Total Price (15% savings): $</b>{' '}
-            <span>{estimate.total_price}</span>
-          </Typography>
-          <Typography key="shop-price">
-            <b>Shop price: $</b>{' '}
-            <span>
-              <del>{estimate.shop_price}</del>
-            </span>
-          </Typography>
-        </Box>
+        {statusBlockExpanded.total && (
+          <Box key="price" className={classes.boxPrice}>
+            <Typography key="services">
+              <b>Services: $</b>{' '}
+              <span>
+                {Object.keys(estimate.services).reduce(
+                  (sum, s) => sum + estimate.services[s].total_price,
+                  0
+                )}
+              </span>
+            </Typography>
+            <Typography key="tax">
+              <b>Tax: $</b> <span>{estimate.tax}</span>
+            </Typography>
+            <Typography key="total-price">
+              <b>Total Price: $</b> <span>{estimate.total_price}</span>
+            </Typography>
+            <Typography key="shop-price">
+              <b>Shop price: $</b>{' '}
+              <span>
+                <del>{estimate.shop_price}</del>
+              </span>
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );
