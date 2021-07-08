@@ -123,3 +123,12 @@ export const getEstimate = async (
     method: 'GET',
   });
 };
+
+export const acceptEstimate = async (
+  id: number | null
+): Promise<ResponseAppointmentEstimate> => {
+  return callApi<ResponseAppointmentEstimate>({
+    url: `/api/v1/estimate_responses?estimate_response[estimate_id]=${id}`,
+    method: 'POST',
+  });
+};

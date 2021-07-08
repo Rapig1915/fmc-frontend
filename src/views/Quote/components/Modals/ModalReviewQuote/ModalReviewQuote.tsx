@@ -43,6 +43,7 @@ import { brandOf } from 'src/assets/brands';
 
 import TitleTip from './TitleTip';
 import EstimateSummary from './EstimateSummary';
+import { acceptEstimate } from '../../../../../api/quote';
 
 interface ModalReviewQuoteProps {
   show: boolean;
@@ -371,8 +372,14 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
   };
 
-  const handleEstimateContinue = () => {
-    handleShowModal(QuoteShowModal.DECIDE_ESTIMATE_RESPONSE);
+  const handleEstimateContinue = async () => {
+    if (estimate?.id) {
+      acceptEstimate(estimate.id).then(() => {
+        handleShowModal(QuoteShowModal.DECIDE_ESTIMATE_RESPONSE);
+      });
+    } else {
+      handleShowModal(QuoteShowModal.DECIDE_ESTIMATE_RESPONSE);
+    }
   };
 
   const handleStepBack = () => {
@@ -516,12 +523,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
             xs={12}
             className={classes.contentHolder}
           >
-            <Accordion
-              key="inspection"
-              square
-              expanded
-              className={classes.accordion}
-            >
+            <Accordion key="inspection" expanded className={classes.accordion}>
               <AccordionSummary>
                 <Image src={SvgDiagnosis} className={classes.imageAccordion} />
                 <Typography className={classes.titleAccordion}>

@@ -157,6 +157,7 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
 
   if (!estimate) return <></>;
 
+  // TODO -- Make the key mapping its own component. Should not be configured on this page
   return (
     <Box className={clsx(classes.root, className)}>
       {Object.keys(estimate.services).map((s, ind) => (
@@ -212,10 +213,12 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
           )}
           {statusBlockExpanded[ind] && (
             <Box key="price" className={classes.boxPrice}>
-              <Typography key="price-total">
-                <b>Total Parts: $</b>{' '}
-                <span>{estimate.services[s].parts_price}</span>
-              </Typography>
+              {estimate.services[s].parts_price > 0 && (
+                <Typography key="price-total">
+                  <b>Total Parts: $</b>{' '}
+                  <span>{estimate.services[s].parts_price}</span>
+                </Typography>
+              )}
               <Typography key="price-labor">
                 <b>Labor: $</b> <span>{estimate.services[s].labor_price}</span>
               </Typography>
