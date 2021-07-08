@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
     color: '#2A2D3C',
   },
   introSubtitle: {
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontSize: '22px',
     fontStyle: 'normal',
     fontWeight: 500,

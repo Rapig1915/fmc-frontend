@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   nameCustomer: {
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontStyle: 'normal',
     fontWeight: 500,
     fontSize: '20px',

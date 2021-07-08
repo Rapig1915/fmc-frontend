@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
     minWidth: 100,
     height: '100%',
     color: '#A2A1A8',
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontSize: 20,
     fontStyle: 'normal',
     fontWeight: 500,

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   introSubtitle: {
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontSize: '22px',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
   },
   countReview: {
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontWeight: 500,
     fontStyle: 'italic',
     fontSize: '15px',
@@ -90,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
   containerMention: {
     marginTop: '20px',
     width: '100%',
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontWeight: 500,
     fontStyle: 'normal',
     fontSize: '18px',
@@ -115,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
   },
   titleBadge: {
     maxWidth: '80px',
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontStyle: 'normal',
     fontWeight: 500,
     fontSize: '13px',

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '15px',
   },
   title: {
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontStyle: 'normal',
     fontWeight: 300,
     fontSize: '18px',

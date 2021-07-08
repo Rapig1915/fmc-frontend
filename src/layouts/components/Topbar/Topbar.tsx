@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     height: '100%',
     alignItems: 'center',
 
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontSize: '13px',
     fontStyle: 'normal',
     fontWeight: 400,
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     textAlign: 'left',
 
     '& .button': {
-      fontFamily: 'Artegra Sans',
+      fontFamily: 'Alegreya Sans',
       background: 'transparent',
       border: 'none',
       color: '#FFFFFF',
@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     textDecoration: 'none',
 
     color: '#2A2D3C',
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontSize: '15px',
     fontStyle: 'normal',
     fontWeight: 600,

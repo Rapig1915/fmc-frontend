@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
   },
   titleWarranty: {
     color: theme.palette.common.white,
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontWeight: 400,
     fontStyle: 'normal',
     fontSize: '23px',

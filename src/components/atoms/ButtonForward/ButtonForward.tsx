@@ -25,7 +25,7 @@ const useStyles = makeStyles({
     borderRadius: (props: ButtonForwardProps) =>
       props.rounded ? 31 : undefined,
     textTransform: 'none',
-    fontFamily: 'Artegra Sans',
+    fontFamily: 'Alegreya Sans',
     fontStyle: 'normal',
     fontWeight: 500,
     backgroundColor: (props: ButtonForwardProps) =>
