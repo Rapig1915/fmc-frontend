@@ -374,12 +374,10 @@ const Topbar = (props: ToolbarProps): ReactElement => {
             </a>
           </div>
           <div className={classes.flexGrow} />
-          <IconButton
-            className={classes.iconButton}
-            onClick={onSidebarOpen}
-            aria-label="Menu"
-          >
-            <Image src={SvgCall} />
+          <IconButton className={classes.iconButton} aria-label="Menu">
+            <Link href="tel:(214) 620-0702">
+              <Image src={SvgCall} />
+            </Link>
           </IconButton>
         </Toolbar>
       </Hidden>
