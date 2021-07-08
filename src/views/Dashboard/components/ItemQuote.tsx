@@ -272,11 +272,6 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const min = React.useMemo(
-    () => (Math.random() * 40 + 10 + (!data ? 1 : 0)).toFixed(0),
-    [data]
-  );
-
   if (!data?.attributes.car.make) return <></>;
 
   const { attributes } = data;
@@ -367,10 +362,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
                 We&apos;re working on your quote
               </Typography>
               <Typography key="notify" className={classes.checkWaiting}>
-                Check back in:
-              </Typography>
-              <Typography key="hours" className={classes.hoursWaiting}>
-                <b>{min}</b> m &nbsp;
+                We&apos;ll notify you ASAP
               </Typography>
             </Box>
           ) : (

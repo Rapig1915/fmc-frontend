@@ -387,7 +387,7 @@ export const allStaticServices = [
     imageSelected: imgService.brakes_selected,
   },
   {
-    name: 'Used car',
+    name: 'Used car inspection',
     image: imgService.used_car,
     imageSelected: imgService.used_car_selected,
   },

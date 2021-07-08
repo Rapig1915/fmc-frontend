@@ -134,7 +134,10 @@ const ServiceIntro = (props: ServiceIntroProps): ReactElement => {
         lazy={false}
       />
       {withLink && (
-        <a href={URL.DASHBOARD} className={classes.linkTerm}>
+        <a
+          href="https://www.fixmycar.io/terms_and_conditions"
+          className={classes.linkTerm}
+        >
           Terms & Conditions
         </a>
       )}
