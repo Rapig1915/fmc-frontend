@@ -283,6 +283,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
     estimate,
     services,
     status,
+    diagnosis_fee: diagnosisFee,
   } = attributes;
 
   const isServiceQuote = appointmentType === 'repair';
@@ -412,7 +413,7 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
               <Check /> Complimentary 50-point inspection
             </Typography>
             <Typography className={classes.inspectContent} key="service-3">
-              <Check /> $35 goes towards the repair price
+              <Check /> ${diagnosisFee / 2} goes towards the repair price
             </Typography>
           </Box>
           <Box key="buttons" className="buttons">

@@ -530,7 +530,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                       <Check /> Complimentary multi-point inspection
                     </Typography>
                     <Typography className={classes.inspectContent} key="sub-3">
-                      <Check /> $35 goes forwards the repair price
+                      <Check /> ${getPrice() / 2} goes forwards the repair price
                     </Typography>
                   </Box>
                 )}
