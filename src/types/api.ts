@@ -1,4 +1,4 @@
-import { IAppointment, ICarMeta, IUser, IVehicle } from './model';
+import { IAppointment, ICarMeta, IEstimate, IUser, IVehicle } from './model';
 
 export interface ResponseZipcode {
   zipcode: string;
@@ -59,6 +59,12 @@ export interface RequestUpdateEstimateResponse {
     mechanic_already_here?: string;
     appointment_day?: string;
     appointment_time?: string;
+  };
+}
+
+export interface RequestUpdateEstimateService {
+  estimate_service: {
+    status: string;
   };
 }
 
@@ -139,4 +145,8 @@ export interface ResponseAppointmentEstimate {
       phone: string;
     };
   };
+}
+
+export interface ResponseEstimate {
+  data: IEstimate;
 }

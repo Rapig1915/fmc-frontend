@@ -10,6 +10,8 @@ import {
   ResponseAvailability,
   ResponseAppointmentEstimate,
   RequestUpdateEstimateResponse,
+  RequestUpdateEstimateService,
+  ResponseEstimate,
 } from 'src/types';
 import { callApi } from './request';
 
@@ -130,5 +132,16 @@ export const acceptEstimate = async (
   return callApi<ResponseAppointmentEstimate>({
     url: `/api/v1/estimate_responses?estimate_response[estimate_id]=${id}`,
     method: 'POST',
+  });
+};
+
+export const updateEstimateServiceStatus = async (
+  id: number,
+  data: RequestUpdateEstimateService
+): Promise<ResponseEstimate> => {
+  return callApi<ResponseEstimate>({
+    url: `/api/v1/estimate_services/${id}`,
+    method: 'PUT',
+    data,
   });
 };

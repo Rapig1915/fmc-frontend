@@ -2,9 +2,11 @@ import { IAppointment } from 'src/types';
 import {
   IQuoteState,
   IQuoteZipcodePayload,
+  EstimateItemStatusPayload,
   IReduxAction,
   QUOTE_SET_APPOINTMENT,
   QUOTE_SET_ZIP,
+  ESTIMATE_ITEM_STATUS,
 } from '../types';
 
 const initialState: IQuoteState = {
@@ -30,6 +32,20 @@ export default (
         ...state,
         appointment: action.payload as IAppointment,
       };
+    case ESTIMATE_ITEM_STATUS: {
+      const appt = state.appointment;
+      Object.assign(state.appointment, appt);
+      const { s, status } = action.payload as EstimateItemStatusPayload;
+
+      if (appt?.attributes.estimate?.services) {
+        appt.attributes.estimate.services[s].status = status;
+      }
+
+      return {
+        ...state,
+        appointment: appt,
+      };
+    }
     default:
       return state;
   }

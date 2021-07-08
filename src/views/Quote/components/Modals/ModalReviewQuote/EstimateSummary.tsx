@@ -1,15 +1,15 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, List, ListItem, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import {
   AttachMoney,
   KeyboardArrowDown,
   KeyboardArrowRight,
-  RemoveCircle,
 } from '@material-ui/icons';
 import { IReduxState } from 'src/store/reducers';
+import ServiceItem from './ServiceItem';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +50,23 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '24px',
     marginLeft: theme.spacing(1),
     color: theme.palette.common.black,
+    minWidth: 60,
+
+    '& b': {
+      color: '#24CA90',
+    },
+
+    [theme.breakpoints.down('xs')]: {
+      fontSize: 15,
+      marginLeft: theme.spacing(0.2),
+    },
+  },
+  titleServiceDisabled: {
+    fontWeight: 600,
+    fontSize: 20,
+    lineHeight: '24px',
+    marginLeft: theme.spacing(1),
+    color: '#C5C5C5',
     minWidth: 60,
 
     '& b': {
@@ -124,36 +141,39 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+
+  rejectBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));
 
 interface EstimateSummaryProps {
   className?: string;
 }
 
-const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
+const EstimateSummary = (props: EstimateSummaryProps) => {
   const { className } = props;
-
+  const dispatch = useDispatch();
   const classes = useStyles();
-
+  const [open, setOpen] = useState(false);
   const estimate = useSelector(
     (state: IReduxState) =>
       state.quote.appointment && state.quote.appointment.attributes.estimate
   );
+  const [total, setTotal] = useState(estimate?.total_price);
 
-  const [statusBlockExpanded, setStatusBlockExpanded] = useState<{
-    [key: string]: boolean;
-  }>({});
-
-  const handleCollapseBlock = (index: number | string, value: boolean) => {
-    setStatusBlockExpanded((state) => ({
-      ...state,
-      [index]: value,
-    }));
+  const handleRemoveOrAdd = (val: number, add: boolean) => {
+    if (add) {
+      setTotal(total ? total + val : 0);
+    } else {
+      setTotal(total ? total - val : 0);
+    }
   };
 
-  useEffect(() => {
-    setStatusBlockExpanded({});
-  }, [estimate]);
+  const handleCollapseBlock = (value: boolean) => {
+    setOpen(value);
+  };
 
   if (!estimate) return <></>;
 
@@ -161,71 +181,14 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
   return (
     <Box className={clsx(classes.root, className)}>
       {Object.keys(estimate.services).map((s, ind) => (
-        <Box
-          key={`service-${estimate.services[s].id}`}
-          className={classes.boxService}
-        >
-          <Box
-            key="title"
-            flexDirection="row"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <AttachMoney className={classes.iconService} />
-            <Typography key="title" className={classes.titleService} noWrap>
-              {s}:
-            </Typography>
-            <Box flexGrow={1} />
-            <Typography key="price" className={classes.titleService} noWrap>
-              <b>$</b> {estimate.services[s].total_price.toFixed(2)}
-            </Typography>
-            {!statusBlockExpanded[ind] ? (
-              <KeyboardArrowDown
-                className="button-expand"
-                onClick={() => handleCollapseBlock(ind, true)}
-              />
-            ) : (
-              <KeyboardArrowRight
-                className="button-expand"
-                onClick={() => handleCollapseBlock(ind, false)}
-              />
-            )}
-          </Box>
-          {statusBlockExpanded[ind] && (
-            <Box
-              key="item"
-              flexDirection="row"
-              display="flex"
-              alignItems="center"
-              className={classes.itemService}
-            >
-              <RemoveCircle className={classes.iconServiceItem} />
-              <Box key="content" className={classes.itemContent}>
-                <Typography className={classes.itemTitle}>{s}</Typography>
-                <List>
-                  {estimate.services[s].parts.map((part) => (
-                    <ListItem key={part.id}>• {part.name}</ListItem>
-                  ))}
-                </List>
-              </Box>
-            </Box>
-          )}
-          {statusBlockExpanded[ind] && (
-            <Box key="price" className={classes.boxPrice}>
-              {estimate.services[s].parts_price > 0 && (
-                <Typography key="price-total">
-                  <b>Total Parts: $</b>{' '}
-                  <span>{estimate.services[s].parts_price}</span>
-                </Typography>
-              )}
-              <Typography key="price-labor">
-                <b>Labor: $</b> <span>{estimate.services[s].labor_price}</span>
-              </Typography>
-            </Box>
-          )}
-        </Box>
+        <ServiceItem
+          onRemoveOrAdd={handleRemoveOrAdd}
+          amt_services={Object.keys(estimate.services).length}
+          s={s}
+          service={estimate.services[s]}
+        />
       ))}
+
       <Box key="total" className={classes.boxTotal}>
         <Box key="title" flexDirection="row" display="flex" alignItems="center">
           <AttachMoney className={classes.iconService} />
@@ -234,36 +197,27 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
           </Typography>
           <Box flexGrow={1} />
           <Typography key="total-price" className={classes.titleService} noWrap>
-            <b>$</b> {estimate.total_price}
+            <b>$</b> {total?.toFixed(2)}
           </Typography>
-          {!statusBlockExpanded.total ? (
+          {!open ? (
             <KeyboardArrowDown
               className="button-expand"
-              onClick={() => handleCollapseBlock('total', true)}
+              onClick={() => handleCollapseBlock(true)}
             />
           ) : (
             <KeyboardArrowRight
               className="button-expand"
-              onClick={() => handleCollapseBlock('total', false)}
+              onClick={() => handleCollapseBlock(false)}
             />
           )}
         </Box>
-        {statusBlockExpanded.total && (
+        {open && (
           <Box key="price" className={classes.boxPrice}>
-            <Typography key="services">
-              <b>Services: $</b>{' '}
-              <span>
-                {Object.keys(estimate.services).reduce(
-                  (sum, s) => sum + estimate.services[s].total_price,
-                  0
-                )}
-              </span>
-            </Typography>
             <Typography key="tax">
               <b>Tax: $</b> <span>{estimate.tax}</span>
             </Typography>
             <Typography key="total-price">
-              <b>Total Price: $</b> <span>{estimate.total_price}</span>
+              <b>Total Price: $</b> <span>{total?.toFixed(2)}</span>
             </Typography>
             <Typography key="shop-price">
               <b>Shop price: $</b>{' '}
