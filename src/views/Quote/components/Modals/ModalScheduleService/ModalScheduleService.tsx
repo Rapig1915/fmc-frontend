@@ -199,6 +199,7 @@ const ModalScheduleService = (
     handleUpdateAppointment,
     handleRespondAppointmentEstimate,
     isEstimateResponse,
+    shouldBookEstimate,
     handleShowModal,
   } = useContext(QuoteContext);
 
@@ -227,7 +228,7 @@ const ModalScheduleService = (
   const isReadyToSchedule =
     timeSlotsToday &&
     timeSlotsToday[selectedTimeSlotIndex] &&
-    (isEstimateResponse ||
+    ((isEstimateResponse && !shouldBookEstimate) ||
       (location.type_of_site &&
         location.exact_address &&
         location.description));
@@ -253,7 +254,7 @@ const ModalScheduleService = (
     if (isReadyToSchedule) {
       mixPanel(MIXPANEL_TRACK.SCHEDULE_APPOINTMENT);
 
-      if (isEstimateResponse) {
+      if (isEstimateResponse && !shouldBookEstimate) {
         handleRespondAppointmentEstimate({
           appointment: {
             id: appointmentId,
@@ -377,7 +378,7 @@ const ModalScheduleService = (
             </Grid>
           </Grid>
         </Box>
-        {!isEstimateResponse && (
+        {(!isEstimateResponse || shouldBookEstimate) && (
           <Box key="pick-location-title" flexDirection="row" display="flex">
             <LocationOn color="primary" />
             <Typography className={classes.titleDatetime} noWrap>
@@ -385,7 +386,7 @@ const ModalScheduleService = (
             </Typography>
           </Box>
         )}
-        {!isEstimateResponse && (
+        {(!isEstimateResponse || shouldBookEstimate) && (
           <Box key="pick-location" className={classes.boxDateTime}>
             <Box key="location-info-1" className={classes.boxLocation}>
               <SelectWithStatus

@@ -31,6 +31,12 @@ const Routes = (): ReactElement => {
         component={Quote}
         exact
         layout={MinimalLayout}
+        path={URL.ESTIMATE}
+      />
+      <RouteWithLayout
+        component={Quote}
+        exact
+        layout={MinimalLayout}
         path={URL.ESTIMATE_RESPONSE}
       />
       <RouteWithLayout

@@ -77,6 +77,7 @@ export interface IQuoteContext {
   urlReferer: string;
 
   isEstimateResponse: boolean;
+  shouldBookEstimate: boolean;
 }
 
 export const QuoteContext = React.createContext<IQuoteContext>({
@@ -138,4 +139,5 @@ export const QuoteContext = React.createContext<IQuoteContext>({
   urlReferer: '',
 
   isEstimateResponse: false,
+  shouldBookEstimate: false,
 });

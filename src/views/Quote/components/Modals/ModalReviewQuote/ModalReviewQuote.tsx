@@ -325,9 +325,12 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
 
   const [showTip, setShowTip] = React.useState(false);
 
-  const { handleShowModal, urlReferer, isEstimateResponse } = useContext(
-    QuoteContext
-  );
+  const {
+    handleShowModal,
+    urlReferer,
+    isEstimateResponse,
+    shouldBookEstimate,
+  } = useContext(QuoteContext);
 
   if (!appointment || !appointment?.attributes || !appointment?.id) {
     return <></>;
@@ -580,7 +583,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                   )
               )}
             <DialogActions className={classes.actionContainer}>
-              {isEstimateResponse && (
+              {isEstimateResponse && !shouldBookEstimate && (
                 <ButtonForward
                   key="continue-estimate-decision"
                   title="Continue"
@@ -589,7 +592,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                   onClickHandler={handleEstimateContinue}
                 />
               )}
-              {!isEstimateResponse && canSchedule && (
+              {(!isEstimateResponse || shouldBookEstimate) && canSchedule && (
                 <ButtonForward
                   key="schedule-service"
                   title="Schedule service"

@@ -70,6 +70,9 @@ const Quote = (): ReactElement => {
 
   const { appId: appIdParam }: { appId: string } = useParams();
   const isEstimateResponse = !!appIdParam;
+  const shouldBookEstimate =
+    isEstimateResponse &&
+    location.pathname.includes(URL.ESTIMATE.replace(':appId', ''));
 
   const params = queryString.parse(location.search);
   const zipQuery = Array.isArray(params.zip) ? params.zip[0] || '' : params.zip;
@@ -417,11 +420,18 @@ const Quote = (): ReactElement => {
 
     dispatch(setAppointment(resp.data));
 
-    if (isEstimateResponse) {
+    if (isEstimateResponse && !shouldBookEstimate) {
       if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
         handleShowModal(QuoteShowModal.FINISH_BOOKING);
-    } else if (isNotSureFunnel || urlReferer === URL.DASHBOARD) {
-      if (!contact || !contact.name || !contact.email || !contact.phone)
+    } else if (
+      isNotSureFunnel ||
+      urlReferer === URL.DASHBOARD ||
+      shouldBookEstimate
+    ) {
+      if (
+        !shouldBookEstimate &&
+        (!contact || !contact.name || !contact.email || !contact.phone)
+      )
         handleShowModal(QuoteShowModal.CONTACT);
       else if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
         handleShowModal(QuoteShowModal.FINISH_BOOKING);
@@ -530,6 +540,7 @@ const Quote = (): ReactElement => {
         urlReferer,
 
         isEstimateResponse,
+        shouldBookEstimate,
       }}
     >
       <Container className={classes.root}>
