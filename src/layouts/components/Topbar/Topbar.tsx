@@ -10,6 +10,7 @@ import {
   Typography,
   IconButton,
   Container,
+  Link,
 } from '@material-ui/core';
 
 import { ButtonForward, Image } from 'src/components/atoms';
@@ -60,12 +61,15 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     letterSpacing: '0px',
     textAlign: 'left',
 
-    '& button': {
+    '& .button': {
       fontFamily: 'Artegra Sans',
       background: 'transparent',
       border: 'none',
       color: '#FFFFFF',
       cursor: 'pointer',
+      textDecoration: 'none',
+      fontSize: 13,
+      fontWeight: 400,
     },
   },
   flexGrow: {
@@ -164,6 +168,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     fontStyle: 'normal',
     fontSize: 17,
     lineHeight: '24.57px',
+    textDecoration: 'none',
   },
 }));
 
@@ -214,9 +219,13 @@ const Topbar = (props: ToolbarProps): ReactElement => {
                 />
               )}
               {!loggedIn && (
-                <button type="button" key="call">
+                <Link
+                  key="tel-team-fixmycar"
+                  className="button"
+                  href="tel:(214) 620-0702"
+                >
                   (214) 620-0702
-                </button>
+                </Link>
               )}
               {!loggedIn && (
                 <Image
@@ -227,7 +236,12 @@ const Topbar = (props: ToolbarProps): ReactElement => {
                 />
               )}
               {!loggedIn && (
-                <button type="button" key="login" onClick={handleClickLogin}>
+                <button
+                  type="button"
+                  key="login"
+                  className="button"
+                  onClick={handleClickLogin}
+                >
                   Login
                 </button>
               )}
@@ -303,7 +317,15 @@ const Topbar = (props: ToolbarProps): ReactElement => {
               )}
               {loggedIn && (
                 <ImageNode
-                  title={<>(214) 620-0702</>}
+                  title={
+                    <Link
+                      key="tel-team-fixmycar"
+                      className={classes.titlePhone}
+                      href="tel:(214) 620-0702"
+                    >
+                      (214) 620-0702
+                    </Link>
+                  }
                   imgUrl={ImageServieProvider}
                   titleProps={{ className: classes.titlePhone }}
                   imgProps={{ className: classes.imgServiceProvider }}

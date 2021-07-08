@@ -61,7 +61,7 @@ const ModalReasonAccordion = (
 
   const classes = useStyles();
 
-  const [expanded, setExpanded] = React.useState<number | false>(1);
+  const [expanded, setExpanded] = React.useState<number | false>(0);
   const handleChange = (panel: number) => (
     event: React.ChangeEvent<unknown>,
     newExpanded: boolean

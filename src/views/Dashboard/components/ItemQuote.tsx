@@ -4,7 +4,7 @@ import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Check } from '@material-ui/icons';
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
+import { Box, Button, makeStyles, Typography, Link } from '@material-ui/core';
 
 import { ButtonForward, Image } from 'src/components/atoms';
 import { ImageNode } from 'src/components/molecules';
@@ -255,6 +255,14 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '13.84px',
     lineHeight: '20.71px',
   },
+  titlePhone: {
+    color: '#302A3C',
+    fontWeight: 400,
+    fontStyle: 'normal',
+    fontSize: 13.84,
+    lineHeight: '20.71px',
+    textDecoration: 'none',
+  },
 }));
 
 const ItemQuote = (props: ItemQuoteProps): ReactElement => {
@@ -388,7 +396,13 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
                   <>
                     <b>Talk to a service advisor:</b>
                     <br />
-                    Call us (214) 620-0702
+                    <Link
+                      key="tel-team-fixmycar"
+                      className={classes.titlePhone}
+                      href="tel:(214) 620-0702"
+                    >
+                      Call us (214) 620-0702
+                    </Link>
                   </>
                 }
                 imgUrl={SvgQuestion}
@@ -448,7 +462,13 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
               <>
                 <b>Talk to a service advisor:</b>
                 <br />
-                Call us (214) 620-0702
+                <Link
+                  key="tel-team-fixmycar"
+                  className={classes.titlePhone}
+                  href="tel:(214) 620-0702"
+                >
+                  Call us (214) 620-0702
+                </Link>
               </>
             }
             imgUrl={SvgQuestion}

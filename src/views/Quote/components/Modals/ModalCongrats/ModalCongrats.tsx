@@ -9,6 +9,7 @@ import {
   DialogTitle,
   IconButton,
   Typography,
+  Link,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import { Close } from '@material-ui/icons';
@@ -149,6 +150,14 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     },
   },
+  titlePhone: {
+    color: '#7E7A92',
+    fontWeight: 400,
+    fontStyle: 'normal',
+    fontSize: 15,
+    lineHeight: '20px',
+    textDecoration: 'none',
+  },
   helperQuestion: {
     marginBottom: theme.spacing(3),
   },
@@ -251,7 +260,13 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
                 <>
                   <b>Questions?</b>
                   <br />
-                  Call us (214) 620-0702
+                  <Link
+                    key="tel-team-fixmycar"
+                    className={classes.titlePhone}
+                    href="tel:(214) 620-0702"
+                  >
+                    Call us (214) 620-0702
+                  </Link>
                 </>
               }
               imgUrl={SvgQuestion}
