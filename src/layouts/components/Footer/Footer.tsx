@@ -213,7 +213,7 @@ const Footer = (props: FooterProps): ReactElement => {
                   <Link key="link-team-fixmycar" href="mailto:team@fixmycar.io">
                     <h6>team@fixmycar.io</h6>
                   </Link>
-                  <Link key="tel-team-fixmycar" href="tel:(313) 474-9816">
+                  <Link key="tel-team-fixmycar" href="tel:(214) 620-0702">
                     <h6>(214) 620-0702</h6>
                   </Link>
                   <div>

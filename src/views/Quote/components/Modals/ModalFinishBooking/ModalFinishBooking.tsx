@@ -11,6 +11,7 @@ import {
   Hidden,
   IconButton,
   Typography,
+  Link,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -177,8 +178,16 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
     fontWeight: 300,
     fontStyle: 'normal',
-    fontSize: '17px',
+    fontSize: 17,
     lineHeight: '22px',
+  },
+  titlePhone: {
+    color: theme.palette.common.white,
+    fontWeight: 300,
+    fontStyle: 'normal',
+    fontSize: 17,
+    lineHeight: '22px',
+    textDecoration: 'none',
   },
 
   contentHolder: {
@@ -329,7 +338,13 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
                   <>
                     <b>Questions?</b>
                     <br />
-                    Call us (214) 620-0702
+                    <Link
+                      key="tel-team-fixmycar"
+                      className={classes.titlePhone}
+                      href="tel:(214) 620-0702"
+                    >
+                      Call us (214) 620-0702
+                    </Link>
                   </>
                 }
                 imgUrl={SvgQuestion}
