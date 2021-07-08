@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { Box, makeStyles } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import { Image } from 'src/components/atoms';
-import { URL } from 'src/utils/consts';
 
 import ImageQuoteIntro from 'src/assets/quote-intro.png';
 import { carFacts } from 'src/utils/data';
