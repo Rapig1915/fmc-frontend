@@ -95,8 +95,6 @@ const useStyles = makeStyles((theme) => ({
     color: '#7E7A92',
     paddingLeft: theme.spacing(2),
     flexGrow: 1,
-
-    // borderBottom: '1px dashed #D8D8D8',
   },
 
   boxPrice: {
@@ -179,7 +177,7 @@ const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
             </Typography>
             <Box flexGrow={1} />
             <Typography key="price" className={classes.titleService} noWrap>
-              <b>$</b> {estimate.services[s].total_price}
+              <b>$</b> {estimate.services[s].total_price.toFixed(2)}
             </Typography>
             {!statusBlockExpanded[ind] ? (
               <KeyboardArrowDown
