@@ -145,11 +145,6 @@ const FormContact = (props: FormContactProps): ReactElement => {
       <Typography key="title" className={classes.title}>
         Contact & Account
       </Typography>
-      {!modalView && (
-        <Typography key="subtitle" className={classes.subTitle}>
-          Our technician are preparing a quote for you
-        </Typography>
-      )}
       <Grid container className={classes.contentContainer}>
         <Grid item sm={modalView ? 12 : 8} xs={12}>
           <form>
