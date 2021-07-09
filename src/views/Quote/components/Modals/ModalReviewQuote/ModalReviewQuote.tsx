@@ -357,7 +357,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     services,
   } = attributes;
 
-  const isServiceQuote = appointmentType === 'repair' || isEstimateResponse;
+  const isServiceQuote = appointmentType === 'repair';
   const diagCanSchedule =
     !isServiceQuote &&
     appointmentStatus !== 'pending' &&
