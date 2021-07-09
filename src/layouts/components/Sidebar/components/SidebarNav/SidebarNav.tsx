@@ -109,7 +109,12 @@ const SidebarNav = (props: SidebarNavProps): ReactElement => {
         )}
       </ListItem>
       <ListItem className={classes.listItem}>
-        <ButtonForward rounded size="small" className={classes.buttonForward} />
+        <ButtonForward
+          rounded
+          size="small"
+          className={classes.buttonForward}
+          onClickHandler={() => history.push(URL.QUOTE)}
+        />
       </ListItem>
     </List>
   );

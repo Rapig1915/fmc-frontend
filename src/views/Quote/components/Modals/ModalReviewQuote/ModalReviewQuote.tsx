@@ -357,7 +357,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     services,
   } = attributes;
 
-  const isServiceQuote = appointmentType === 'repair';
+  const isServiceQuote = appointmentType === 'repair' || isEstimateResponse;
   const diagCanSchedule =
     !isServiceQuote &&
     appointmentStatus !== 'pending' &&
@@ -396,7 +396,13 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const getTitle = () => {
-    if (!isServiceQuote) return 'Diagnose my car';
+    if (!isServiceQuote) {
+      return 'Diagnose my car';
+    }
+
+    if (isEstimateResponse && estimate?.services) {
+      return Object.keys(estimate.services).join(', ');
+    }
 
     return services.join(', ');
   };

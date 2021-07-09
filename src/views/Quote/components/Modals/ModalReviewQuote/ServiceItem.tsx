@@ -175,6 +175,20 @@ const ServiceItem = (props: ServiceItemProps) => {
     setOpen(value);
   };
 
+  const updateStatus = async (statusUpdate: string, add: boolean) => {
+    const data = {
+      estimate_service: {
+        status: statusUpdate,
+      },
+    };
+
+    updateEstimateServiceStatus(id, data).then(() => {
+      dispatch(estimateItemStatus(s, statusUpdate));
+      handleCollapseBlock(false);
+      onRemoveOrAdd(totalPrice, add);
+    });
+  };
+
   return (
     <Box key={`service-${id}`} className={classes.boxService}>
       <Box
@@ -228,23 +242,12 @@ const ServiceItem = (props: ServiceItemProps) => {
           alignItems="center"
           className={classes.itemService}
         >
-          {Object.keys(amtServices > 1) &&
+          {amtServices > 1 &&
             status !== 'locked' &&
             (status === 'rejected' ? (
               <Button
                 className={classes.rejectBtn}
-                onClick={async () => {
-                  const data = {
-                    estimate_service: {
-                      status: 'approved',
-                    },
-                  };
-                  updateEstimateServiceStatus(id, data).then(() => {
-                    dispatch(estimateItemStatus(s, 'approved'));
-                    handleCollapseBlock(false);
-                    onRemoveOrAdd(totalPrice, true);
-                  });
-                }}
+                onClick={() => updateStatus('approved', true)}
               >
                 <RadioButtonUncheckedRounded
                   className={classes.iconServiceItemInactive}
@@ -253,18 +256,7 @@ const ServiceItem = (props: ServiceItemProps) => {
             ) : (
               <Button
                 className={classes.rejectBtn}
-                onClick={async () => {
-                  const data = {
-                    estimate_service: {
-                      status: 'rejected',
-                    },
-                  };
-                  updateEstimateServiceStatus(id, data).then(() => {
-                    dispatch(estimateItemStatus(s, 'rejected'));
-                    handleCollapseBlock(false);
-                    onRemoveOrAdd(totalPrice, false);
-                  });
-                }}
+                onClick={() => updateStatus('rejected', false)}
               >
                 <RemoveCircle className={classes.iconServiceItem} />
               </Button>

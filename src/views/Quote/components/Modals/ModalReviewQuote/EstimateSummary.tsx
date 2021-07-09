@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import {
@@ -23,12 +23,6 @@ const useStyles = makeStyles((theme) => ({
     '& .button-expand': {
       cursor: 'pointer',
     },
-  },
-  boxService: {
-    marginBottom: theme.spacing(1),
-    background: '#EBF1FA',
-    borderRadius: 6,
-    padding: theme.spacing(2),
   },
   boxTotal: {
     marginBottom: theme.spacing(1),
@@ -61,59 +55,6 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(0.2),
     },
   },
-  titleServiceDisabled: {
-    fontWeight: 600,
-    fontSize: 20,
-    lineHeight: '24px',
-    marginLeft: theme.spacing(1),
-    color: '#C5C5C5',
-    minWidth: 60,
-
-    '& b': {
-      color: '#24CA90',
-    },
-
-    [theme.breakpoints.down('xs')]: {
-      fontSize: 15,
-      marginLeft: theme.spacing(0.2),
-    },
-  },
-  itemService: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    padding: theme.spacing(2),
-    '& ul, & li': {
-      margin: 2,
-      padding: 0,
-    },
-  },
-  iconServiceItem: {
-    color: '#DC7979',
-    marginRight: theme.spacing(1),
-    marginTop: theme.spacing(1),
-    width: 20,
-    height: 20,
-  },
-  itemTitle: {
-    fontWeight: 400,
-    fontSize: 18,
-    lineHeight: '28px',
-    color: theme.palette.common.black,
-
-    [theme.breakpoints.down('xs')]: {
-      fontSize: 14,
-    },
-  },
-  itemContent: {
-    fontWeight: 400,
-    fontSize: 18,
-    lineHeight: '29px',
-    color: '#7E7A92',
-    paddingLeft: theme.spacing(2),
-    flexGrow: 1,
-  },
-
   boxPrice: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
@@ -141,11 +82,6 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-
-  rejectBtn: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 }));
 
 interface EstimateSummaryProps {
@@ -154,7 +90,6 @@ interface EstimateSummaryProps {
 
 const EstimateSummary = (props: EstimateSummaryProps) => {
   const { className } = props;
-  const dispatch = useDispatch();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const estimate = useSelector(
@@ -177,7 +112,6 @@ const EstimateSummary = (props: EstimateSummaryProps) => {
 
   if (!estimate) return <></>;
 
-  // TODO -- Make the key mapping its own component. Should not be configured on this page
   return (
     <Box className={clsx(classes.root, className)}>
       {Object.keys(estimate.services).map((s, ind) => (
@@ -216,6 +150,11 @@ const EstimateSummary = (props: EstimateSummaryProps) => {
             <Typography key="tax">
               <b>Tax: $</b> <span>{estimate.tax}</span>
             </Typography>
+            {estimate.discount_total > 0 && (
+              <Typography key="discount">
+                <b>Discount: - $</b> <span>{estimate.discount_total}</span>
+              </Typography>
+            )}
             <Typography key="total-price">
               <b>Total Price: $</b> <span>{total?.toFixed(2)}</span>
             </Typography>
