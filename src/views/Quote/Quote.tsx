@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import queryString from 'query-string';
 import { Container, makeStyles, Typography } from '@material-ui/core';
-
 import {
   QuoteShowModal,
   QuoteStep,
@@ -416,33 +415,55 @@ const Quote = (): ReactElement => {
       return;
     }
 
-    const resp: ResponseAppointment = await updateAppointment(appId, data);
+    updateAppointment(appId, data)
+      .then((resp: ResponseAppointment) => {
+        dispatch(setAppointment(resp.data));
 
-    dispatch(setAppointment(resp.data));
+        if (isEstimateResponse && !shouldBookEstimate) {
+          if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
+            handleShowModal(QuoteShowModal.FINISH_BOOKING);
+        } else if (
+          isNotSureFunnel ||
+          urlReferer === URL.DASHBOARD ||
+          shouldBookEstimate
+        ) {
+          if (
+            !shouldBookEstimate &&
+            (!contact || !contact.name || !contact.email || !contact.phone)
+          )
+            handleShowModal(QuoteShowModal.CONTACT);
+          else if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
+            handleShowModal(QuoteShowModal.FINISH_BOOKING);
+          else if (showModal === QuoteShowModal.REVIEW_QUOTE)
+            handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
+          else handleShowModal(QuoteShowModal.REVIEW_QUOTE);
+        } else if (step === QuoteStep.QUOTE_CONTACT) {
+          login(resp);
+        } else {
+          handleStepChange(QuoteStep.QUOTE_CONTACT, true);
+        }
+      })
+      .catch((error) => {
+        // Error 😨
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors &&
+          Array.isArray(error.response.data.errors)
+        ) {
+          handleSetContact({
+            ...contact,
+            error: error.response.data.errors[0],
+          });
 
-    if (isEstimateResponse && !shouldBookEstimate) {
-      if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
-        handleShowModal(QuoteShowModal.FINISH_BOOKING);
-    } else if (
-      isNotSureFunnel ||
-      urlReferer === URL.DASHBOARD ||
-      shouldBookEstimate
-    ) {
-      if (
-        !shouldBookEstimate &&
-        (!contact || !contact.name || !contact.email || !contact.phone)
-      )
-        handleShowModal(QuoteShowModal.CONTACT);
-      else if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
-        handleShowModal(QuoteShowModal.FINISH_BOOKING);
-      else if (showModal === QuoteShowModal.REVIEW_QUOTE)
-        handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
-      else handleShowModal(QuoteShowModal.REVIEW_QUOTE);
-    } else if (step === QuoteStep.QUOTE_CONTACT) {
-      login(resp);
-    } else {
-      handleStepChange(QuoteStep.QUOTE_CONTACT, true);
-    }
+          setTimeout(() => {
+            handleSetContact({
+              ...contact,
+              error: '',
+            });
+          }, 3000);
+        }
+      });
   };
 
   const handleRespondAppointmentEstimate = async (

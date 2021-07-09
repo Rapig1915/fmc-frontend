@@ -36,6 +36,7 @@ export interface IQuoteContact {
   email: string;
   password: string;
   phone: string;
+  error?: string;
 }
 
 export interface IQuoteContext {

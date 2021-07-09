@@ -35,10 +35,18 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
     },
   },
-  subTitle: {
-    fontSize: 18,
-    lineHeight: '25px',
+  error: {
+    fontSize: 15,
+    lineHeight: '28px',
     fontWeight: 500,
+    marginBottom: theme.spacing(1),
+    textAlign: 'center',
+    color: '#FF3030',
+  },
+  subTitle: {
+    fontSize: 22,
+    lineHeight: '25px',
+    fontWeight: 700,
     marginBottom: theme.spacing(3),
     maxWidth: 300,
     flexWrap: 'wrap',
@@ -125,13 +133,15 @@ const FormContact = (props: FormContactProps): ReactElement => {
   };
 
   const PHONE_NUMBER_LENGTH = 10;
+  const MIN_PASSWORD_LENGTH = 6;
   const isReadyToContinue =
     !!contact.name &&
     !!contact.email &&
     (loggedIn || !!contact.password) &&
     !!contact.phone &&
     validateEmail(contact.email) &&
-    contact.phone.length === PHONE_NUMBER_LENGTH;
+    contact.phone.length === PHONE_NUMBER_LENGTH &&
+    contact.password.length >= MIN_PASSWORD_LENGTH;
 
   return (
     <Box
@@ -145,6 +155,11 @@ const FormContact = (props: FormContactProps): ReactElement => {
       <Typography key="title" className={classes.title}>
         Contact & Account
       </Typography>
+      {contact.error && (
+        <Typography key="error" className={classes.error}>
+          {contact.error}
+        </Typography>
+      )}
       <Grid container className={classes.contentContainer}>
         <Grid item sm={modalView ? 12 : 8} xs={12}>
           <form>
@@ -178,6 +193,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
                   }
                   start={<Lock color="secondary" />}
                   password
+                  minLength={MIN_PASSWORD_LENGTH}
                 />
               </Box>
             )}

@@ -343,7 +343,7 @@ const ModalScheduleService = (
               />
             </Grid>
             {xsOnly && (
-              <Grid xs={12} className={classes.containerTimeSlots}>
+              <Grid item xs={12} className={classes.containerTimeSlots}>
                 <Box
                   key="pick-date-time-title"
                   flexDirection="row"
