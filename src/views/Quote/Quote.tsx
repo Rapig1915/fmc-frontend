@@ -427,10 +427,7 @@ const Quote = (): ReactElement => {
           urlReferer === URL.DASHBOARD ||
           shouldBookEstimate
         ) {
-          if (
-            !shouldBookEstimate &&
-            (!contact || !contact.name || !contact.email || !contact.phone)
-          )
+          if (!shouldBookEstimate && showModal === QuoteShowModal.NONE)
             handleShowModal(QuoteShowModal.CONTACT);
           else if (showModal === QuoteShowModal.SCHEDULE_SERVICE)
             handleShowModal(QuoteShowModal.FINISH_BOOKING);

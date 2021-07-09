@@ -141,7 +141,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
     !!contact.phone &&
     validateEmail(contact.email) &&
     contact.phone.length === PHONE_NUMBER_LENGTH &&
-    contact.password.length >= MIN_PASSWORD_LENGTH;
+    (loggedIn || contact.password.length >= MIN_PASSWORD_LENGTH);
 
   return (
     <Box
