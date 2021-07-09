@@ -86,9 +86,13 @@ const Splash = (props: SplashProps): ReactElement => {
           <Typography className={classes.title}>{text}</Typography>
         ) : (
           <Typography className={classes.title}>
-            <b>{stateCustomer} happy customers</b>
-            <br />
-            had their car fixed in your area with Fixmycar!
+            {stateCustomer > 0 && (
+              <div>
+                <b>{stateCustomer} happy customers</b>
+                <br />
+                had their car fixed in your area with FixMyCar!
+              </div>
+            )}
           </Typography>
         )}
         <CircularProgress />
