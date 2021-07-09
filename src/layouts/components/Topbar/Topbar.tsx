@@ -206,7 +206,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
                 lazy={false}
               />
               <div>
-                <b>Service waranty:</b> 24 months / 24,000 mi waranty on each
+                <b>Service warranty:</b> 24 months / 24,000 mi warranty on each
                 job.
               </div>
               <div className={classes.flexGrow} />

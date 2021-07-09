@@ -371,10 +371,10 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
                 key="warranty"
                 title={
                   <>
-                    <b>Service waranty:</b>
+                    <b>Service warranty:</b>
                     <br />
                     24 months / 24,000 mi
-                    <br /> waranty on each job.
+                    <br /> warranty on each job.
                   </>
                 }
                 imgUrl={SvgSecurity}
@@ -437,10 +437,10 @@ const ItemQuote = (props: ItemQuoteProps): ReactElement => {
             key="warranty"
             title={
               <>
-                <b>Service waranty:</b>
+                <b>Service warranty:</b>
                 <br />
                 24 months / 24,000 mi
-                <br /> waranty on each job.
+                <br /> warranty on each job.
               </>
             }
             imgUrl={SvgSecurity}
