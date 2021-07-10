@@ -343,7 +343,7 @@ const ModalScheduleService = (
               />
             </Grid>
             {xsOnly && (
-              <Grid xs={12} className={classes.containerTimeSlots}>
+              <Grid item xs={12} className={classes.containerTimeSlots}>
                 <Box
                   key="pick-date-time-title"
                   flexDirection="row"
@@ -410,7 +410,7 @@ const ModalScheduleService = (
             </Box>
             <Box key="location-info-3" className={classes.boxLocation}>
               <InputWithStatus
-                placeholder="Describe your car and location"
+                placeholder="Any hints to find your car?"
                 value={location.description}
                 valueChanged={(val: string) =>
                   handleLocationInputChange('description', val)

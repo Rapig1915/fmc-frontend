@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -88,7 +88,7 @@ interface EstimateSummaryProps {
   className?: string;
 }
 
-const EstimateSummary = (props: EstimateSummaryProps) => {
+const EstimateSummary = (props: EstimateSummaryProps): ReactElement => {
   const { className } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -114,7 +114,7 @@ const EstimateSummary = (props: EstimateSummaryProps) => {
 
   return (
     <Box className={clsx(classes.root, className)}>
-      {Object.keys(estimate.services).map((s, ind) => (
+      {Object.keys(estimate.services).map((s) => (
         <ServiceItem
           onRemoveOrAdd={handleRemoveOrAdd}
           amt_services={Object.keys(estimate.services).length}

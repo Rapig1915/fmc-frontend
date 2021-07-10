@@ -8,9 +8,8 @@ import { InputWithStatus } from 'src/components/atoms';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
 import { QuoteStep } from 'src/types';
-import { IReduxState } from 'src/store/reducers';
 
-import { Email, Lock, Person, Phone } from '@material-ui/icons';
+import { Email, Person, Phone } from '@material-ui/icons';
 import { QuoteContext } from '../QuoteContext';
 
 interface FormContactProps {
@@ -35,10 +34,18 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
     },
   },
-  subTitle: {
-    fontSize: 18,
-    lineHeight: '25px',
+  error: {
+    fontSize: 15,
+    lineHeight: '28px',
     fontWeight: 500,
+    marginBottom: theme.spacing(1),
+    textAlign: 'center',
+    color: '#FF3030',
+  },
+  subTitle: {
+    fontSize: 22,
+    lineHeight: '25px',
+    fontWeight: 700,
     marginBottom: theme.spacing(3),
     maxWidth: 300,
     flexWrap: 'wrap',
@@ -88,7 +95,6 @@ const FormContact = (props: FormContactProps): ReactElement => {
 
   const classes = useStyles();
 
-  const loggedIn = useSelector((state: IReduxState) => state.auth.loggedIn);
   const {
     handleSetStep,
     handleUpdateAppointment,
@@ -115,7 +121,6 @@ const FormContact = (props: FormContactProps): ReactElement => {
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
-      password: contact.password,
     });
   };
 
@@ -128,7 +133,6 @@ const FormContact = (props: FormContactProps): ReactElement => {
   const isReadyToContinue =
     !!contact.name &&
     !!contact.email &&
-    (loggedIn || !!contact.password) &&
     !!contact.phone &&
     validateEmail(contact.email) &&
     contact.phone.length === PHONE_NUMBER_LENGTH;
@@ -143,15 +147,20 @@ const FormContact = (props: FormContactProps): ReactElement => {
       )}
     >
       <Typography key="title" className={classes.title}>
-        Contact & Account
+        We&apos;ll Send You Your Quote
       </Typography>
+      {contact.error && (
+        <Typography key="error" className={classes.error}>
+          {contact.error}
+        </Typography>
+      )}
       <Grid container className={classes.contentContainer}>
         <Grid item sm={modalView ? 12 : 8} xs={12}>
           <form>
             <Box key="input-name" className={classes.lineContainer}>
               <InputWithStatus
                 className={classes.flexGrow}
-                placeholder="First And Last Name"
+                placeholder="Name"
                 value={contact.name}
                 valueChanged={(val: string) => handleInputChange('name', val)}
                 start={<Person color="secondary" />}
@@ -167,24 +176,10 @@ const FormContact = (props: FormContactProps): ReactElement => {
                 start={<Email color="secondary" />}
               />
             </Box>
-            {!loggedIn && (
-              <Box key="input-password" className={classes.lineContainer}>
-                <InputWithStatus
-                  className={classes.flexGrow}
-                  placeholder="Password"
-                  value={contact.password}
-                  valueChanged={(val: string) =>
-                    handleInputChange('password', val)
-                  }
-                  start={<Lock color="secondary" />}
-                  password
-                />
-              </Box>
-            )}
             <Box key="input-phone" className={classes.lineContainer}>
               <InputWithStatus
                 className={classes.flexGrow}
-                placeholder={`Cell phone number (${PHONE_NUMBER_LENGTH} digits)`}
+                placeholder={`Phone (${PHONE_NUMBER_LENGTH} digits)`}
                 value={contact.phone}
                 forceLength={PHONE_NUMBER_LENGTH}
                 valueChanged={(val: string) => handleInputChange('phone', val)}

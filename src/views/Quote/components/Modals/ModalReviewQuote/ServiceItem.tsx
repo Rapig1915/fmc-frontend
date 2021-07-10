@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import {
   Box,
   List,
@@ -157,7 +157,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ServiceItem = (props: ServiceItemProps) => {
+const ServiceItem = (props: ServiceItemProps): ReactElement => {
   const classes = useStyles();
   const { amt_services: amtServices, s, service, onRemoveOrAdd } = props;
   const {

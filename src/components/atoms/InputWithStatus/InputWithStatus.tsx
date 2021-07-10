@@ -15,6 +15,7 @@ interface InputWithStatusProps {
   password?: boolean;
   email?: boolean;
   forceLength?: number;
+  minLength?: number;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -67,6 +68,7 @@ const InputWithStatus = (props: InputWithStatusProps): ReactElement => {
     multiline,
     email,
     forceLength,
+    minLength,
   } = props;
 
   const classes = useStyles();
@@ -84,7 +86,8 @@ const InputWithStatus = (props: InputWithStatusProps): ReactElement => {
   const isCheck =
     !!value &&
     (!email || validateEmail(value)) &&
-    (!forceLength || value.length === forceLength);
+    (!forceLength || value.length === forceLength) &&
+    (!minLength || value.length >= minLength);
 
   return (
     <FormControl
@@ -122,6 +125,7 @@ InputWithStatus.defaultProps = {
   multiline: false,
   password: false,
   forceLength: 0,
+  minLength: 0,
   email: false,
 };
 

@@ -34,8 +34,8 @@ export interface IQuoteCar {
 export interface IQuoteContact {
   name: string;
   email: string;
-  password: string;
   phone: string;
+  error?: string;
 }
 
 export interface IQuoteContext {
@@ -121,7 +121,6 @@ export const QuoteContext = React.createContext<IQuoteContext>({
   contact: {
     name: '',
     email: '',
-    password: '',
     phone: '',
   },
   handleSetContact: () => {},
