@@ -263,9 +263,9 @@ const ModalCongrats = (props: ModalCongratsProps): ReactElement => {
                   <Link
                     key="tel-team-fixmycar"
                     className={classes.titlePhone}
-                    href="tel:(214) 620-0702"
+                    href="tel:(214) 799-1773"
                   >
-                    Call us (214) 620-0702
+                    Call us (214) 799-1773
                   </Link>
                 </>
               }

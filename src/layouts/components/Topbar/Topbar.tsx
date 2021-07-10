@@ -222,9 +222,9 @@ const Topbar = (props: ToolbarProps): ReactElement => {
                 <Link
                   key="tel-team-fixmycar"
                   className="button"
-                  href="tel:(214) 620-0702"
+                  href="tel:(214) 799-1773"
                 >
-                  (214) 620-0702
+                  (214) 799-1773
                 </Link>
               )}
               {!loggedIn && (
@@ -321,9 +321,9 @@ const Topbar = (props: ToolbarProps): ReactElement => {
                     <Link
                       key="tel-team-fixmycar"
                       className={classes.titlePhone}
-                      href="tel:(214) 620-0702"
+                      href="tel:(214) 799-1773"
                     >
-                      (214) 620-0702
+                      (214) 799-1773
                     </Link>
                   }
                   imgUrl={ImageServieProvider}
@@ -375,7 +375,7 @@ const Topbar = (props: ToolbarProps): ReactElement => {
           </div>
           <div className={classes.flexGrow} />
           <IconButton className={classes.iconButton} aria-label="Menu">
-            <Link href="tel:(214) 620-0702">
+            <Link href="tel:(214) 799-1773">
               <Image src={SvgCall} />
             </Link>
           </IconButton>
