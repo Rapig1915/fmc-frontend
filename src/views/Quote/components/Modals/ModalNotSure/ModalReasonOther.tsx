@@ -84,6 +84,7 @@ const ModalReasonOther = (props: ModalReasonOtherProps): ReactElement => {
         className={classes.inputReason}
         onChange={handleChange}
         value={otherReason}
+        placeholder="Type here to describe your problem"
         multiline
       />
     </Box>
