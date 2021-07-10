@@ -121,65 +121,6 @@ const CheckoutForm = ({
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item sm={6} xs={12}>
-          <Box
-            key="action-pay-full"
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="flex-start"
-            className={classes.buttonPayFull}
-          >
-            {requestInProgress ? (
-              <CircularProgress
-                color="secondary"
-                size={30}
-                style={{ marginRight: 29 }}
-              />
-            ) : (
-              <Check color="action" fontSize="large" />
-            )}
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="flex-start"
-              justifyContent="center"
-            >
-              <Typography key="title" className="titleAction">
-                Book Now
-              </Typography>
-              <Typography key="description" className="descAction">
-                Pay later
-              </Typography>
-            </Box>
-          </Box>
-        </Grid>
-        <Grid item sm={6} xs={12}>
-          <Box
-            key="action-pay-installment"
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="flex-start"
-            className={classes.buttonPayInstallment}
-          >
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="flex-start"
-              justifyContent="center"
-            >
-              <Typography key="title" className="titleAction">
-                Book Now
-              </Typography>
-              <Typography key="description" className="descAction">
-                Pay in installments later
-              </Typography>
-            </Box>
-          </Box>
-        </Grid>
-      </Grid>
       <form onSubmit={handleSubmit}>
         <CardElement options={cardStyle} className={classes.cardInput} />
         <p className={classes.error}>{errors}</p>

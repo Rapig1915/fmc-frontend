@@ -250,7 +250,6 @@ const Quote = (): ReactElement => {
   const [contact, setContact] = useState<IQuoteContact>({
     name: (user && user.attributes.name) || '',
     email: (user && user.attributes.email) || '',
-    password: '',
     phone: (user && user.attributes.phone) || '',
   });
 
@@ -337,7 +336,6 @@ const Quote = (): ReactElement => {
     handleSetContact({
       name: '',
       email: '',
-      password: '',
       phone: '',
     });
   }, [
@@ -598,7 +596,7 @@ const Quote = (): ReactElement => {
         />
         <Splash
           show={loggingIn || openSplash}
-          text={openSplash ? '' : 'Logging you in'}
+          text={openSplash ? '' : 'Creating your account'}
         />
         <ModalInputZip show={showZipModal} onGetQuote={handleSetZipFromModal} />
       </Container>

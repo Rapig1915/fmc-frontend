@@ -8,9 +8,8 @@ import { InputWithStatus } from 'src/components/atoms';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
 import { QuoteStep } from 'src/types';
-import { IReduxState } from 'src/store/reducers';
 
-import { Email, Lock, Person, Phone } from '@material-ui/icons';
+import { Email, Person, Phone } from '@material-ui/icons';
 import { QuoteContext } from '../QuoteContext';
 
 interface FormContactProps {
@@ -96,7 +95,6 @@ const FormContact = (props: FormContactProps): ReactElement => {
 
   const classes = useStyles();
 
-  const loggedIn = useSelector((state: IReduxState) => state.auth.loggedIn);
   const {
     handleSetStep,
     handleUpdateAppointment,
@@ -123,7 +121,6 @@ const FormContact = (props: FormContactProps): ReactElement => {
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
-      password: contact.password,
     });
   };
 
@@ -133,15 +130,12 @@ const FormContact = (props: FormContactProps): ReactElement => {
   };
 
   const PHONE_NUMBER_LENGTH = 10;
-  const MIN_PASSWORD_LENGTH = 6;
   const isReadyToContinue =
     !!contact.name &&
     !!contact.email &&
-    (loggedIn || !!contact.password) &&
     !!contact.phone &&
     validateEmail(contact.email) &&
-    contact.phone.length === PHONE_NUMBER_LENGTH &&
-    (loggedIn || contact.password.length >= MIN_PASSWORD_LENGTH);
+    contact.phone.length === PHONE_NUMBER_LENGTH;
 
   return (
     <Box
@@ -153,7 +147,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
       )}
     >
       <Typography key="title" className={classes.title}>
-        Contact & Account
+        We&apos;ll Send You Your Quote
       </Typography>
       {contact.error && (
         <Typography key="error" className={classes.error}>
@@ -166,7 +160,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
             <Box key="input-name" className={classes.lineContainer}>
               <InputWithStatus
                 className={classes.flexGrow}
-                placeholder="First And Last Name"
+                placeholder="Name"
                 value={contact.name}
                 valueChanged={(val: string) => handleInputChange('name', val)}
                 start={<Person color="secondary" />}
@@ -182,25 +176,10 @@ const FormContact = (props: FormContactProps): ReactElement => {
                 start={<Email color="secondary" />}
               />
             </Box>
-            {!loggedIn && (
-              <Box key="input-password" className={classes.lineContainer}>
-                <InputWithStatus
-                  className={classes.flexGrow}
-                  placeholder="Password"
-                  value={contact.password}
-                  valueChanged={(val: string) =>
-                    handleInputChange('password', val)
-                  }
-                  start={<Lock color="secondary" />}
-                  password
-                  minLength={MIN_PASSWORD_LENGTH}
-                />
-              </Box>
-            )}
             <Box key="input-phone" className={classes.lineContainer}>
               <InputWithStatus
                 className={classes.flexGrow}
-                placeholder={`Cell phone number (${PHONE_NUMBER_LENGTH} digits)`}
+                placeholder={`Phone (${PHONE_NUMBER_LENGTH} digits)`}
                 value={contact.phone}
                 forceLength={PHONE_NUMBER_LENGTH}
                 valueChanged={(val: string) => handleInputChange('phone', val)}

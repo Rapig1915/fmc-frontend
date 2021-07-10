@@ -391,13 +391,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
                 key="title-payment-1"
                 className={classes.textPayment1}
               >
-                You will not be charged now
-              </Typography>
-              <Typography
-                key="title-payment-2"
-                className={classes.textPayment2}
-              >
-                We&apos;ll charge you after your service is completed.
+                You will not be charged until your service is completed.
               </Typography>
               <Box key="action-payment">
                 <CheckoutForm

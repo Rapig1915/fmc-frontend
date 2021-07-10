@@ -410,7 +410,7 @@ const ModalScheduleService = (
             </Box>
             <Box key="location-info-3" className={classes.boxLocation}>
               <InputWithStatus
-                placeholder="Describe your car and location"
+                placeholder="Any hints to find your car?"
                 value={location.description}
                 valueChanged={(val: string) =>
                   handleLocationInputChange('description', val)
