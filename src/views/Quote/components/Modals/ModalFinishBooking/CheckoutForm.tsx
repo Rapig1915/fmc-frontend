@@ -1,8 +1,6 @@
 import React, { ReactElement } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, CircularProgress, Grid, Typography } from '@material-ui/core';
 import { CardElement } from '@stripe/react-stripe-js';
-import { Check } from '@material-ui/icons';
 
 interface CheckOutFormProps {
   errors: string | undefined | null;

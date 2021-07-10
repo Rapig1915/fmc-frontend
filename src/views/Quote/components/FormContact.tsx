@@ -1,5 +1,4 @@
 import React, { ReactElement, useContext } from 'react';
-import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Grid, Typography } from '@material-ui/core';

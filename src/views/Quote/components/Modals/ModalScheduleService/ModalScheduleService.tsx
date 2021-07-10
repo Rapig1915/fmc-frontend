@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -207,19 +207,17 @@ const ModalScheduleService = (
     (state: IReduxState) => state.quote.appointment?.id
   );
 
-  const [date, changeDate] = React.useState<MaterialUiPickersDate>(moment());
+  const [date, changeDate] = useState<MaterialUiPickersDate>(moment());
 
-  const [timeSlots, setTimeSlots] = React.useState<{ [dt: string]: string[] }>(
-    {}
-  );
+  const [timeSlots, setTimeSlots] = useState<{ [dt: string]: string[] }>({});
 
   const keyDate = (date && date.format('YYYY-MM-DD')) || '';
 
   const timeSlotsToday = (timeSlots && timeSlots[keyDate]) || [];
 
-  const [selectedTimeSlotIndex, setSelectedTimeSlotIndex] = React.useState(0);
+  const [selectedTimeSlotIndex, setSelectedTimeSlotIndex] = useState(0);
 
-  const [location, setLocation] = React.useState({
+  const [location, setLocation] = useState({
     type_of_site: '',
     exact_address: '',
     description: '',
@@ -232,7 +230,8 @@ const ModalScheduleService = (
       (location.type_of_site &&
         location.exact_address &&
         location.description));
-  React.useEffect(() => {
+
+  useEffect(() => {
     const timer = setTimeout(async () => {
       if (!appointmentId) return;
 
@@ -243,6 +242,9 @@ const ModalScheduleService = (
       }
 
       setTimeSlots(resp.data.attributes.availability);
+      changeDate(
+        moment(Object.entries(resp.data.attributes.availability)[0][0])
+      );
     });
 
     return () => {
@@ -363,18 +365,24 @@ const ModalScheduleService = (
               xs={12}
               className={classes.containerTimeSlots}
             >
-              {timeSlotsToday.map((tm, index) => (
-                <Box
-                  key={`tm-${tm}`}
-                  className={clsx(
-                    classes.itemTimeSlot,
-                    index === selectedTimeSlotIndex && 'selected'
-                  )}
-                  onClick={() => setSelectedTimeSlotIndex(index)}
-                >
-                  {tm.replaceAll(':00', '')}
+              {timeSlotsToday.length > 0 ? (
+                timeSlotsToday.map((tm, index) => (
+                  <Box
+                    key={`tm-${tm}`}
+                    className={clsx(
+                      classes.itemTimeSlot,
+                      index === selectedTimeSlotIndex && 'selected'
+                    )}
+                    onClick={() => setSelectedTimeSlotIndex(index)}
+                  >
+                    {tm.replaceAll(':00', '')}
+                  </Box>
+                ))
+              ) : (
+                <Box>
+                  <Typography>No times available</Typography>
                 </Box>
-              ))}
+              )}
             </Grid>
           </Grid>
         </Box>
