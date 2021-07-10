@@ -596,7 +596,6 @@ export const staticServiceList = [
   'Transmission Oil Pressure Switch Replacement',
   'Transmission Position Sensor (Switch) Replacement',
   'Transmission Speed Sensor Replacement',
-  '50-Point Inspection',
   'Abs Light is On Inspection',
   'Adjust Windshield Washer Jets',
   'Banging Noises When Driving Over The Bumps Inspection',
