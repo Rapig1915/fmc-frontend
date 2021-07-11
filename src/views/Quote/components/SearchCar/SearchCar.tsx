@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { ReactElement, useEffect, useContext, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Grid, Hidden, Typography } from '@material-ui/core';
@@ -10,9 +10,7 @@ import { ICarMeta, CarSelectType, QuoteShowModal, QuoteStep } from 'src/types';
 import { checkPlateNumber } from 'src/api/quote';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
-
 import SvgToggleInformation from 'src/assets/menu/toggle-information.svg';
-
 import FormPlateNumber from './FormPlateNumber';
 import FormYearMakeModel from './FormYearMakeModel';
 import FormConfirmCar from './FormConfirmCar';
@@ -88,18 +86,6 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     setIsReadyToConfirm(false);
 
     setCarSelectType(key);
-    if (key === CarSelectType.BY_PLATE_NUMBER)
-      handleSetCar({
-        ...car,
-        attributes: {
-          year: '',
-          make: '',
-          model: '',
-          engine_size: '',
-          mileage: '',
-          vin: '',
-        },
-      });
   };
 
   const handleBack = () => {
@@ -107,7 +93,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     else handleSetStep(QuoteStep.QUOTE_SERVICE_DESK);
   };
 
-  const [searching, setSearching] = React.useState(false);
+  const [searching, setSearching] = useState(false);
 
   const handleSearch = async () => {
     if (carSelectType === CarSelectType.BY_PLATE_NUMBER) {
@@ -155,6 +141,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
         return;
 
       setIsReadyToConfirm(true);
+      if (onConfirm) onConfirm();
     }
   };
 
@@ -167,13 +154,13 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     handleShowModal(QuoteShowModal.SERVICE_INTRO);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     mixPanel(MIXPANEL_TRACK.CAR);
   });
 
   return (
     <Box className={clsx('quote-search-car', classes.root, className)}>
-      <Typography className={classes.title}>Tell us about your car?</Typography>
+      <Typography className={classes.title}>Tell us about your car</Typography>
       <Grid container className={classes.contentContainer}>
         <Grid item md={8} sm={12} xs={12}>
           <TabSelector
@@ -193,7 +180,13 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
               carSelectType === CarSelectType.BY_YEAR_MAKE_MODEL
             }
           />
-          <FormConfirmCar show={isReadyToConfirm} type={carSelectType} />
+          <FormConfirmCar
+            show={
+              isReadyToConfirm &&
+              carSelectType === CarSelectType.BY_PLATE_NUMBER
+            }
+            type={carSelectType}
+          />
         </Grid>
         <Grid item md={4} sm={12} xs={12} className={classes.actionContainer}>
           <Hidden smUp>
@@ -218,8 +211,16 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
           />
           {!isReadyToConfirm ? (
             <ButtonForward
-              title="Search"
-              key="Search"
+              title={
+                carSelectType === CarSelectType.BY_PLATE_NUMBER
+                  ? 'Search'
+                  : 'Continue'
+              }
+              key={
+                carSelectType === CarSelectType.BY_PLATE_NUMBER
+                  ? 'Search'
+                  : 'Continue'
+              }
               rounded
               size="large"
               disabled={!isReadyToSearch}
