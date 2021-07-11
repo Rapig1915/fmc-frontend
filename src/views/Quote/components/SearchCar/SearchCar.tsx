@@ -175,18 +175,11 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
             }
           />
           <FormYearMakeModel
-            show={
-              !isReadyToConfirm &&
-              carSelectType === CarSelectType.BY_YEAR_MAKE_MODEL
-            }
+            show={carSelectType === CarSelectType.BY_YEAR_MAKE_MODEL}
           />
-          <FormConfirmCar
-            show={
-              isReadyToConfirm &&
-              carSelectType === CarSelectType.BY_PLATE_NUMBER
-            }
-            type={carSelectType}
-          />
+          {carSelectType === CarSelectType.BY_PLATE_NUMBER && (
+            <FormConfirmCar show={isReadyToConfirm} type={carSelectType} />
+          )}
         </Grid>
         <Grid item md={4} sm={12} xs={12} className={classes.actionContainer}>
           <Hidden smUp>
