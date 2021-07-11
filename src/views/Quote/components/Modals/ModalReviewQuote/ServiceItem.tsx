@@ -275,11 +275,11 @@ const ServiceItem = (props: ServiceItemProps): ReactElement => {
         <Box key="price" className={classes.boxPrice}>
           {partsPrice > 0 && (
             <Typography key="price-total">
-              <b>Total Parts: $</b> <span>{partsPrice}</span>
+              <b>Total Parts: $</b> <span>{partsPrice.toFixed(2)}</span>
             </Typography>
           )}
           <Typography key="price-labor">
-            <b>Labor: $</b> <span>{laborPrice}</span>
+            <b>Labor: $</b> <span>{laborPrice.toFixed(2)}</span>
           </Typography>
         </Box>
       )}
