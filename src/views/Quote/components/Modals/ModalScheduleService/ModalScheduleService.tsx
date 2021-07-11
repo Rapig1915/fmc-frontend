@@ -201,6 +201,7 @@ const ModalScheduleService = (
     isEstimateResponse,
     shouldBookEstimate,
     handleShowModal,
+    requestInProgress,
   } = useContext(QuoteContext);
 
   const appointmentId = useSelector(
@@ -242,9 +243,10 @@ const ModalScheduleService = (
       }
 
       setTimeSlots(resp.data.attributes.availability);
-      changeDate(
-        moment(Object.entries(resp.data.attributes.availability)[0][0])
-      );
+      const timeSlotEntries = Object.entries(resp.data.attributes.availability);
+      if (timeSlotEntries.length > 0 && timeSlotEntries[0].length > 0) {
+        changeDate(moment(timeSlotEntries[0][0]));
+      }
     });
 
     return () => {
@@ -435,7 +437,8 @@ const ModalScheduleService = (
             size="large"
             rounded
             onClickHandler={handleSchedule}
-            disabled={!isReadyToSchedule}
+            disabled={!isReadyToSchedule || requestInProgress}
+            processing={requestInProgress}
           />
         </DialogActions>
       </DialogContent>

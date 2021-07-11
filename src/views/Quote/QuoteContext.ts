@@ -78,6 +78,8 @@ export interface IQuoteContext {
 
   isEstimateResponse: boolean;
   shouldBookEstimate: boolean;
+
+  requestInProgress: boolean;
 }
 
 export const QuoteContext = React.createContext<IQuoteContext>({
@@ -139,4 +141,6 @@ export const QuoteContext = React.createContext<IQuoteContext>({
 
   isEstimateResponse: false,
   shouldBookEstimate: false,
+
+  requestInProgress: false,
 });

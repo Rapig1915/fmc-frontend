@@ -100,6 +100,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
     contact,
     handleSetContact,
     loggingIn,
+    requestInProgress,
   } = useContext(QuoteContext);
 
   const handleInputChange = (key: string, value: string) => {
@@ -210,7 +211,8 @@ const FormContact = (props: FormContactProps): ReactElement => {
             rounded
             size="large"
             onClickHandler={handleContinue}
-            disabled={!isReadyToContinue || loggingIn}
+            disabled={!isReadyToContinue || loggingIn || requestInProgress}
+            processing={requestInProgress}
           />
         </Grid>
       </Grid>
