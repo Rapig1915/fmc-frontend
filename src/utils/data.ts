@@ -382,12 +382,12 @@ export const allMileage = [
 
 export const allStaticServices = [
   {
-    name: 'Front brakes pads & rotors',
+    name: 'Front Brakes Pads & Rotors',
     image: imgService.brakes,
     imageSelected: imgService.brakes_selected,
   },
   {
-    name: 'Used car inspection',
+    name: 'Pre-Purchase Inspection',
     image: imgService.used_car,
     imageSelected: imgService.used_car_selected,
   },

@@ -358,6 +358,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   } = attributes;
 
   const isServiceQuote = appointmentType === 'repair';
+  const isPPI = appointmentType === 'ppi';
   const diagCanSchedule =
     !isServiceQuote &&
     appointmentStatus !== 'pending' &&
@@ -401,6 +402,10 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const getTitle = () => {
+    if (isPPI) {
+      return 'Pre-Purchase Inspection';
+    }
+
     if (!isServiceQuote && !isEstimateResponse) {
       return 'Diagnose my car';
     }
@@ -547,7 +552,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.accordionDetail}>
-                {!isServiceQuote && !isEstimateResponse && (
+                {!isServiceQuote && !isEstimateResponse && !isPPI && (
                   <Box className={classes.inspectContainer}>
                     <Typography className={classes.inspectTitle} key="title-1">
                       Includes:

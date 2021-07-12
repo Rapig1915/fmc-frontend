@@ -230,6 +230,9 @@ const Quote = (): ReactElement => {
   const isNotSureFunnel =
     reason && reason.reasonId && reason.reason && reason.subReason.length;
 
+  const isPPI =
+    services.length === 1 && services[0] === 'Pre-Purchase Inspection';
+
   const handleSetReason = useCallback(
     (newReason: IQuoteReason) => setReason(newReason),
     []
@@ -294,7 +297,7 @@ const Quote = (): ReactElement => {
           )
         );
 
-        if (isNotSureFunnel) {
+        if (isNotSureFunnel || isPPI) {
           history.push(URL.DASHBOARD);
         } else {
           handleSetStep(QuoteStep.QUOTE_CONGRATS);
@@ -374,8 +377,17 @@ const Quote = (): ReactElement => {
       diagInput += `. ${reason.note}`;
     }
 
+    let appointmentType;
+    if (isNotSureFunnel) {
+      appointmentType = 'diagnosis';
+    } else if (isPPI) {
+      appointmentType = 'ppi';
+    } else {
+      appointmentType = 'repair';
+    }
+
     return {
-      appointment_type: isNotSureFunnel ? 'diagnosis' : 'repair',
+      appointment_type: appointmentType,
       car_attributes: {
         ...car.attributes,
       },
@@ -403,7 +415,7 @@ const Quote = (): ReactElement => {
       .then((resp: ResponseAppointment) => {
         dispatch(setAppointment(resp.data));
 
-        if (isNotSureFunnel) {
+        if (isNotSureFunnel || isPPI) {
           handleShowModal(QuoteShowModal.CONTACT);
         } else {
           handleStepChange(QuoteStep.QUOTE_CONTACT, true);
@@ -435,6 +447,7 @@ const Quote = (): ReactElement => {
             handleShowModal(QuoteShowModal.FINISH_BOOKING);
         } else if (
           isNotSureFunnel ||
+          isPPI ||
           urlReferer === URL.DASHBOARD ||
           shouldBookEstimate
         ) {
