@@ -555,7 +555,7 @@ const Quote = (): ReactElement => {
 
   const getSplashText = () => {
     if (isEstimateResponse) {
-      return openSplash ? 'Loading estimate of your quote' : '';
+      return openSplash ? 'Loading your estimate' : '';
     }
     return 'Creating your account';
   };
