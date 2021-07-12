@@ -359,6 +359,8 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
 
   const isServiceQuote = appointmentType === 'repair';
   const isPPI = appointmentType === 'ppi';
+  const isDiag = appointmentType === 'diagnosis';
+
   const diagCanSchedule =
     !isServiceQuote &&
     appointmentStatus !== 'pending' &&
@@ -402,12 +404,10 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const getTitle = () => {
+    if (isDiag && shouldBookEstimate) return 'Diagnose my car';
+
     if (isPPI) {
       return 'Pre-Purchase Inspection';
-    }
-
-    if (!isServiceQuote && !isEstimateResponse) {
-      return 'Diagnose my car';
     }
 
     if (isEstimateResponse && estimate?.services) {
@@ -418,6 +418,8 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const getPrice = () => {
+    if (isDiag && shouldBookEstimate) return attributes.diagnosis_fee;
+
     if (isServiceQuote || isEstimateResponse)
       return estimate ? estimate.total_price : 0;
 
@@ -552,22 +554,36 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.accordionDetail}>
-                {!isServiceQuote && !isEstimateResponse && !isPPI && (
-                  <Box className={classes.inspectContainer}>
-                    <Typography className={classes.inspectTitle} key="title-1">
-                      Includes:
-                    </Typography>
-                    <Typography className={classes.inspectContent} key="sub-1">
-                      <Check /> Complete inspection of the issue
-                    </Typography>
-                    <Typography className={classes.inspectContent} key="sub-2">
-                      <Check /> Complimentary multi-point inspection
-                    </Typography>
-                    <Typography className={classes.inspectContent} key="sub-3">
-                      <Check /> ${getPrice() / 2} goes forwards the repair price
-                    </Typography>
-                  </Box>
-                )}
+                {(!isServiceQuote && !isEstimateResponse && !isPPI) ||
+                  (shouldBookEstimate && isDiag && (
+                    <Box className={classes.inspectContainer}>
+                      <Typography
+                        className={classes.inspectTitle}
+                        key="title-1"
+                      >
+                        Includes:
+                      </Typography>
+                      <Typography
+                        className={classes.inspectContent}
+                        key="sub-1"
+                      >
+                        <Check /> Complete inspection of the issue
+                      </Typography>
+                      <Typography
+                        className={classes.inspectContent}
+                        key="sub-2"
+                      >
+                        <Check /> Complimentary multi-point inspection
+                      </Typography>
+                      <Typography
+                        className={classes.inspectContent}
+                        key="sub-3"
+                      >
+                        <Check /> ${getPrice() / 2} goes forwards the repair
+                        price
+                      </Typography>
+                    </Box>
+                  ))}
                 <ImageNode
                   key="happy-customers"
                   title={
