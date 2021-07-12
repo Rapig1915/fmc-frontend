@@ -231,22 +231,30 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
   const stripe = useStripe();
   const elements = useElements();
   const [errors, setErrors] = React.useState<string | undefined | null>(null);
+  const [stripeRequestInProgress, setStripeRequestInProgress] = React.useState(
+    false
+  );
 
   const handleCheckOut = async () => {
+    setStripeRequestInProgress(true);
     setErrors(null);
 
     if (!stripe || !elements) {
+      setStripeRequestInProgress(false);
       return false;
     }
 
     const cardElem = elements.getElement(CardElement);
 
     if (!cardElem) {
+      setStripeRequestInProgress(false);
       return false;
     }
 
     // const { error, token } = await stripe.createToken(cardElem);
     const { token } = await stripe.createToken(cardElem);
+
+    setStripeRequestInProgress(false);
 
     if (token) {
       await handleConfirmAppointment({ token: token.id });
@@ -420,8 +428,8 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
               size="large"
               rounded
               onClickHandler={handleCheckOut}
-              disabled={requestInProgress}
-              processing={requestInProgress}
+              disabled={requestInProgress || stripeRequestInProgress}
+              processing={requestInProgress || stripeRequestInProgress}
             />
           )}
         </DialogActions>
