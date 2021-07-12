@@ -251,18 +251,18 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
       return false;
     }
 
-    // const { error, token } = await stripe.createToken(cardElem);
     const { token } = await stripe.createToken(cardElem);
-
-    setStripeRequestInProgress(false);
 
     if (token) {
       await handleConfirmAppointment({ token: token.id });
     } else {
+      setStripeRequestInProgress(false);
       setErrors('Quote confirmation failed');
     }
 
     mixPanel(MIXPANEL_TRACK.CARD_INFO);
+
+    setStripeRequestInProgress(false);
 
     return true;
   };
