@@ -401,7 +401,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const getTitle = () => {
-    if (!isServiceQuote) {
+    if (!isServiceQuote && !isEstimateResponse) {
       return 'Diagnose my car';
     }
 
@@ -413,7 +413,8 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const getPrice = () => {
-    if (isServiceQuote) return estimate ? estimate.total_price : 0;
+    if (isServiceQuote || isEstimateResponse)
+      return estimate ? estimate.total_price : 0;
 
     return attributes.diagnosis_fee;
   };
@@ -546,7 +547,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.accordionDetail}>
-                {!isServiceQuote && (
+                {!isServiceQuote && !isEstimateResponse && (
                   <Box className={classes.inspectContainer}>
                     <Typography className={classes.inspectTitle} key="title-1">
                       Includes:
