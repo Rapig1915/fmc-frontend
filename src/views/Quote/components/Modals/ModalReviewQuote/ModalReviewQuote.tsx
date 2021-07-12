@@ -368,7 +368,12 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     appointmentStatus === 'diagnosis_complete';
 
   const handleSchedule = () => {
-    mixPanel(MIXPANEL_TRACK.DIAGNOSIS_ESTIMATE);
+    if (shouldBookEstimate) {
+      mixPanel(MIXPANEL_TRACK.REPAIR_ESTIMATE);
+    } else {
+      mixPanel(MIXPANEL_TRACK.DIAGNOSIS_ESTIMATE);
+    }
+
     handleShowModal(QuoteShowModal.SCHEDULE_SERVICE);
   };
 

@@ -64,7 +64,7 @@ const FormYearMakeModel = (props: FormYearMakeModelProps): ReactElement => {
 
   const [vehicleList, setVehicleList] = useState<[IVehicle]>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTimeout(async () => {
       const resp = await getVehicles(car.attributes.year, undefined, undefined);
       if (resp && resp.data) setVehicleList(resp.data);

@@ -360,6 +360,7 @@ const Quote = (): ReactElement => {
   };
 
   const handleContinueOnService = () => {
+    mixPanel(MIXPANEL_TRACK.REPAIR_SERVICE);
     handleStepChange(QuoteStep.QUOTE_SEARCH_CAR, true);
   };
 
