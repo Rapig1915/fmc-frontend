@@ -42,12 +42,16 @@ interface ModalFinishBookingProps {
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    overflowX: 'hidden',
+  },
+  content: {
     minWidth: 600,
     [theme.breakpoints.down('sm')]: {
       minWidth: 500,
     },
     [theme.breakpoints.down('xs')]: {
-      minWidth: 320,
+      minWidth: 200,
+      padding: theme.spacing(0),
     },
   },
   flexGrow: {
@@ -218,43 +222,47 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
     (state: IReduxState) => state.quote.appointment?.attributes.status
   );
 
-  const { handleShowModal, handleConfirmAppointment } = useContext(
-    QuoteContext
-  );
+  const {
+    handleShowModal,
+    handleConfirmAppointment,
+    requestInProgress,
+  } = useContext(QuoteContext);
 
   const stripe = useStripe();
   const elements = useElements();
   const [errors, setErrors] = React.useState<string | undefined | null>(null);
-  const [requestInProgress, setRequestInProgress] = React.useState(false);
+  const [stripeRequestInProgress, setStripeRequestInProgress] = React.useState(
+    false
+  );
 
   const handleCheckOut = async () => {
-    setRequestInProgress(true);
+    setStripeRequestInProgress(true);
     setErrors(null);
 
     if (!stripe || !elements) {
-      setRequestInProgress(false);
+      setStripeRequestInProgress(false);
       return false;
     }
 
     const cardElem = elements.getElement(CardElement);
 
     if (!cardElem) {
-      setRequestInProgress(false);
+      setStripeRequestInProgress(false);
       return false;
     }
 
-    // const { error, token } = await stripe.createToken(cardElem);
     const { token } = await stripe.createToken(cardElem);
-
-    setRequestInProgress(false);
 
     if (token) {
       await handleConfirmAppointment({ token: token.id });
     } else {
+      setStripeRequestInProgress(false);
       setErrors('Quote confirmation failed');
     }
 
     mixPanel(MIXPANEL_TRACK.CARD_INFO);
+
+    setStripeRequestInProgress(false);
 
     return true;
   };
@@ -269,6 +277,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
       onClose={onClose}
       aria-labelledby="responsive-dialog-title"
       scroll="body"
+      className={classes.content}
     >
       <DialogTitle className={classes.title}>
         <Box className={classes.buttonGroupBack}>
@@ -285,8 +294,8 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
           <Close />
         </IconButton>
       </DialogTitle>
-      <DialogContent className={classes.root}>
-        <Grid container spacing={2}>
+      <DialogContent className={classes.content}>
+        <Grid container>
           <Hidden smDown>
             <Grid container item md={4} className={classes.intro}>
               <ImageNode
@@ -394,10 +403,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
                 You will not be charged until your service is completed.
               </Typography>
               <Box key="action-payment">
-                <CheckoutForm
-                  errors={errors}
-                  requestInProgress={requestInProgress}
-                />
+                <CheckoutForm errors={errors} />
                 <Box
                   key="image-payments"
                   display="flex"
@@ -422,7 +428,8 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
               size="large"
               rounded
               onClickHandler={handleCheckOut}
-              disabled={requestInProgress}
+              disabled={requestInProgress || stripeRequestInProgress}
+              processing={requestInProgress || stripeRequestInProgress}
             />
           )}
         </DialogActions>

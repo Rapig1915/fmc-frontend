@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignContent: 'flex-start',
+    alignItems: 'center',
 
     borderRadius: 5,
     border: '2px solid #D8D8D8',

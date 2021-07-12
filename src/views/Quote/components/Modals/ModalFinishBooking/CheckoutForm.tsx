@@ -4,7 +4,6 @@ import { CardElement } from '@stripe/react-stripe-js';
 
 interface CheckOutFormProps {
   errors: string | undefined | null;
-  requestInProgress: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -107,10 +106,7 @@ const cardStyle = {
   },
 };
 
-const CheckoutForm = ({
-  errors,
-  requestInProgress,
-}: CheckOutFormProps): ReactElement => {
+const CheckoutForm = ({ errors }: CheckOutFormProps): ReactElement => {
   const classes = useStyles();
 
   const handleSubmit = async (event: React.SyntheticEvent) => {

@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect, useContext, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 import { Box, Grid, Hidden, Typography } from '@material-ui/core';
 import { TabSelector } from 'src/components/molecules';
 import ButtonForward from 'src/components/atoms/ButtonForward';
@@ -64,12 +65,15 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
   const { className, onConfirm } = props;
 
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [carSelectType, setCarSelectType] = useState(
     Object.keys(arrCarSelectTypes)[0]
   );
 
-  const { car, handleSetCar, handleSetStep } = useContext(QuoteContext);
+  const { car, handleSetCar, handleSetStep, requestInProgress } = useContext(
+    QuoteContext
+  );
 
   const isReadyToSearch =
     (carSelectType === CarSelectType.BY_PLATE_NUMBER &&
@@ -93,6 +97,13 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     else handleSetStep(QuoteStep.QUOTE_SERVICE_DESK);
   };
 
+  const showCommonError = () => {
+    enqueueSnackbar('Error occured in searching your car.', {
+      variant: 'error',
+      anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+    });
+  }
+
   const [searching, setSearching] = useState(false);
 
   const handleSearch = async () => {
@@ -101,36 +112,32 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
 
       setSearching(true);
 
-      try {
-        const resp = await checkPlateNumber(
-          car.search.plate_number,
-          car.search.state
-        );
+      checkPlateNumber(car.search.plate_number, car.search.state)
+        .then((resp) => {
+          if (!resp || !resp.specifications) {
+            return;
+          }
 
-        if (!resp || !resp.specifications) {
-          return;
-        }
+          const carMeta: ICarMeta = resp.specifications;
 
-        const carMeta: ICarMeta = resp.specifications;
+          if (!carMeta) return;
 
-        if (!carMeta) return;
+          handleSetCar({
+            ...car,
+            attributes: {
+              year: carMeta.year,
+              make: carMeta.make,
+              model: carMeta.model,
+              engine_size: carMeta.engine,
+              mileage: '',
+              vin: carMeta.vin,
+            },
+          });
 
-        handleSetCar({
-          ...car,
-          attributes: {
-            year: carMeta.year,
-            make: carMeta.make,
-            model: carMeta.model,
-            engine_size: carMeta.engine,
-            mileage: '',
-            vin: carMeta.vin,
-          },
-        });
-
-        setIsReadyToConfirm(true);
-      } finally {
-        setSearching(false);
-      }
+          setIsReadyToConfirm(true);
+        })
+        .catch(() => showCommonError())
+        .finally(() => setSearching(false));
     } else {
       if (
         !car.attributes.year ||
@@ -216,7 +223,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
               }
               rounded
               size="large"
-              disabled={!isReadyToSearch}
+              disabled={searching || !isReadyToSearch}
               onClickHandler={handleSearch}
               processing={searching}
             />
@@ -226,6 +233,8 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
               rounded
               size="large"
               onClickHandler={handleConfirm}
+              disabled={requestInProgress}
+              processing={requestInProgress}
             />
           )}
         </Grid>

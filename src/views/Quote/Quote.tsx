@@ -2,6 +2,7 @@ import React, { ReactElement, useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import queryString from 'query-string';
+import { useSnackbar } from 'notistack';
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import {
   QuoteShowModal,
@@ -62,6 +63,7 @@ const Quote = (): ReactElement => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   const zip = useSelector((state: IReduxState) => state.quote.zip);
   const user = useSelector((state: IReduxState) => state.auth.user);
@@ -84,6 +86,8 @@ const Quote = (): ReactElement => {
     : params.referer || '';
 
   const [openSplash, setOpenSplash] = React.useState(false);
+
+  const [requestInProgress, setRequestInProgress] = React.useState(false);
 
   useEffect(() => {
     if (!isEstimateResponse) {
@@ -348,6 +352,13 @@ const Quote = (): ReactElement => {
     handleSetContact,
   ]);
 
+  const showCommonError = () => {
+    enqueueSnackbar('An error occured while processing your quote.', {
+      variant: 'error',
+      anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+    });
+  };
+
   const handleContinueOnService = () => {
     mixPanel(MIXPANEL_TRACK.REPAIR_SERVICE);
     handleStepChange(QuoteStep.QUOTE_SEARCH_CAR, true);
@@ -387,20 +398,19 @@ const Quote = (): ReactElement => {
   };
 
   const handleCreateAppointment = async () => {
-    const resp: ResponseAppointment = await createAppointment(grabInputData());
+    setRequestInProgress(true);
+    createAppointment(grabInputData())
+      .then((resp: ResponseAppointment) => {
+        dispatch(setAppointment(resp.data));
 
-    if (!resp || !resp.data) {
-      // error handling
-      return;
-    }
-
-    dispatch(setAppointment(resp.data));
-
-    if (isNotSureFunnel) {
-      handleShowModal(QuoteShowModal.CONTACT);
-    } else {
-      handleStepChange(QuoteStep.QUOTE_CONTACT, true);
-    }
+        if (isNotSureFunnel) {
+          handleShowModal(QuoteShowModal.CONTACT);
+        } else {
+          handleStepChange(QuoteStep.QUOTE_CONTACT, true);
+        }
+      })
+      .catch(() => showCommonError())
+      .finally(() => setRequestInProgress(false));
   };
 
   const handleUpdateAppointment = async (
@@ -413,6 +423,8 @@ const Quote = (): ReactElement => {
       // error handling
       return;
     }
+
+    setRequestInProgress(true);
 
     updateAppointment(appId, data)
       .then((resp: ResponseAppointment) => {
@@ -459,7 +471,9 @@ const Quote = (): ReactElement => {
             });
           }, 3000);
         }
-      });
+      })
+      .catch(() => showCommonError())
+      .finally(() => setRequestInProgress(false));
   };
 
   const handleRespondAppointmentEstimate = async (
@@ -470,11 +484,16 @@ const Quote = (): ReactElement => {
       return;
     }
 
-    await updateAppointmentEstimate(appId, data);
+    setRequestInProgress(true);
 
-    if (isEstimateResponse) {
-      handleShowModal(QuoteShowModal.CONGRATS);
-    }
+    updateAppointmentEstimate(appId, data)
+      .then(() => {
+        if (isEstimateResponse) {
+          handleShowModal(QuoteShowModal.CONGRATS);
+        }
+      })
+      .catch(() => showCommonError())
+      .finally(() => setRequestInProgress(false));
   };
 
   const handleConfirmAppointment = async (data: RequestConfirmAppointment) => {
@@ -483,16 +502,14 @@ const Quote = (): ReactElement => {
       return;
     }
 
-    const resp: ResponseAppointment = await confirmAppointment(appId, data);
-
-    if (!resp || !resp.data) {
-      // error handling
-      return;
-    }
-
-    dispatch(setAppointment(resp.data));
-    handleShowModal(QuoteShowModal.NONE);
-    login(resp);
+    confirmAppointment(appId, data)
+      .then((resp: ResponseAppointment) => {
+        dispatch(setAppointment(resp.data));
+        handleShowModal(QuoteShowModal.NONE);
+        login(resp);
+      })
+      .catch(() => showCommonError())
+      .finally(() => setRequestInProgress(false));
   };
 
   const handleConfirmCar = () => {
@@ -558,6 +575,8 @@ const Quote = (): ReactElement => {
 
         isEstimateResponse,
         shouldBookEstimate,
+
+        requestInProgress,
       }}
     >
       <Container className={classes.root}>
