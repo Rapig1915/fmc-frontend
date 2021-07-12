@@ -120,6 +120,7 @@ const Quote = (): ReactElement => {
 
     const asyncReadAppointment = async () => {
       try {
+        setOpenSplash(true);
         const appointment = await getAppointment(appIdParam);
 
         const happyCustomer = await getHappyCustomer(
@@ -135,6 +136,8 @@ const Quote = (): ReactElement => {
           );
           dispatch(setAppointment(appointment.data));
         }
+
+        setOpenSplash(false);
       } catch (err) {
         logger.error(err);
         history.push(URL.HOME);
@@ -550,6 +553,13 @@ const Quote = (): ReactElement => {
     );
   };
 
+  const getSplashText = () => {
+    if (isEstimateResponse) {
+      return openSplash ? 'Loading estimate of your quote' : '';
+    }
+    return 'Creating your account';
+  };
+
   return (
     <QuoteContext.Provider
       value={{
@@ -627,10 +637,7 @@ const Quote = (): ReactElement => {
           show={showModal === QuoteShowModal.DECIDE_ESTIMATE_RESPONSE}
           onClose={() => handleShowModal(QuoteShowModal.NONE)}
         />
-        <Splash
-          show={loggingIn || openSplash}
-          text={openSplash ? '' : 'Creating your account'}
-        />
+        <Splash show={loggingIn || openSplash} text={getSplashText()} />
         <ModalInputZip show={showZipModal} onGetQuote={handleSetZipFromModal} />
       </Container>
     </QuoteContext.Provider>

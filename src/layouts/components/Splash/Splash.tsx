@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface SplashProps {
   show: boolean;
-  text?: string;
+  text?: string | boolean;
 }
 
 const Splash = (props: SplashProps): ReactElement => {
