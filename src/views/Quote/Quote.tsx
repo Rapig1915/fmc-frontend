@@ -163,9 +163,15 @@ const Quote = (): ReactElement => {
     zip?: string;
     customer?: number;
   }) => {
-    if (payload.zip) {
+    if (payload.zip && payload.customer) {
       mixPanel(MIXPANEL_TRACK.ZIP);
       dispatch(setZip(payload.zip || '', payload.customer || 0));
+
+      setOpenSplash(true);
+      const timerId = setTimeout(() => {
+        setOpenSplash(false);
+        clearTimeout(timerId);
+      }, 3000);
     }
   };
 
@@ -554,9 +560,10 @@ const Quote = (): ReactElement => {
   };
 
   const getSplashText = () => {
-    if (isEstimateResponse) {
-      return openSplash ? 'Loading your estimate' : '';
+    if (openSplash) {
+      return isEstimateResponse ? 'Loading your estimate' : '';
     }
+
     return 'Creating your account';
   };
 
