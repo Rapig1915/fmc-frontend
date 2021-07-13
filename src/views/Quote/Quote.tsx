@@ -586,7 +586,9 @@ const Quote = (): ReactElement => {
 
   const getSplashText = () => {
     if (openSplash) {
-      return isEstimateResponse ? 'Loading your estimate' : '';
+      return isEstimateResponse || shouldBookEstimate
+        ? 'Loading your estimate'
+        : '';
     }
 
     return 'Creating your account';
