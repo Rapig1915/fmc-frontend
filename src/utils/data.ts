@@ -582,7 +582,6 @@ export const staticServiceList = [
   'Rear Wheel Speed Sensor Replacement (One Side)',
   'Rear Wheel Speed Sensor Replacement (Both Sides)',
   'Front & Rear Wheel Speed Sensors Replacement (Both Sides)',
-  'Purchase Inspection',
   'Axle Shaft Seal Replacement',
   'Clutch Cable Replacement',
   'Differential Gasket Replacement',

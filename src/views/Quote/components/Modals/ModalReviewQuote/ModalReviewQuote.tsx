@@ -357,8 +357,19 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     services,
   } = attributes;
 
+  const isInspectionServices: boolean[] = [];
+  if (services.length > 0) {
+    services.forEach((item) =>
+      isInspectionServices.push(item.toLowerCase().includes('inspection'))
+    );
+  }
+
+  const isInspections =
+    services.length > 0 && !isInspectionServices.includes(false);
   const isServiceQuote = appointmentType === 'repair';
   const isPPI = appointmentType === 'ppi';
+  const isDiag = appointmentType === 'diagnosis';
+
   const diagCanSchedule =
     !isServiceQuote &&
     appointmentStatus !== 'pending' &&
@@ -402,12 +413,9 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const getTitle = () => {
-    if (isPPI) {
-      return 'Pre-Purchase Inspection';
-    }
-
-    if (!isServiceQuote && !isEstimateResponse) {
-      return 'Diagnose my car';
+    if (!isEstimateResponse) {
+      if (isDiag && !isInspections) return 'Diagnose my car';
+      if (isPPI) return 'Pre-Purchase Inspection';
     }
 
     if (isEstimateResponse && estimate?.services) {
@@ -437,7 +445,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     >
       <DialogTitle className={classes.title}>
         <Box className={classes.buttonGroupBack}>
-          {!urlReferer && (
+          {!urlReferer && !isEstimateResponse && !shouldBookEstimate && (
             <ArrowBackIos className="title-icon" onClick={handleStepBack} />
           )}
         </Box>
@@ -552,7 +560,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.accordionDetail}>
-                {!isServiceQuote && !isEstimateResponse && !isPPI && (
+                {(isDiag || isPPI || isInspections) && !isEstimateResponse && (
                   <Box className={classes.inspectContainer}>
                     <Typography className={classes.inspectTitle} key="title-1">
                       Includes:
