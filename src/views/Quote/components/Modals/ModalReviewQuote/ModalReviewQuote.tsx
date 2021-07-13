@@ -357,6 +357,15 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     services,
   } = attributes;
 
+  const isInspectionServices: boolean[] = [];
+  if (services.length > 0) {
+    services.forEach((item) =>
+      isInspectionServices.push(item.toLowerCase().includes('inspection'))
+    );
+  }
+
+  const isInspections =
+    services.length > 0 && !isInspectionServices.includes(false);
   const isServiceQuote = appointmentType === 'repair';
   const isPPI = appointmentType === 'ppi';
   const isDiag = appointmentType === 'diagnosis';
@@ -404,10 +413,9 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const getTitle = () => {
-    if (isDiag && shouldBookEstimate) return 'Diagnose my car';
-
-    if (isPPI) {
-      return 'Pre-Purchase Inspection';
+    if (!isEstimateResponse) {
+      if (isDiag && !isInspections) return 'Diagnose my car';
+      if (isPPI) return 'Pre-Purchase Inspection';
     }
 
     if (isEstimateResponse && estimate?.services) {
@@ -418,8 +426,6 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   };
 
   const getPrice = () => {
-    if (isDiag && shouldBookEstimate) return attributes.diagnosis_fee;
-
     if (isServiceQuote || isEstimateResponse)
       return estimate ? estimate.total_price : 0;
 
@@ -439,7 +445,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
     >
       <DialogTitle className={classes.title}>
         <Box className={classes.buttonGroupBack}>
-          {!urlReferer && (
+          {!urlReferer && !isEstimateResponse && !shouldBookEstimate && (
             <ArrowBackIos className="title-icon" onClick={handleStepBack} />
           )}
         </Box>
@@ -554,36 +560,22 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.accordionDetail}>
-                {(!isServiceQuote && !isEstimateResponse && !isPPI) ||
-                  (shouldBookEstimate && isDiag && (
-                    <Box className={classes.inspectContainer}>
-                      <Typography
-                        className={classes.inspectTitle}
-                        key="title-1"
-                      >
-                        Includes:
-                      </Typography>
-                      <Typography
-                        className={classes.inspectContent}
-                        key="sub-1"
-                      >
-                        <Check /> Complete inspection of the issue
-                      </Typography>
-                      <Typography
-                        className={classes.inspectContent}
-                        key="sub-2"
-                      >
-                        <Check /> Complimentary multi-point inspection
-                      </Typography>
-                      <Typography
-                        className={classes.inspectContent}
-                        key="sub-3"
-                      >
-                        <Check /> ${getPrice() / 2} goes forwards the repair
-                        price
-                      </Typography>
-                    </Box>
-                  ))}
+                {(isDiag || isPPI || isInspections) && !isEstimateResponse && (
+                  <Box className={classes.inspectContainer}>
+                    <Typography className={classes.inspectTitle} key="title-1">
+                      Includes:
+                    </Typography>
+                    <Typography className={classes.inspectContent} key="sub-1">
+                      <Check /> Complete inspection of the issue
+                    </Typography>
+                    <Typography className={classes.inspectContent} key="sub-2">
+                      <Check /> Complimentary multi-point inspection
+                    </Typography>
+                    <Typography className={classes.inspectContent} key="sub-3">
+                      <Check /> ${getPrice() / 2} goes forwards the repair price
+                    </Typography>
+                  </Box>
+                )}
                 <ImageNode
                   key="happy-customers"
                   title={

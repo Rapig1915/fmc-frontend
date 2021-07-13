@@ -70,10 +70,10 @@ const Quote = (): ReactElement => {
   const location = useLocation();
 
   const { appId: appIdParam }: { appId: string } = useParams();
-  const isEstimateResponse = !!appIdParam;
+  const isEstimateResponse =
+    !!appIdParam && location.pathname.includes('estimate_response');
   const shouldBookEstimate =
-    isEstimateResponse &&
-    location.pathname.includes(URL.ESTIMATE.replace(':appId', ''));
+    !!appIdParam && !location.pathname.includes('estimate_response');
 
   const params = queryString.parse(location.search);
   const zipQuery = Array.isArray(params.zip) ? params.zip[0] || '' : params.zip;
@@ -90,7 +90,7 @@ const Quote = (): ReactElement => {
   const [requestInProgress, setRequestInProgress] = React.useState(false);
 
   useEffect(() => {
-    if (!isEstimateResponse) {
+    if (!isEstimateResponse && !shouldBookEstimate) {
       // For normal quote page, require zip
       const asyncReadZip = async () => {
         if (zipQuery && zipQuery !== zip) {
@@ -152,9 +152,11 @@ const Quote = (): ReactElement => {
     zip,
     isEstimateResponse,
     appIdParam,
+    shouldBookEstimate,
   ]);
 
-  const showZipModal = !isEstimateResponse && !zip && !zipQuery;
+  const showZipModal =
+    !isEstimateResponse && !shouldBookEstimate && !zip && !zipQuery;
 
   const handleSetZipFromModal = (payload: {
     zip?: string;
@@ -192,8 +194,11 @@ const Quote = (): ReactElement => {
 
   const [showModal, setShowModal] = useState(
     (location.state && location.state.modal) ||
-      (isEstimateResponse ? QuoteShowModal.REVIEW_QUOTE : QuoteShowModal.NONE)
+      (isEstimateResponse || shouldBookEstimate
+        ? QuoteShowModal.REVIEW_QUOTE
+        : QuoteShowModal.NONE)
   );
+
   const handleShowModal = useCallback(
     (newShowModal: QuoteShowModal) => setShowModal(newShowModal),
     []
@@ -232,6 +237,21 @@ const Quote = (): ReactElement => {
 
   const isPPI =
     services.length === 1 && services[0] === 'Pre-Purchase Inspection';
+
+  const isInspectionServices: boolean[] = [];
+  if (services.length > 0) {
+    services.forEach((item) =>
+      isInspectionServices.push(item.toLowerCase().includes('inspection'))
+    );
+  } else if (staticServices.length > 0) {
+    staticServices.forEach((item) =>
+      isInspectionServices.push(item.toLowerCase().includes('inspection'))
+    );
+  }
+
+  const isInspections =
+    (services.length > 0 || staticServices.length > 0) &&
+    !isInspectionServices.includes(false);
 
   const handleSetReason = useCallback(
     (newReason: IQuoteReason) => setReason(newReason),
@@ -297,7 +317,7 @@ const Quote = (): ReactElement => {
           )
         );
 
-        if (isNotSureFunnel || isPPI) {
+        if (isNotSureFunnel || isPPI || isInspections) {
           history.push(URL.DASHBOARD);
         } else {
           handleSetStep(QuoteStep.QUOTE_CONGRATS);
@@ -377,8 +397,12 @@ const Quote = (): ReactElement => {
       diagInput += `. ${reason.note}`;
     }
 
+    if (isInspections) {
+      diagInput = staticServices.join(', ');
+    }
+
     let appointmentType;
-    if (isNotSureFunnel) {
+    if (isNotSureFunnel || isInspections) {
       appointmentType = 'diagnosis';
     } else if (isPPI) {
       appointmentType = 'ppi';
@@ -415,7 +439,7 @@ const Quote = (): ReactElement => {
       .then((resp: ResponseAppointment) => {
         dispatch(setAppointment(resp.data));
 
-        if (isNotSureFunnel || isPPI) {
+        if (isNotSureFunnel || isPPI || isInspections) {
           handleShowModal(QuoteShowModal.CONTACT);
         } else {
           handleStepChange(QuoteStep.QUOTE_CONTACT, true);
@@ -448,6 +472,7 @@ const Quote = (): ReactElement => {
         } else if (
           isNotSureFunnel ||
           isPPI ||
+          isInspections ||
           urlReferer === URL.DASHBOARD ||
           shouldBookEstimate
         ) {
