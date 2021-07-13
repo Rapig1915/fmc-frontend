@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Typography, useMediaQuery } from '@material-ui/core';
+import { Box, Typography, useMediaQuery } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface SplashProps {
   show: boolean;
-  text?: string;
+  text?: string | boolean;
 }
 
 const Splash = (props: SplashProps): ReactElement => {
@@ -85,7 +85,7 @@ const Splash = (props: SplashProps): ReactElement => {
         {text ? (
           <Typography className={classes.title}>{text}</Typography>
         ) : (
-          <Typography className={classes.title}>
+          <Box className={classes.title}>
             {stateCustomer > 0 && (
               <div>
                 <b>{stateCustomer} happy customers</b>
@@ -93,7 +93,7 @@ const Splash = (props: SplashProps): ReactElement => {
                 had their car fixed in your area with FixMyCar!
               </div>
             )}
-          </Typography>
+          </Box>
         )}
         <CircularProgress />
       </DialogContent>
