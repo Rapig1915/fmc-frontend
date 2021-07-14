@@ -118,6 +118,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
     mixPanel(MIXPANEL_TRACK.CONTACT_INFO);
 
     handleUpdateAppointment({
+      kind: 'RequestUpdateAppointmentContact',
       name: contact.name,
       email: contact.email,
       phone: contact.phone,

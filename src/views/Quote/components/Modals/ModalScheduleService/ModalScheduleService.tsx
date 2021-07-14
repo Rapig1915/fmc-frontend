@@ -268,6 +268,7 @@ const ModalScheduleService = (
         });
       } else {
         handleUpdateAppointment({
+          kind: 'RequestUpdateAppointmentTime',
           appointment_day: keyDate,
           appointment_time: timeSlotsToday[selectedTimeSlotIndex],
           type_of_site: location.type_of_site,

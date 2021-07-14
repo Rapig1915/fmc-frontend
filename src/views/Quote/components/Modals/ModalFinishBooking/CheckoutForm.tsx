@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { CardElement } from '@stripe/react-stripe-js';
+import useDeviseQuery from 'src/hooks/useDeviseQuery';
 
 interface CheckOutFormProps {
   errors: string | undefined | null;
@@ -89,12 +90,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const cardStyle = {
+const cardStyle = (isXs: boolean) => ({
   style: {
     base: {
+      padding: '0px',
       color: '#32325d',
       fontSmoothing: 'antialiased',
-      fontSize: '16px',
+      fontSize: isXs ? '12px' : '16px',
       '::placeholder': {
         color: '#32325d',
       },
@@ -104,7 +106,7 @@ const cardStyle = {
       iconColor: '#fa755a',
     },
   },
-};
+});
 
 const CheckoutForm = ({ errors }: CheckOutFormProps): ReactElement => {
   const classes = useStyles();
@@ -113,10 +115,15 @@ const CheckoutForm = ({ errors }: CheckOutFormProps): ReactElement => {
     event.preventDefault();
   };
 
+  const { xsOnly } = useDeviseQuery();
+
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <CardElement options={cardStyle} className={classes.cardInput} />
+        <CardElement
+          options={cardStyle(xsOnly)}
+          className={classes.cardInput}
+        />
         <p className={classes.error}>{errors}</p>
       </form>
     </>

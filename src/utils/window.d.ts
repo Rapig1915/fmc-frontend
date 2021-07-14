@@ -4,6 +4,10 @@ declare global {
       track: (service: string) => void;
       identify: (id: string | undefined) => void;
     };
+
+    fbq: (a: string, b: string) => void;
+    dataLayer: Array;
+    uetq: Array;
   }
 }
 

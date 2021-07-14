@@ -452,7 +452,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
         {appointmentCompleted ? (
           <Typography className={classes.titleText}>Work performed:</Typography>
         ) : (
-          <Typography className={classes.titleText}>
+          <Box className={classes.titleText}>
             Quote{' '}
             <Hidden xsDown>
               <Info
@@ -462,7 +462,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
               />
             </Hidden>
             {showTip && <TitleTip />}
-          </Typography>
+          </Box>
         )}
         <IconButton
           aria-label="close"

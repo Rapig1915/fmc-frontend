@@ -102,7 +102,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
       variant: 'error',
       anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
     });
-  }
+  };
 
   const [searching, setSearching] = useState(false);
 

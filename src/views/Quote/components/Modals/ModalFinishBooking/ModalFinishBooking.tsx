@@ -277,7 +277,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
       onClose={onClose}
       aria-labelledby="responsive-dialog-title"
       scroll="body"
-      className={classes.content}
+      className={classes.root}
     >
       <DialogTitle className={classes.title}>
         <Box className={classes.buttonGroupBack}>
@@ -413,7 +413,7 @@ const ModalFinishBooking = (props: ModalFinishBookingProps): ReactElement => {
                   marginTop={2}
                 >
                   {cardTypes.map((ct) => (
-                    <Image key={ct} src={`/assets/payment/${ct}.svg`} />
+                    <Image key={ct.title} src={ct.image} />
                   ))}
                 </Box>
               </Box>

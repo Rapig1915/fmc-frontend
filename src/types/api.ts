@@ -14,6 +14,7 @@ export interface ResponseCheckPlateNumber {
 }
 
 export interface RequestCreateAppointment {
+  kind?: 'RequestCreateAppointment';
   appointment_type?: string;
   car_attributes: {
     year: string;
@@ -39,12 +40,14 @@ export interface RequestCreateAppointment {
 }
 
 export interface RequestUpdateAppointmentContact {
+  kind?: 'RequestUpdateAppointmentContact';
   name: string;
   email: string;
   phone: string;
 }
 
 export interface RequestUpdateAppointmentTime {
+  kind?: 'RequestUpdateAppointmentTime';
   appointment_day: string;
   appointment_time: string;
   type_of_site: string;
