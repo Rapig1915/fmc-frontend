@@ -148,7 +148,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
       )}
     >
       <Typography key="title" className={classes.title}>
-        We&apos;ll Send You Your Quote
+        Contact Info
       </Typography>
       {contact.error && (
         <Typography key="error" className={classes.error}>
