@@ -118,6 +118,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
     mixPanel(MIXPANEL_TRACK.CONTACT_INFO);
 
     handleUpdateAppointment({
+      kind: 'RequestUpdateAppointmentContact',
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
@@ -147,7 +148,7 @@ const FormContact = (props: FormContactProps): ReactElement => {
       )}
     >
       <Typography key="title" className={classes.title}>
-        We&apos;ll Send You Your Quote
+        Contact Info
       </Typography>
       {contact.error && (
         <Typography key="error" className={classes.error}>

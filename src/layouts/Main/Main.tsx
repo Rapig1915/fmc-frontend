@@ -2,17 +2,16 @@ import React, { ReactElement, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core';
-import { CustomTheme } from 'src/themes';
 import { Topbar, Footer, Sidebar } from '../components';
 
 interface MainProps {
   children?: React.ReactNode;
 }
 
-const useStyles = makeStyles((theme: CustomTheme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     height: '100%',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: 'transparent',
     position: 'relative',
   },
 }));

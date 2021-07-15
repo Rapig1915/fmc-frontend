@@ -30,6 +30,7 @@ import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK, URL } from 'src/utils/consts';
 import { signIn } from 'src/api/auth';
 import logger from 'src/utils/logger';
+import callAds from 'src/utils/ads';
 
 import { FormContact, SearchCar, ServiceDesk } from './components';
 import SimpleCongrats from './components/SimpleCongrats';
@@ -420,6 +421,7 @@ const Quote = (): ReactElement => {
     }
 
     return {
+      kind: 'RequestCreateAppointment',
       appointment_type: appointmentType,
       car_attributes: {
         ...car.attributes,
@@ -497,29 +499,36 @@ const Quote = (): ReactElement => {
         } else {
           handleStepChange(QuoteStep.QUOTE_CONTACT, true);
         }
+
+        if (data.kind === 'RequestUpdateAppointmentContact') {
+          callAds(resp.data);
+        }
       })
       .catch((error) => {
         // Error 😨
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.errors &&
-          Array.isArray(error.response.data.errors)
-        ) {
-          handleSetContact({
-            ...contact,
-            error: error.response.data.errors[0],
-          });
-
-          setTimeout(() => {
+        if (data.kind === 'RequestUpdateAppointmentContact') {
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.errors &&
+            Array.isArray(error.response.data.errors)
+          ) {
             handleSetContact({
               ...contact,
-              error: '',
+              error: error.response.data.errors[0],
             });
-          }, 3000);
+
+            setTimeout(() => {
+              handleSetContact({
+                ...contact,
+                error: '',
+              });
+            }, 3000);
+          }
+        } else {
+          showCommonError();
         }
       })
-      .catch(() => showCommonError())
       .finally(() => setRequestInProgress(false));
   };
 

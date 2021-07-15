@@ -3,6 +3,7 @@ import imgCandidate from 'src/assets/candidates';
 import imgCustomer from 'src/assets/customers';
 import imgBadge from 'src/assets/badges';
 import imgService from 'src/assets/services';
+import imgPayment from 'src/assets/payment';
 
 import { QuoteStep, CarSelectType } from 'src/types';
 
@@ -539,7 +540,20 @@ export const carLocations = [
   'Other',
 ];
 
-export const cardTypes = ['visa', 'mastercard', 'american-express'];
+export const cardTypes = [
+  {
+    title: 'visa',
+    image: imgPayment.visa,
+  },
+  {
+    title: 'mastercard',
+    image: imgPayment.mastercard,
+  },
+  {
+    title: 'american-express',
+    image: imgPayment.american_express,
+  },
+];
 
 export const staticServiceList = [
   'Auxiliary Battery Replacement',

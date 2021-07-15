@@ -9,6 +9,7 @@ import {
   List,
   ListItem,
   Link,
+  Box,
 } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
@@ -104,6 +105,7 @@ const useStyles = makeStyles((theme: CustomTheme) => ({
     width: '100%',
     height: 'auto',
     objectFit: 'cover',
+    zIndex: -1,
   },
   mask: {
     position: 'absolute',
@@ -172,7 +174,7 @@ const Footer = (props: FooterProps): ReactElement => {
   }, []);
 
   return (
-    <Container>
+    <Box>
       <div {...rest} className={clsx(classes.root, className)}>
         <Image
           className={classes.imgBack}
@@ -181,7 +183,7 @@ const Footer = (props: FooterProps): ReactElement => {
           lazy={false}
         />
         <div key="mask" className={classes.mask} />
-        <div className={classes.footerContainer}>
+        <Container className={classes.footerContainer}>
           <List disablePadding>
             <ListItem disableGutters className={classes.logoContainerItem}>
               <div className={classes.logoContainer}>
@@ -293,12 +295,12 @@ const Footer = (props: FooterProps): ReactElement => {
               </Grid>
             </ListItem>
           </List>
-        </div>
+        </Container>
       </div>
       <div className={classes.copyrightBar}>
         © FixMyCar.io - 2021 | Privacy Policy | Terms of Service
       </div>
-    </Container>
+    </Box>
   );
 };
 

@@ -219,14 +219,6 @@ const Login = (): ReactElement => {
           />
         )}
       </Box>
-      <ButtonForward
-        color="secondary"
-        key="switch"
-        title="Login With Email"
-        size="large"
-        className="switch"
-        onClickHandler={handleSwtichMode}
-      />
     </Box>
   ) : (
     <Box className={classes.root}>
@@ -255,14 +247,6 @@ const Login = (): ReactElement => {
           disabled={!isReadyToSignByEmail}
         />
       </Box>
-      <ButtonForward
-        color="secondary"
-        key="switch"
-        title="Login With Phone"
-        size="large"
-        className="switch"
-        onClickHandler={handleSwtichMode}
-      />
     </Box>
   );
 };
