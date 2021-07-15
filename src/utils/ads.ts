@@ -66,7 +66,7 @@ const callFbq = (event: string, totalVal?: number) => {
       fbq('track', event);
     } else {
       fbq('track', event, {
-        value: totalVal,
+        value: totalVal || 0,
         currency: 'USD',
       });
     }
