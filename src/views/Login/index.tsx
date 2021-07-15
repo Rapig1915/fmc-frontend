@@ -202,7 +202,7 @@ const Login = (): ReactElement => {
       <Box className={classes.buttons}>
         <ButtonForward
           key="forward"
-          title={data.codeSent ? 'Check code' : 'Send code'}
+          title={data.codeSent ? 'Login' : 'Send code'}
           size="large"
           onClickHandler={handleForward}
           disabled={
