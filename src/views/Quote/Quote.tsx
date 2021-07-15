@@ -30,7 +30,7 @@ import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK, URL } from 'src/utils/consts';
 import { signIn } from 'src/api/auth';
 import logger from 'src/utils/logger';
-import callAds from 'src/utils/ads';
+import { callAdsQuote, callAdsBooking } from 'src/utils/ads';
 
 import { FormContact, SearchCar, ServiceDesk } from './components';
 import SimpleCongrats from './components/SimpleCongrats';
@@ -81,6 +81,9 @@ const Quote = (): ReactElement => {
   const utmSrcQuery = Array.isArray(params.utm_source)
     ? params.utm_source[0] || ''
     : params.utm_source;
+  const gclid = Array.isArray(params.gclid)
+    ? params.gclid[0] || ''
+    : params.gclid;
 
   const urlReferer = Array.isArray(params.referer)
     ? params.referer[0] || ''
@@ -432,7 +435,7 @@ const Quote = (): ReactElement => {
         utm_term: '',
         utm_content: '',
         utm_campaign: '',
-        gclid: '',
+        gclid: gclid || '',
       },
       location_attributes: {
         zip,
@@ -501,7 +504,7 @@ const Quote = (): ReactElement => {
         }
 
         if (data.kind === 'RequestUpdateAppointmentContact') {
-          callAds(resp.data);
+          callAdsQuote(resp.data);
         }
       })
       .catch((error) => {
@@ -562,6 +565,7 @@ const Quote = (): ReactElement => {
       .then((resp: ResponseAppointment) => {
         dispatch(setAppointment(resp.data));
         handleShowModal(QuoteShowModal.NONE);
+        callAdsBooking(resp.data);
         login(resp);
       })
       .catch(() => showCommonError())

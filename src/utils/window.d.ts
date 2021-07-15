@@ -5,7 +5,11 @@ declare global {
       identify: (id: string | undefined) => void;
     };
 
-    fbq: (a: string, b: string) => void;
+    fbq: (
+      a: string,
+      b: string,
+      c?: { value: number; currency: string }
+    ) => void;
     dataLayer: Array;
     uetq: Array;
   }
