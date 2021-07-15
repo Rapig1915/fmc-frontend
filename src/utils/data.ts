@@ -244,11 +244,11 @@ export const itemFooter = {
     },
     {
       title: 'Services',
-      url: 'https://staging.fixmycar.io/services',
+      url: 'https://www.fixmycar.io/services',
     },
     {
       title: 'FAQ',
-      url: 'https://staging.fixmycar.io/faq',
+      url: 'https://www.fixmycar.io/faq',
     },
   ],
   carMakers: [
