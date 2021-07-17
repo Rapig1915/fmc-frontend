@@ -37,6 +37,7 @@ export interface RequestCreateAppointment {
   diagnosis_input: string;
   services: string[];
   category_selected: string;
+  level: string;
 }
 
 export interface RequestUpdateAppointmentContact {

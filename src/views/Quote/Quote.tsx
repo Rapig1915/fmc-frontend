@@ -415,12 +415,16 @@ const Quote = (): ReactElement => {
     }
 
     let appointmentType;
+    let level;
     if (isNotSureFunnel || isInspections) {
       appointmentType = 'diagnosis';
+      level = 'A';
     } else if (isPPI) {
       appointmentType = 'ppi';
+      level = 'A';
     } else {
       appointmentType = 'repair';
+      level = 'B';
     }
 
     return {
@@ -444,6 +448,7 @@ const Quote = (): ReactElement => {
       diagnosis_input: diagInput,
       services: [...services, ...staticServices],
       category_selected: reason.reason,
+      level,
     };
   };
 
