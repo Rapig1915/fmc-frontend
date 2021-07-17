@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import { ArrowForwardIos, Help, Search } from '@material-ui/icons';
 import ButtonForward from 'src/components/atoms/ButtonForward';
+import mixPanel from 'src/utils/mixpanel';
+import { MIXPANEL_TRACK } from 'src/utils/consts';
 import { ModalNotSure, ModalSelectStaticService } from '../Modals';
 import { QuoteContext } from '../../QuoteContext';
 
@@ -104,6 +106,7 @@ const ServiceBar = (props: ServiceBarProps): ReactElement => {
 
   const handleContinue = () => {
     setOpenModalNotSure(false);
+    mixPanel(MIXPANEL_TRACK.NOT_SURE_WHATS_WRONG_NEXT);
     onContinue();
   };
 
