@@ -59,7 +59,12 @@ const useStyles = makeStyles((theme) => ({
   services: {
     display: 'flex',
     flexDirection: 'column',
-    flexWrap: 'wrap',
+    maxHeight: 500,
+    overflowY: 'scroll',
+
+    [theme.breakpoints.down('xs')]: {
+      maxHeight: 300,
+    },
 
     item: {
       flex: 1,
@@ -87,7 +92,7 @@ const ModalSelectStaticService = (
   const handleClickService = _.debounce((value: string) => {
     const newServices = staticServices;
     if (staticServices.includes(value))
-      newServices.splice(staticServices.indexOf(value));
+      newServices.splice(staticServices.indexOf(value), 1);
     else newServices.push(value);
     handleSetStaticServices(newServices);
     setDisplay(display + 1);
@@ -102,7 +107,9 @@ const ModalSelectStaticService = (
     >
       <DialogTitle className={classes.title}>
         <Typography className="hidden">{display}</Typography>
-        <Typography className={classes.titleText}>Select services</Typography>
+        <Typography className={classes.titleText}>
+          Search for service
+        </Typography>
         <IconButton
           aria-label="close"
           className={classes.closeButton}
@@ -114,7 +121,7 @@ const ModalSelectStaticService = (
       <DialogContent className={classes.content}>
         <InputWithStatus
           start={<Search />}
-          placeholder="Search service..."
+          placeholder="Search for service..."
           value={filter}
           valueChanged={(val: string) => setFilter(val)}
         />

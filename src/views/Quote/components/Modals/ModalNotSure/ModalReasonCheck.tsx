@@ -7,9 +7,10 @@ import {
   AccordionDetails,
   AccordionSummary,
 } from 'src/components/organisms';
+import { IQuoteReasonSelection } from 'src/views/Quote/QuoteContext';
 
 interface ModalReasonCheckProps {
-  reason: string;
+  selection: IQuoteReasonSelection;
   note: string;
   onNoteChange: (val: string) => void;
 }
@@ -108,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ModalReasonCheck = (props: ModalReasonCheckProps): ReactElement => {
-  const { reason, note, onNoteChange } = props;
+  const { selection, note, onNoteChange } = props;
   const classes = useStyles();
 
   const [showNote, setShowNote] = React.useState(false);
@@ -145,7 +146,10 @@ const ModalReasonCheck = (props: ModalReasonCheckProps): ReactElement => {
       <Accordion square expanded>
         <AccordionSummary>
           <Typography className={classes.reasonTitle}>
-            Inspection: {reason}
+            Inspection:{' '}
+            {Object.keys(selection)
+              .filter((x) => !!selection[x])
+              .join(', ')}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>

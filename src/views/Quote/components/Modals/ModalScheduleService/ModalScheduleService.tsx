@@ -133,9 +133,12 @@ const useStyles = makeStyles((theme) => ({
   },
 
   containerDatepicker: {
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 5,
-    [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing(-3),
+    '& .MuiPickersBasePicker-container': {
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   },
   containerTimeSlots: {
@@ -301,6 +304,13 @@ const ModalScheduleService = (
     };
   }, {});
 
+  const isDateDisabled = (day: MaterialUiPickersDate): boolean => {
+    return (
+      ((timeSlots && timeSlots[day?.format('YYYY-MM-DD') || '']) || [])
+        .length <= 0
+    );
+  };
+
   const { xsOnly } = useDeviseQuery();
 
   return (
@@ -331,11 +341,11 @@ const ModalScheduleService = (
           </Typography>
         </Box>
         <Box key="pick-date-time" className={classes.boxDateTime}>
-          <Grid container spacing={2}>
+          <Grid container spacing={xsOnly ? 0 : 2}>
             <Grid
               item
               sm={9}
-              md={8}
+              md={6}
               xs={12}
               className={classes.containerDatepicker}
             >
@@ -344,6 +354,8 @@ const ModalScheduleService = (
                 variant="static"
                 openTo="date"
                 value={date}
+                disableToolbar
+                shouldDisableDate={isDateDisabled}
                 onChange={handleChangeDate}
               />
             </Grid>
@@ -364,7 +376,7 @@ const ModalScheduleService = (
             <Grid
               item
               sm={3}
-              md={4}
+              md={6}
               xs={12}
               className={classes.containerTimeSlots}
             >

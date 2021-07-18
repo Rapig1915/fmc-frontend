@@ -2,16 +2,14 @@ import React, { ReactElement, useEffect, useContext, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
-import { Box, Grid, Hidden, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { TabSelector } from 'src/components/molecules';
 import ButtonForward from 'src/components/atoms/ButtonForward';
-import { Image } from 'src/components/atoms';
 import { arrCarSelectTypes } from 'src/utils/data';
-import { ICarMeta, CarSelectType, QuoteShowModal, QuoteStep } from 'src/types';
+import { ICarMeta, CarSelectType, QuoteStep } from 'src/types';
 import { checkPlateNumber } from 'src/api/quote';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
-import SvgToggleInformation from 'src/assets/menu/toggle-information.svg';
 import FormPlateNumber from './FormPlateNumber';
 import FormYearMakeModel from './FormYearMakeModel';
 import FormConfirmCar from './FormConfirmCar';
@@ -58,6 +56,16 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonBack: {
     marginRight: theme.spacing(1),
+  },
+  buttonContinue: {
+    maxWidth: 150,
+    float: 'right',
+
+    [theme.breakpoints.down('xs')]: {
+      position: 'fixed',
+      top: 'calc(100% - 60px)',
+      right: theme.spacing(3),
+    },
   },
 }));
 
@@ -156,11 +164,6 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
     if (onConfirm) onConfirm();
   };
 
-  const { handleShowModal } = useContext(QuoteContext);
-  const handleShowIntro = () => {
-    handleShowModal(QuoteShowModal.SERVICE_INTRO);
-  };
-
   useEffect(() => {
     mixPanel(MIXPANEL_TRACK.CAR);
   });
@@ -189,15 +192,6 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
           )}
         </Grid>
         <Grid item md={4} sm={12} xs={12} className={classes.actionContainer}>
-          <Hidden smUp>
-            <Box onClick={handleShowIntro}>
-              <Image
-                src={SvgToggleInformation}
-                lazy={false}
-                className="button-mobile-info"
-              />
-            </Box>
-          </Hidden>
           <ButtonForward
             title="Back"
             key="Back"
@@ -226,6 +220,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
               disabled={searching || !isReadyToSearch}
               onClickHandler={handleSearch}
               processing={searching}
+              className={classes.buttonContinue}
             />
           ) : (
             <ButtonForward
@@ -235,6 +230,7 @@ const SearchCar = (props: SearchCarProps): ReactElement => {
               onClickHandler={handleConfirm}
               disabled={requestInProgress}
               processing={requestInProgress}
+              className={classes.buttonContinue}
             />
           )}
         </Grid>

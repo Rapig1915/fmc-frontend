@@ -12,7 +12,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { ArrowBackIos, Close } from '@material-ui/icons';
 
 import { ButtonForward } from 'src/components/atoms';
-import { QuoteContext } from 'src/views/Quote/QuoteContext';
+import {
+  IQuoteReasonSelection,
+  QuoteContext,
+} from 'src/views/Quote/QuoteContext';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
 
@@ -109,15 +112,9 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
 
   const { reason, handleSetReason } = useContext(QuoteContext);
 
-  const handleMainReasonChange = (
-    newReasonId: number,
-    newReason: string,
-    newSubReason: string[]
-  ) => {
+  const handleMainReasonChange = (newSelection: IQuoteReasonSelection) => {
     handleSetReason({
-      reasonId: newReasonId,
-      reason: newReason,
-      subReason: newSubReason,
+      selection: newSelection,
       otherReason: '',
       note: '',
     });
@@ -125,16 +122,10 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
 
   const canContinue = React.useMemo(() => {
     if (reasonStep === ReasonStep.START)
-      return (
-        reason && reason.reasonId && reason.reason && reason.subReason.length
-      );
+      return reason && Object.keys(reason.selection).length > 0;
     if (reasonStep === ReasonStep.OTHER)
       return (
-        reason &&
-        reason.reasonId &&
-        reason.reason &&
-        reason.subReason.length &&
-        reason.otherReason
+        reason && Object.keys(reason.selection).length > 0 && reason.otherReason
       );
     if (reasonStep === ReasonStep.CHECK) return true;
 
@@ -165,17 +156,18 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
 
   const handleContinue = () => {
     if (reasonStep === ReasonStep.START) {
-      if (reason.reasonId && reason.reason && reason.subReason[0] !== 'Other')
+      const hasOtherReason: boolean = Object.keys(reason.selection).reduce(
+        (obj: boolean, mR): boolean =>
+          obj ||
+          (reason.selection[mR] && reason.selection[mR]?.includes('Other')) ||
+          false,
+        false
+      );
+      if (hasOtherReason) setReasonStep(ReasonStep.OTHER);
+      else if (Object.keys(reason.selection).length > 0)
         setReasonStep(ReasonStep.CHECK);
-      else if (reason.subReason[0] === 'Other') setReasonStep(ReasonStep.OTHER);
     } else if (reasonStep === ReasonStep.OTHER) {
-      if (
-        reason.reasonId &&
-        reason.reason &&
-        reason.subReason[0] === 'Other' &&
-        reason.otherReason
-      )
-        setReasonStep(ReasonStep.CHECK);
+      if (reason.otherReason) setReasonStep(ReasonStep.CHECK);
     } else if (reasonStep === ReasonStep.CHECK) {
       onContinue();
     }
@@ -208,21 +200,20 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
       <DialogContent>
         {reasonStep === ReasonStep.START && (
           <ModalReasonAccordion
-            reasonId={reason.reasonId}
-            subReason={reason.subReason}
+            selection={reason.selection}
             onChange={handleMainReasonChange}
           />
         )}
         {reasonStep === ReasonStep.OTHER && (
           <ModalReasonOther
-            reason={reason.reason}
+            selection={reason.selection}
             otherReason={reason.otherReason}
             onOtherReasonChange={handleOtherReasonChange}
           />
         )}
         {reasonStep === ReasonStep.CHECK && (
           <ModalReasonCheck
-            reason={reason.reason}
+            selection={reason.selection}
             note={reason.note}
             onNoteChange={handleNoteChange}
           />

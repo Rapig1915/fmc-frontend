@@ -566,13 +566,14 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                       Includes:
                     </Typography>
                     <Typography className={classes.inspectContent} key="sub-1">
-                      <Check /> Complete inspection of the issue
+                      <Check /> Complete inspection of your vehicle&apos;s
+                      issues
                     </Typography>
                     <Typography className={classes.inspectContent} key="sub-2">
-                      <Check /> Complimentary multi-point inspection
+                      <Check /> Complimentary vehicle health inspection
                     </Typography>
                     <Typography className={classes.inspectContent} key="sub-3">
-                      <Check /> ${getPrice() / 2} goes forwards the repair price
+                      <Check /> ${getPrice()} goes towards the repair price
                     </Typography>
                   </Box>
                 )}
@@ -637,7 +638,7 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
               {(!isEstimateResponse || shouldBookEstimate) && canSchedule && (
                 <ButtonForward
                   key="schedule-service"
-                  title="Schedule service"
+                  title="Schedule"
                   size="large"
                   rounded
                   onClickHandler={handleSchedule}

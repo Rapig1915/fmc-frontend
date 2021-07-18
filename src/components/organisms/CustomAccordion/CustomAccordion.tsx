@@ -32,6 +32,7 @@ export const MyAccordion = withStyles((theme) => ({
 export const MyAccordionSummary = withStyles({
   root: {
     backgroundColor: '#EBF1FA',
+    color: '#79739C',
     borderBottom: '1px solid #EBF1FA',
     borderRadius: 6,
     marginBottom: -1,
@@ -41,6 +42,10 @@ export const MyAccordionSummary = withStyles({
     },
   },
   content: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+
     '&$expanded': {
       margin: '12px 0',
     },

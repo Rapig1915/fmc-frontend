@@ -238,15 +238,12 @@ const Quote = (): ReactElement => {
   );
 
   const [reason, setReason] = useState<IQuoteReason>({
-    reasonId: 0,
-    reason: '',
-    subReason: [],
+    selection: {},
     otherReason: '',
     note: '',
   });
 
-  const isNotSureFunnel =
-    reason && reason.reasonId && reason.reason && reason.subReason.length;
+  const isNotSureFunnel = reason && Object.keys(reason.selection).length > 0;
 
   const isPPI =
     services.length === 1 && services[0] === 'Pre-Purchase Inspection';
@@ -351,9 +348,7 @@ const Quote = (): ReactElement => {
     handleSetServices([]);
 
     handleSetReason({
-      reasonId: 0,
-      reason: '',
-      subReason: [],
+      selection: {},
       otherReason: '',
       note: '',
     });
@@ -401,10 +396,17 @@ const Quote = (): ReactElement => {
   };
 
   const grabInputData = (): RequestCreateAppointment => {
-    let diagInput =
-      reason.subReason[0] === 'Other'
-        ? reason.otherReason
-        : reason.subReason.join('. ');
+    const allSubReason: string[] = Object.keys(reason.selection).reduce(
+      (obj: string[], mR): string[] => [
+        ...obj,
+        ...(reason.selection[mR] || []),
+      ],
+      []
+    );
+    const hasOtherReason: boolean = allSubReason.includes('Other');
+    let diagInput = hasOtherReason
+      ? reason.otherReason
+      : allSubReason.join('. ');
 
     if (reason.note !== '') {
       diagInput += `. ${reason.note}`;
@@ -447,7 +449,9 @@ const Quote = (): ReactElement => {
       address: zip,
       diagnosis_input: diagInput,
       services: [...services, ...staticServices],
-      category_selected: reason.reason,
+      category_selected: Object.keys(reason.selection)
+        .filter((x) => !!reason.selection[x])
+        .join(', '),
       level,
     };
   };

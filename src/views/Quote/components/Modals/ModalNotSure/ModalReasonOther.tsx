@@ -4,9 +4,10 @@ import { Box, TextField, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
+import { IQuoteReasonSelection } from 'src/views/Quote/QuoteContext';
 
 interface ModalReasonOtherProps {
-  reason: string;
+  selection: IQuoteReasonSelection;
   otherReason: string;
   onOtherReasonChange: (val: string) => void;
 }
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ModalReasonOther = (props: ModalReasonOtherProps): ReactElement => {
-  const { reason, otherReason, onOtherReasonChange } = props;
+  const { selection, otherReason, onOtherReasonChange } = props;
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -77,7 +78,10 @@ const ModalReasonOther = (props: ModalReasonOtherProps): ReactElement => {
     >
       <Box>
         <Typography className={classes.majorReason}>
-          {reason} &gt; Other
+          {Object.keys(selection)
+            .filter((x) => !!selection[x])
+            .join(', ')}{' '}
+          &gt; Other
         </Typography>
       </Box>
       <TextField

@@ -60,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonSearch: {
     height: '100%',
+    '&:hover': {
+      background: '#3CD791',
+    },
   },
 
   iconHelp: {
@@ -116,7 +119,7 @@ const ServiceBar = (props: ServiceBarProps): ReactElement => {
         <Search className={classes.iconSearch} />
         <Typography className={classes.labelSearch} onClick={handleSearch}>
           {staticServices.length <= 0
-            ? 'Select Service'
+            ? 'Search for service'
             : `${staticServices.length} selected`}
         </Typography>
         <ButtonForward

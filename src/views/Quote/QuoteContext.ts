@@ -8,10 +8,12 @@ import {
   RequestUpdateEstimateResponse,
 } from 'src/types';
 
+export interface IQuoteReasonSelection {
+  [key: string]: string[] | undefined;
+}
+
 export interface IQuoteReason {
-  reasonId: number;
-  reason: string;
-  subReason: string[];
+  selection: IQuoteReasonSelection;
   otherReason: string;
   note: string;
 }
@@ -96,9 +98,7 @@ export const QuoteContext = React.createContext<IQuoteContext>({
   handleSetServices: () => {},
 
   reason: {
-    reasonId: 0,
-    reason: '',
-    subReason: [],
+    selection: {},
     otherReason: '',
     note: '',
   },

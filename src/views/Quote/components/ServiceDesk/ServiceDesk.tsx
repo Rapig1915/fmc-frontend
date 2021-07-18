@@ -1,11 +1,8 @@
 import React, { ReactElement, useContext } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Hidden, Typography } from '@material-ui/core';
-import { ButtonForward, Image } from 'src/components/atoms';
-import { QuoteShowModal } from 'src/types';
-
-import SvgToggleInformation from 'src/assets/menu/toggle-information.svg';
+import { Box, Typography } from '@material-ui/core';
+import { ButtonForward } from 'src/components/atoms';
 
 import ServiceBar from './ServiceBar';
 import ServiceGallery from './ServiceGallery';
@@ -59,6 +56,12 @@ const useStyles = makeStyles((theme) => ({
   buttonContinue: {
     maxWidth: 150,
     float: 'right',
+
+    [theme.breakpoints.down('xs')]: {
+      position: 'fixed',
+      top: 'calc(100% - 60px)',
+      right: theme.spacing(2),
+    },
   },
 }));
 
@@ -71,13 +74,7 @@ const ServiceDesk = (props: ServiceDeskProps): ReactElement => {
     if (onContinue) onContinue();
   };
 
-  const { services, staticServices, handleShowModal } = useContext(
-    QuoteContext
-  );
-  const handleShowIntro = () => {
-    handleShowModal(QuoteShowModal.SERVICE_INTRO);
-  };
-
+  const { services, staticServices } = useContext(QuoteContext);
   return (
     <Box className={clsx('quote-choose-service', classes.root, className)}>
       <Typography className={classes.title}>How can we help?</Typography>
@@ -87,15 +84,6 @@ const ServiceDesk = (props: ServiceDeskProps): ReactElement => {
         <ServiceSummary className={classes.summaryService} />
       </Box>
       <Box className={classes.actionContainer}>
-        <Hidden smUp>
-          <Box onClick={handleShowIntro}>
-            <Image
-              src={SvgToggleInformation}
-              lazy={false}
-              className="button-mobile-info"
-            />
-          </Box>
-        </Hidden>
         <ButtonForward
           title="Continue"
           rounded

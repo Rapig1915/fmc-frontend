@@ -167,7 +167,7 @@ const Login = (): ReactElement => {
     }));
   };
 
-  const handleSwtichMode = () => {
+  const handleSwitchMode = () => {
     if (data.mode === MODE_LOGIN.PHONE)
       setData((state) => ({
         ...state,

@@ -16,11 +16,12 @@ import {
 } from 'src/components/organisms';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
+import { IQuoteReasonSelection } from 'src/views/Quote/QuoteContext';
+import { Check } from '@material-ui/icons';
 
 interface ModalReasonAccordionProps {
-  reasonId: number;
-  subReason: string[];
-  onChange: (id: number, reason: string, subReason: string[]) => void;
+  selection: IQuoteReasonSelection;
+  onChange: (newSelection: IQuoteReasonSelection) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 const ModalReasonAccordion = (
   props: ModalReasonAccordionProps
 ): ReactElement => {
-  const { reasonId, subReason, onChange } = props;
+  const { selection, onChange } = props;
 
   const classes = useStyles();
 
@@ -69,26 +70,31 @@ const ModalReasonAccordion = (
     setExpanded(newExpanded ? panel : false);
   };
 
-  const handleClickSubreason = _.debounce(
-    (rId: number, r: string, value: string) => {
-      if (value === 'Other') onChange(rId, r, [value]);
-      else {
-        const newSubReason = rId === reasonId ? subReason : [];
+  const handleClickSubreason = _.debounce((r: string, value: string) => {
+    const newSubReason = selection[r] || [];
 
-        if (newSubReason.includes('Other'))
-          newSubReason.splice(newSubReason.indexOf('Other'));
+    if (newSubReason.includes(value))
+      newSubReason.splice(newSubReason.indexOf(value), 1);
+    else newSubReason.push(value);
 
-        if (newSubReason.includes(value))
-          newSubReason.splice(newSubReason.indexOf(value));
-        else newSubReason.push(value);
-        onChange(rId, r, newSubReason);
-      }
-    }
-  );
+    onChange({
+      ...selection,
+      [r]: newSubReason.length > 0 ? newSubReason : undefined,
+    });
+  });
 
   React.useEffect(() => {
     mixPanel(MIXPANEL_TRACK.NOT_SURE_WHATS_WRONG_CATEGORY);
   });
+
+  const isReasonChecked = (
+    reasonTitle: string,
+    subReasonTitle: string
+  ): boolean => {
+    if (!selection[reasonTitle]) return false;
+    const selectedSubReason = selection[reasonTitle] || [];
+    return selectedSubReason.includes(subReasonTitle) || false;
+  };
 
   return (
     <Box>
@@ -105,6 +111,7 @@ const ModalReasonAccordion = (
               id={`header-${x.id}`}
             >
               <Typography className={classes.reasonTitle}>{x.title}</Typography>
+              {selection[x.title] && <Check />}
             </AccordionSummary>
             <AccordionDetails>
               <FormControl component="fieldset">
@@ -114,8 +121,8 @@ const ModalReasonAccordion = (
                     value={r}
                     control={<Radio />}
                     label={r}
-                    checked={x.id === reasonId && subReason.includes(r)}
-                    onClick={() => handleClickSubreason(x.id, x.title, r)}
+                    checked={isReasonChecked(x.title, r)}
+                    onClick={() => handleClickSubreason(x.title, r)}
                   />
                 ))}
                 <FormControlLabel
@@ -123,8 +130,8 @@ const ModalReasonAccordion = (
                   key="Other"
                   control={<Radio />}
                   label="Other"
-                  checked={x.id === reasonId && subReason.includes('Other')}
-                  onClick={() => handleClickSubreason(x.id, x.title, 'Other')}
+                  checked={isReasonChecked(x.title, 'Other')}
+                  onClick={() => handleClickSubreason(x.title, 'Other')}
                 />
               </FormControl>
             </AccordionDetails>

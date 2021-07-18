@@ -198,9 +198,9 @@ const Topbar = (props: ToolbarProps): ReactElement => {
 
   return (
     <Box>
-      <Box className={classes.contactBar}>
+      <Hidden smDown>
         {showServiceWarranty && (
-          <Hidden smDown>
+          <Box className={classes.contactBar}>
             <Container>
               <div className={classes.contactInfoContainer}>
                 <Image
@@ -251,9 +251,9 @@ const Topbar = (props: ToolbarProps): ReactElement => {
                 )}
               </div>
             </Container>
-          </Hidden>
+          </Box>
         )}
-      </Box>
+      </Hidden>
       <Container>
         {showMenu && (
           <Hidden xsDown>
