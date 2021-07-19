@@ -1,4 +1,5 @@
 import React, { ReactElement, useContext } from 'react';
+import { ElfsightWidget } from 'react-elfsight-widget';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -38,7 +39,6 @@ import SvgSecurity from 'src/assets/badges/security.svg';
 import SvgAdvantageMoney from 'src/assets/advantage/money.svg';
 import SvgQuestion from 'src/assets/badges/question.svg';
 import SvgDiagnosis from 'src/assets/badges/diagnosis.svg';
-import ImageHappyCustomer from 'src/assets/happy-customer.svg';
 import { brandOf } from 'src/assets/brands';
 
 import TitleTip from './TitleTip';
@@ -325,10 +325,6 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
   const { show, onClose } = props;
   const classes = useStyles();
 
-  const cntHappyCustomers = useSelector(
-    (state: IReduxState) => state.quote.customer
-  );
-
   const appointment: IAppointment | null = useSelector(
     (state: IReduxState) => state.quote.appointment
   );
@@ -577,20 +573,6 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                     </Typography>
                   </Box>
                 )}
-                <ImageNode
-                  key="happy-customers"
-                  title={
-                    <>
-                      <b>{cntHappyCustomers} happy customers</b>
-                      <br />
-                      Booked the same service in your area
-                    </>
-                  }
-                  imgUrl={ImageHappyCustomer}
-                  titleProps={{ className: classes.titleHappyCustomer }}
-                  imgProps={{ className: classes.imgHappyCustomer }}
-                  className={classes.containerHappyCustomer}
-                />
               </AccordionDetails>
             </Accordion>
             <EstimateSummary />
@@ -645,6 +627,9 @@ const ModalReviewQuote = (props: ModalReviewQuoteProps): ReactElement => {
                 />
               )}
             </DialogActions>
+            <Box className={classes.accordion}>
+              <ElfsightWidget widgetID="99409cb2-47b7-4d61-aa50-d4dfdf217cd4" />
+            </Box>
           </Grid>
         </Grid>
       </DialogContent>
