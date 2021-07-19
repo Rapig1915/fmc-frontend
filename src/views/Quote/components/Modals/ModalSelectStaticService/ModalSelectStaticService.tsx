@@ -54,6 +54,11 @@ const useStyles = makeStyles((theme) => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
+    minWidth: 500,
+
+    [theme.breakpoints.down('xs')]: {
+      minWidth: 250,
+    },
   },
 
   services: {
