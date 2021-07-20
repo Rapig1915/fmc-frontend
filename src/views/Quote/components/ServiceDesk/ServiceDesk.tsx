@@ -42,11 +42,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 70,
     display: 'flex',
     alignItems: 'flex-end',
-    justifyContent: 'space-between',
-
-    [theme.breakpoints.up('sm')]: {
-      justifyContent: 'flex-end',
-    },
+    justifyContent: 'flex-end',
 
     '& .button-mobile-info': {
       width: 45,
@@ -56,12 +52,6 @@ const useStyles = makeStyles((theme) => ({
   buttonContinue: {
     maxWidth: 150,
     float: 'right',
-
-    [theme.breakpoints.down('xs')]: {
-      position: 'fixed',
-      top: 'calc(100% - 60px)',
-      right: theme.spacing(2),
-    },
   },
 }));
 

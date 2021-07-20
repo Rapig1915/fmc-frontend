@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 600,
     [theme.breakpoints.down('sm')]: {
-      minWidth: 300,
+      minWidth: 250,
     },
   },
   flexGrow: {

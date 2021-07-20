@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       minWidth: 300,
     },
+    [theme.breakpoints.down('xs')]: {
+      minWidth: 200,
+    },
   },
   title: {
     margin: 0,
