@@ -9,8 +9,6 @@ import {
   Grid,
   IconButton,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -27,7 +25,6 @@ import {
   DirectionsCar,
   LocationOn,
 } from '@material-ui/icons';
-import { DatePicker } from '@material-ui/pickers';
 
 import moment from 'moment';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
@@ -39,6 +36,7 @@ import { checkAvailability } from 'src/api/quote';
 import mixPanel from 'src/utils/mixpanel';
 import { MIXPANEL_TRACK } from 'src/utils/consts';
 import useDeviseQuery from 'src/hooks/useDeviseQuery';
+import MDatePicker from 'src/components/atoms/DatePicker';
 
 interface ModalScheduleServiceProps {
   show: boolean;
@@ -47,12 +45,38 @@ interface ModalScheduleServiceProps {
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    overflowX: 'hidden',
+
+    '& .MuiDialog-paper': {
+      '@media only screen and (max-width: 375px)': {
+        margin: 10,
+      },
+      '@media only screen and (max-width: 320px)': {
+        maxWidth: 'calc(100%)',
+        margin: 0,
+        borderRadius: 0,
+
+        '& .icon-label-start': {
+          marginLeft: 10,
+        },
+      },
+    },
+  },
+  content: {
     minWidth: 700,
     [theme.breakpoints.down('sm')]: {
       minWidth: 300,
     },
+    [theme.breakpoints.down('xs')]: {
+      minWidth: 200,
+    },
 
-    overflowX: 'hidden',
+    '@media only screen and (max-width: 375px)': {
+      padding: 10,
+    },
+    '@media only screen and (max-width: 320px)': {
+      padding: 0,
+    },
   },
   flexGrow: {
     flexGrow: 1,
@@ -194,10 +218,6 @@ const ModalScheduleService = (
   const { show, onClose } = props;
   const classes = useStyles();
 
-  const theme = useTheme();
-  const isSm = useMediaQuery(theme.breakpoints.down('sm'), {
-    defaultMatches: true,
-  });
   const {
     handleUpdateAppointment,
     handleRespondAppointmentEstimate,
@@ -319,6 +339,7 @@ const ModalScheduleService = (
       onClose={onClose}
       aria-labelledby="responsive-dialog-title"
       scroll="body"
+      className={classes.root}
     >
       <DialogTitle className={classes.title}>
         <Box className={classes.buttonGroupBack}>
@@ -333,9 +354,9 @@ const ModalScheduleService = (
           <Close />
         </IconButton>
       </DialogTitle>
-      <DialogContent className={classes.root}>
+      <DialogContent className={classes.content}>
         <Box key="pick-date-time-title" flexDirection="row" display="flex">
-          <CalendarToday color="primary" />
+          <CalendarToday color="primary" className="icon-label-start" />
           <Typography className={classes.titleDatetime} noWrap>
             {xsOnly ? 'Pick a date' : 'Pick a date & time'}
           </Typography>
@@ -349,14 +370,10 @@ const ModalScheduleService = (
               xs={12}
               className={classes.containerDatepicker}
             >
-              <DatePicker
-                orientation={isSm ? 'portrait' : 'landscape'}
-                variant="static"
-                openTo="date"
-                value={date}
-                disableToolbar
+              <MDatePicker
+                date={date}
                 shouldDisableDate={isDateDisabled}
-                onChange={handleChangeDate}
+                onChangeDate={handleChangeDate}
               />
             </Grid>
             {xsOnly && (
@@ -366,7 +383,7 @@ const ModalScheduleService = (
                   flexDirection="row"
                   display="flex"
                 >
-                  <CalendarToday color="primary" />
+                  <CalendarToday color="primary" className="icon-label-start" />
                   <Typography className={classes.titleDatetime} noWrap>
                     Pick a time
                   </Typography>
@@ -394,7 +411,7 @@ const ModalScheduleService = (
                   </Box>
                 ))
               ) : (
-                <Box>
+                <Box className="icon-label-start">
                   <Typography>No times available</Typography>
                 </Box>
               )}
@@ -403,7 +420,7 @@ const ModalScheduleService = (
         </Box>
         {(!isEstimateResponse || shouldBookEstimate) && (
           <Box key="pick-location-title" flexDirection="row" display="flex">
-            <LocationOn color="primary" />
+            <LocationOn color="primary" className="icon-label-start" />
             <Typography className={classes.titleDatetime} noWrap>
               Your location
             </Typography>

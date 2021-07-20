@@ -122,10 +122,17 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
 
   const canContinue = React.useMemo(() => {
     if (reasonStep === ReasonStep.START)
-      return reason && Object.keys(reason.selection).length > 0;
+      return (
+        reason &&
+        Object.keys(reason.selection).filter((x) => !!reason.selection[x])
+          .length > 0
+      );
     if (reasonStep === ReasonStep.OTHER)
       return (
-        reason && Object.keys(reason.selection).length > 0 && reason.otherReason
+        reason &&
+        Object.keys(reason.selection).filter((x) => !!reason.selection[x])
+          .length > 0 &&
+        reason.otherReason
       );
     if (reasonStep === ReasonStep.CHECK) return true;
 
@@ -220,15 +227,14 @@ const ModalNotSure = (props: ModalNotSureProps): ReactElement => {
         )}
       </DialogContent>
       <DialogActions className={classes.actionContainer}>
-        {!!canContinue && (
-          <ButtonForward
-            key="button-continue"
-            title="Continue"
-            size="large"
-            rounded
-            onClickHandler={handleContinue}
-          />
-        )}
+        <ButtonForward
+          key="button-continue"
+          title="Continue"
+          size="large"
+          rounded
+          onClickHandler={handleContinue}
+          disabled={!canContinue}
+        />
       </DialogActions>
     </Dialog>
   );
