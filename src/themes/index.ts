@@ -45,6 +45,12 @@ export const createFMCTheme = (): CustomTheme => {
               outline: 0,
               borderRadius: 8,
             },
+            '.MuiPickersStaticWrapper-staticWrapperRoot': {
+              minWidth: '200px !important',
+              '.MuiPickersBasePicker-pickerView': {
+                minWidth: 200,
+              },
+            },
           },
         },
         MuiButton: {
